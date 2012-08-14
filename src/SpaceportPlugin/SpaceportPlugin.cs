@@ -1,29 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using PluginCore;
 using PluginCore.Helpers;
 using PluginCore.Managers;
+using SpaceportPlugin.Properties;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace SpaceportPlugin
 {
-	public class SpaceportPlugin : IPlugin
+	public class PluginMain : IPlugin
 	{
 		private const string guid = "3a015ec0-53f3-493a-a5f7-07a55bb93b64";
 		private const string name = "Spaceport Plugin";
 		private const string help = "http://spaceport.io";
 		private const string author = "Jason (Null) Spafford";
-		private const string description = "A spaceport IDE plugin for Flashbuilder";
+		private const string description = "A spaceport IDE plugin for Flash develop.";
 		private const int apiLevel = 1;
+		private Image icon;
 		private object settingsObject;
+		private DockContent mainPanel;
 
 		public void Initialize()
 		{
-			TraceManager.AddAsync ("Starting Spaceport Plugin");
+			TraceManager.AddAsync ("Starting Spaceport Plugin v0.00001");
 			EventManager.AddEventHandler (this, EventType.FileSave);
+
+			icon = Image.FromHbitmap (Resources.pluginIcon.GetHbitmap());
+			mainPanel = PluginBase.MainForm.CreateDockablePanel (new MainUI(), guid, icon, DockState.Hidden);
 
 			HookIntoMenu();
 		}
@@ -41,8 +49,25 @@ namespace SpaceportPlugin
 
 		private void HookIntoMenu()
 		{
-			ToolStripItem spaceportMenu = new ToolStripButton("Spaceport");
+			var spaceportMenu = new ToolStripMenuItem ("Spaceport", icon);
+			var testItem = new ToolStripMenuItem ("Make Spaceport Awesome");
+			var updateSpaceport = new ToolStripButton ("Update Spaceport Plugin");
+			var checkUpdates = new ToolStripMenuItem ("Check for updates automatically");
+			var aboutSpaceport = new ToolStripMenuItem ("About");
 
+			checkUpdates.Checked = true;
+			checkUpdates.CheckOnClick = true;
+
+			checkUpdates.Click += (s, a) => TraceManager.AddAsync ("Check updates changed: " + checkUpdates.Checked);
+			aboutSpaceport.Click += (s, a) => Process.Start ("http://spaceport.io");
+			testItem.Click += (s, a) => mainPanel.Show();
+
+			spaceportMenu.DropDownItems.Add (testItem);
+			spaceportMenu.DropDownItems.Add (new ToolStripSeparator ());
+			spaceportMenu.DropDownItems.Add (updateSpaceport);
+			spaceportMenu.DropDownItems.Add (checkUpdates);
+			spaceportMenu.DropDownItems.Add (new ToolStripSeparator());
+			spaceportMenu.DropDownItems.Add (aboutSpaceport);
 			PluginBase.MainForm.MenuStrip.Items.Add (spaceportMenu);
 		}
 

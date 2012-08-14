@@ -59,5 +59,12 @@ namespace SpaceportPlugin.Properties {
                 resourceCulture = value;
             }
         }
+        
+        internal static System.Drawing.Bitmap pluginIcon {
+            get {
+                object obj = ResourceManager.GetObject("pluginIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }
