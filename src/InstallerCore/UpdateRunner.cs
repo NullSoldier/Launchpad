@@ -8,9 +8,10 @@ namespace InstallerCore
 {
 	public class UpdateRunner
 	{
-		public UpdateRunner (Uri updateLocation)
+		public UpdateRunner (Uri updateLocation, Version currentVersion)
 		{
 			this.updateLocation = updateLocation;
+			this.currentVersion = currentVersion;
 		}
 
 		public event EventHandler UpdateFound;
@@ -39,6 +40,7 @@ namespace InstallerCore
 
 		private const int checkSleepTime = 60000;
 		private readonly Uri updateLocation;
+		private readonly Version currentVersion;
 		private Thread updateThread;
 		private bool isCheckingUpdates;
 
@@ -49,15 +51,23 @@ namespace InstallerCore
 				string version;
 				Exception ex;
 
-				if (UpdateHelper.TryDownloadString (this.updateLocation, out version, out ex))
+				if (!UpdateHelper.TryDownloadString (this.updateLocation, out version, out ex))
 				{
-					onUpdateFound();
-					Stop();
-					return;
+					onCheckUpdateFailed (ex);
+					Thread.Sleep (checkSleepTime);
+					continue;
 				}
-				
-				onCheckUpdateFailed (ex);
-				Thread.Sleep (checkSleepTime);
+
+				//TODO: reduce point of failure at version string formatting
+				if (new Version(version) <= currentVersion)
+				{
+					Thread.Sleep (checkSleepTime);
+					continue;
+				}
+
+				Stop();
+				onUpdateFound();
+				return;
 			}
 		}
 

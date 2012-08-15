@@ -23,7 +23,7 @@ namespace PluginUpdater
 		private const string author = "Jason (Null) Spafford";
 		private const string description = "A spaceport IDE plugin to check for, and update the Spaceport plugin.";
 		private const int apiLevel = 1;
-		private const string updateURL = "http://entitygames.net/games/updates";
+		private const string updateURL = "http://entitygames.net/games/updates/update";
 		private object settingsObject = null;
 		private SpaceportPlugin spaceportPlugin;
 		private SpaceportMenu spaceportMenu;
@@ -69,7 +69,7 @@ namespace PluginUpdater
 			spaceportMenu = spaceportPlugin.SpaceportMenu;
 			HookIntoMenu();
 
-			updateRunner = new UpdateRunner (new Uri (updateURL));
+			updateRunner = new UpdateRunner (new Uri (updateURL), spaceportPluginVersion);
 			updateRunner.CheckUpdateStarted += (s, a) => TraceManager.AddAsync ("Spaceport updater runner started"); 
 			updateRunner.CheckUpdateStopped += (s, a) => TraceManager.AddAsync ("Spaceport updater runner stopped");
 			updateRunner.UpdateFound += (s, a) => TraceManager.AddAsync ("Update found!");
