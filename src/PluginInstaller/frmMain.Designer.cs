@@ -35,46 +35,51 @@
 			// 
 			// inConsole
 			// 
-			this.inConsole.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.inConsole.Location = new System.Drawing.Point(12, 12);
+			this.inConsole.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.inConsole.Location = new System.Drawing.Point(18, 19);
+			this.inConsole.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.inConsole.Multiline = true;
 			this.inConsole.Name = "inConsole";
 			this.inConsole.ReadOnly = true;
-			this.inConsole.Size = new System.Drawing.Size(260, 193);
+			this.inConsole.Size = new System.Drawing.Size(817, 309);
 			this.inConsole.TabIndex = 0;
 			// 
 			// btnInstall
 			// 
-			this.btnInstall.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.btnInstall.Location = new System.Drawing.Point(12, 211);
+			this.btnInstall.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnInstall.Location = new System.Drawing.Point(18, 341);
+			this.btnInstall.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.btnInstall.Name = "btnInstall";
-			this.btnInstall.Size = new System.Drawing.Size(260, 35);
+			this.btnInstall.Size = new System.Drawing.Size(819, 57);
 			this.btnInstall.TabIndex = 1;
 			this.btnInstall.Text = "Install";
 			this.btnInstall.UseVisualStyleBackColor = true;
 			// 
 			// btnFinish
 			// 
-			this.btnFinish.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.btnFinish.Location = new System.Drawing.Point(12, 252);
+			this.btnFinish.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnFinish.Location = new System.Drawing.Point(18, 407);
+			this.btnFinish.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.btnFinish.Name = "btnFinish";
-			this.btnFinish.Size = new System.Drawing.Size(260, 35);
+			this.btnFinish.Size = new System.Drawing.Size(819, 57);
 			this.btnFinish.TabIndex = 2;
 			this.btnFinish.Text = "Finish";
 			this.btnFinish.UseVisualStyleBackColor = true;
 			// 
 			// frmMain
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(284, 290);
+			this.ClientSize = new System.Drawing.Size(855, 468);
 			this.Controls.Add(this.btnFinish);
 			this.Controls.Add(this.btnInstall);
 			this.Controls.Add(this.inConsole);
+			this.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.Name = "frmMain";
 			this.Text = "Spaceport Plugin Installer";
 			this.Load += new System.EventHandler(this.frmMain_Load);

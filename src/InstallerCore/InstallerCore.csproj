@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>InstallerCore</RootNamespace>
     <AssemblyName>InstallerCore</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,8 +32,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cadenza">
+      <HintPath>..\lib\Cadenza.dll</HintPath>
+    </Reference>
     <Reference Include="INIFileParser">
-      <HintPath>..\src\lib\INIFileParser.dll</HintPath>
+      <HintPath>..\lib\INIFileParser.dll</HintPath>
     </Reference>
     <Reference Include="PluginCore">
       <HintPath>..\src\lib\PluginCore.dll</HintPath>
@@ -46,13 +50,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actions\BaseInstallerAction.cs" />
-    <Compile Include="Actions\A2JInstallerAction.cs" />
-    <Compile Include="Actions\SampleInstallAction.cs" />
-    <Compile Include="IInstallerAction.cs" />
     <Compile Include="IniWrapper.cs" />
     <Compile Include="InstalledList.cs" />
     <Compile Include="Installer.cs" />
+    <Compile Include="InstallerEventArgs.cs" />
+    <Compile Include="InstallerFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
