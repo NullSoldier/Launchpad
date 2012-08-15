@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceportPlugin", "src\Spac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginInstaller", "src\PluginInstaller\PluginInstaller.csproj", "{F81EFCE4-C491-40C1-8E8C-27965BA89FB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstallerCore", "InstallerCore\InstallerCore.csproj", "{4FBB9DDC-6E2F-4092-A679-E4B6574E7697}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstallerCore", "src\InstallerCore\InstallerCore.csproj", "{4FBB9DDC-6E2F-4092-A679-E4B6574E7697}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
