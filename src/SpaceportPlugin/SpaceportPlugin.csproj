@@ -56,7 +56,7 @@
       <DependentUpon>MainUI.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PluginMain.cs" />
+    <Compile Include="SpaceportPlugin.cs" />
     <EmbeddedResource Include="MainUI.resx">
       <DependentUpon>MainUI.cs</DependentUpon>
     </EmbeddedResource>
@@ -82,6 +82,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\favicons.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PluginCommon\PluginCommon.csproj">
+      <Project>{E8893B9D-F4C3-4F3A-AE2F-FDB11FC2B6C3}</Project>
+      <Name>PluginCommon</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

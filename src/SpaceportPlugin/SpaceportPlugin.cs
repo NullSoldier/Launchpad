@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using PluginCommon;
 using PluginCore;
 using PluginCore.Helpers;
 using PluginCore.Managers;
@@ -13,7 +14,7 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace SpaceportPlugin
 {
-	public class PluginMain : IPlugin
+	public class SpaceportPlugin : IPlugin
 	{
 		private const string guid = "7b05efcc-d6e8-49c4-85b9-85ae9e22ead9";
 		private const string name = "Spaceport Plugin";
@@ -24,10 +25,11 @@ namespace SpaceportPlugin
 		private Image icon;
 		private object settingsObject;
 		private DockContent mainPanel;
+		private SpaceportMenu spaceportMenu;
 
 		public void Initialize()
 		{
-			TraceManager.AddAsync ("Starting Spaceport Plugin v0.00001");
+			TraceManager.AddAsync ("Starting Spaceport Plugin v0.00002");
 			EventManager.AddEventHandler (this, EventType.FileSave);
 
 			icon = Image.FromHbitmap (Resources.pluginIcon.GetHbitmap());
@@ -49,26 +51,10 @@ namespace SpaceportPlugin
 
 		private void HookIntoMenu()
 		{
-			var spaceportMenu = new ToolStripMenuItem ("Spaceport", icon);
-			var testItem = new ToolStripMenuItem ("Make Spaceport Awesome");
-			var updateSpaceport = new ToolStripButton ("Update Spaceport Plugin");
-			var checkUpdates = new ToolStripMenuItem ("Check for updates automatically");
-			var aboutSpaceport = new ToolStripMenuItem ("About");
-
-			checkUpdates.Checked = true;
-			checkUpdates.CheckOnClick = true;
-
-			checkUpdates.Click += (s, a) => TraceManager.AddAsync ("Check updates changed: " + checkUpdates.Checked);
-			aboutSpaceport.Click += (s, a) => Process.Start ("http://spaceport.io");
-			testItem.Click += (s, a) => mainPanel.Show();
-
-			spaceportMenu.DropDownItems.Add (testItem);
-			spaceportMenu.DropDownItems.Add (new ToolStripSeparator ());
-			spaceportMenu.DropDownItems.Add (updateSpaceport);
-			spaceportMenu.DropDownItems.Add (checkUpdates);
-			spaceportMenu.DropDownItems.Add (new ToolStripSeparator());
-			spaceportMenu.DropDownItems.Add (aboutSpaceport);
-			PluginBase.MainForm.MenuStrip.Items.Add (spaceportMenu);
+			spaceportMenu = new SpaceportMenu (PluginBase.MainForm.MenuStrip);
+			
+			spaceportMenu.AboutItem.Click += (s, a) => Process.Start ("http://spaceport.io");
+			spaceportMenu.MakeAwesomeItem.Click += (s, a) => mainPanel.Show();
 		}
 
 		#region Required Properties
