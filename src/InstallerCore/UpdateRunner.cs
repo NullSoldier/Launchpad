@@ -8,15 +8,19 @@ namespace InstallerCore
 {
 	public class UpdateRunner
 	{
+		public UpdateRunner (Uri updateLocation)
+		{
+			this.updateLocation = updateLocation;
+		}
+
 		public event EventHandler UpdateFound;
 		public event EventHandler CheckUpdateStarted;
 		public event EventHandler CheckUpdateStopped;
 		public event EventHandler<UnhandledExceptionEventArgs> CheckUpdateFailed;
 
-		public void StartUpdateRunner (Uri updateLocation)
+		public void Start()
 		{
-			this.updateLocation = updateLocation;
-			this.isCheckingUpdates = true;
+			isCheckingUpdates = true;
 
 			updateThread = new Thread (updateCheckRunner);
 			updateThread.Start();
@@ -24,7 +28,7 @@ namespace InstallerCore
 			onStartCheckUpdate();
 		}
 
-		public void StopUpdateRunner()
+		public void Stop()
 		{
 			if (!isCheckingUpdates)
 				return;
@@ -34,7 +38,7 @@ namespace InstallerCore
 		}
 
 		private const int checkSleepTime = 60000;
-		private Uri updateLocation;
+		private readonly Uri updateLocation;
 		private Thread updateThread;
 		private bool isCheckingUpdates;
 
@@ -45,10 +49,10 @@ namespace InstallerCore
 				string version;
 				Exception ex;
 
-				if (UpdateHelper.TryDownloadString (updateLocation, out version, out ex))
+				if (UpdateHelper.TryDownloadString (this.updateLocation, out version, out ex))
 				{
 					onUpdateFound();
-					StopUpdateRunner();
+					Stop();
 					return;
 				}
 				

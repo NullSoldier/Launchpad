@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using PluginCommon;
@@ -26,15 +27,22 @@ namespace PluginSpaceport
 			get { return spaceportMenu; }
 		}
 
+		public Version Version
+		{
+			get { return currentVersion; }
+		}
+
 		public void Initialize()
 		{
-			TraceManager.AddAsync ("Starting Spaceport Plugin v0.00002");
-			EventManager.AddEventHandler (this, EventType.FileSave);
-
 			icon = Image.FromHbitmap (Resources.spaceportIcon.GetHbitmap());
 			mainPanel = PluginBase.MainForm.CreateDockablePanel (new MainUI(), guid, icon, DockState.Hidden);
+			currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
 
 			HookIntoMenu();
+
+			TraceManager.AddAsync ("Starting Spaceport Plugin v" + currentVersion);
+			EventManager.AddEventHandler (this, EventType.FileSave);
+
 			isInitialized = true;
 		}
 
@@ -55,10 +63,11 @@ namespace PluginSpaceport
 		private const string author = "Jason (Null) Spafford";
 		private const string description = "A spaceport IDE plugin for Flash develop.";
 		private const int apiLevel = 1;
-		private Image icon;
 		private object settingsObject = null;
+		private Image icon;
 		private DockContent mainPanel;
 		private SpaceportMenu spaceportMenu;
+		private Version currentVersion;
 		private bool isInitialized;
 
 		private void HookIntoMenu()
