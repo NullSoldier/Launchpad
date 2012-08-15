@@ -36,8 +36,10 @@ namespace InstallerCore
 
 			foreach (InstallerFile installFile in installList.Files)
 			{
-				string destPath = Path.Combine (flashDevelopRoot, installFile.File.Name);
-
+				// Take the original path and chop off the install root,
+				// then append it to the flash develop folder
+				string relativeDestPath = installFile.File.FullName.Substring (installRoot.Length + 1);
+				string destPath = Path.Combine (flashDevelopRoot, relativeDestPath);
 			
 				var targetDir = new DirectoryInfo (destPath).Parent;
 				if (!targetDir.Exists)

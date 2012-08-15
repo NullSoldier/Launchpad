@@ -29,7 +29,7 @@ namespace PluginInstaller
 		{
 			Icon = Icon.FromHandle (Resources.icon.GetHicon ());
 			manifestRoot = Path.Combine (Environment.CurrentDirectory, "files");
-			flashDeveloperRoot = @"C:\Program Files (x86)\FlashDevelop"; //TODO: autodetect this
+			flashDeveloperRoot = @"C:\Program Files\FlashDevelop"; //TODO: autodetect this
 
 			var installList = new InstallFileList ();
 			installList.Load (manifestRoot);
@@ -38,7 +38,12 @@ namespace PluginInstaller
 			LogMessage ("Preparing to install: " + installList.Count + " files.");
 
 			foreach (InstallerFile file in installList.Files)
-				LogMessage (string.Format ("* {0} ({1})", file.File.Name, file.Version));
+			{
+				var filesDirIndex = file.File.FullName.IndexOf ("files") + 5;
+				var filesRelativePath = file.File.FullName.Substring (filesDirIndex);
+
+				LogMessage (string.Format ("* {0} ({1})", filesRelativePath, file.Version));
+			}
 		}
 
 		private void LogMessage (string message)
@@ -52,7 +57,7 @@ namespace PluginInstaller
 		private void StartInstalling()
 		{
 			Installer installer = new Installer ();
-			installer.FileInstalled += (s, e) => LogMessage ("File installed: " + e.FileInstalled.Name);
+			installer.FileInstalled += (s, e) => LogMessage ("File installed: " + e.FileInstalled.FullName);
 			installer.FinishedInstalling += (s, e) =>
 			{
 				base.Invoke ((Action)finishedInstalling);
