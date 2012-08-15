@@ -57,11 +57,13 @@
 			this.btnInstall.TabIndex = 1;
 			this.btnInstall.Text = "Install";
 			this.btnInstall.UseVisualStyleBackColor = true;
+			this.btnInstall.Click += new System.EventHandler(this.btnInstall_Click);
 			// 
 			// btnFinish
 			// 
 			this.btnFinish.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnFinish.Enabled = false;
 			this.btnFinish.Location = new System.Drawing.Point(18, 407);
 			this.btnFinish.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.btnFinish.Name = "btnFinish";

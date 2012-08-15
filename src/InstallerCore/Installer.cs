@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
+using PluginInstaller;
 
 namespace InstallerCore
 {
@@ -18,7 +19,7 @@ namespace InstallerCore
 			installThread.Start(new [] {installRoot, flashDevelopRoot});
 		}
 
-		private const string installManifestName = "installList.ini";
+		private const string installManifestName = "files.ini";
 		private Thread installThread;
 
 		private void installThreadRunner(object arg)
@@ -30,15 +31,19 @@ namespace InstallerCore
 		private void startInstallProcess (string installRoot, string flashDevelopRoot)
 		{
 			// Get list of files to install
-			string installManifestPath = Path.Combine (installRoot, installManifestName);
-			IniWrapper iniWrapper = new IniWrapper (installManifestPath);
+			var installList = new InstallFileList ();
+			installList.Load (installRoot);
 
-			foreach (IniParser.KeyData kvp in iniWrapper.GetSection ("Files"))
+			foreach (InstallerFile installFile in installList.Files)
 			{
-				string sourcePath = Path.Combine (installRoot, kvp.KeyName);
-				string destPath = Path.Combine (flashDevelopRoot, kvp.Value);
+				string destPath = Path.Combine (flashDevelopRoot, installFile.File.Name);
 
-				File.Copy (sourcePath, destPath, true);
+			
+				var targetDir = new DirectoryInfo (destPath).Parent;
+				if (!targetDir.Exists)
+					targetDir.Create();
+
+				installFile.File.CopyTo (destPath, true);
 				onFileInstalled (destPath);
 			}
 

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using InstallerCore;
 using PluginInstaller.Properties;
 
 namespace PluginInstaller
@@ -21,26 +22,56 @@ namespace PluginInstaller
 		}
 
 		private string manifestPath;
+		private string manifestRoot;
+		private string flashDeveloperRoot;
 
 		private void frmMain_Load(object sender, EventArgs e)
 		{
-			this.Icon = Icon.FromHandle (Resources.icon.GetHicon ());
-			this.manifestPath = Path.Combine (Environment.CurrentDirectory, "files\\files.ini");
+			Icon = Icon.FromHandle (Resources.icon.GetHicon ());
+			manifestRoot = Path.Combine (Environment.CurrentDirectory, "files");
+			flashDeveloperRoot = @"C:\Program Files (x86)\FlashDevelop"; //TODO: autodetect this
+
+			var installList = new InstallFileList ();
+			installList.Load (manifestRoot);
 
 			LogMessage ("Spaceport installer " + Assembly.GetExecutingAssembly().GetName().Version + " loaded.");
-			LogMessage ("Preparing to install: " + GetInstallCount() + " files.");
+			LogMessage ("Preparing to install: " + installList.Count + " files.");
+
+			foreach (InstallerFile file in installList.Files)
+				LogMessage (string.Format ("* {0} ({1})", file.File.Name, file.Version));
 		}
 
 		private void LogMessage (string message)
 		{
-			inConsole.Text += string.Format ("{0}{1}", message, Environment.NewLine);
+			if (this.InvokeRequired)
+				base.Invoke ((Action)delegate { LogMessage (message); });
+			else
+				inConsole.Text += string.Format ("{0}{1}", message, Environment.NewLine);
 		}
 
-		private int GetInstallCount()
+		private void StartInstalling()
 		{
-			InstalledList list = new InstalledList();
-			list.Load (manifestPath);
-			return list.Count;
+			Installer installer = new Installer ();
+			installer.FileInstalled += (s, e) => LogMessage ("File installed: " + e.FileInstalled.Name);
+			installer.FinishedInstalling += (s, e) =>
+			{
+				base.Invoke ((Action)finishedInstalling);
+			};
+
+			installer.Start (manifestRoot, flashDeveloperRoot);
+		}
+
+		private void btnInstall_Click(object sender, EventArgs e)
+		{
+			btnInstall.Enabled = false;
+
+			StartInstalling();
+		}
+
+		private void finishedInstalling()
+		{
+			LogMessage ("Files finished installing.");
+			btnFinish.Enabled = true;
 		}
 	}
 }

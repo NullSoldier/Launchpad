@@ -51,7 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IniWrapper.cs" />
-    <Compile Include="InstalledList.cs" />
+    <Compile Include="InstallFileList.cs" />
     <Compile Include="Installer.cs" />
     <Compile Include="InstallerEventArgs.cs" />
     <Compile Include="InstallerFile.cs" />
