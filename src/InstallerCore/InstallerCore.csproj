@@ -67,6 +67,8 @@
     <Compile Include="InstallerEventArgs.cs" />
     <Compile Include="InstallerFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UpdateHelper.cs" />
+    <Compile Include="UpdateRunner.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
