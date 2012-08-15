@@ -35,9 +35,9 @@
 			// 
 			// inConsole
 			// 
-			this.inConsole.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.inConsole.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+						| System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
 			this.inConsole.Location = new System.Drawing.Point(18, 19);
 			this.inConsole.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.inConsole.Multiline = true;
@@ -48,8 +48,8 @@
 			// 
 			// btnInstall
 			// 
-			this.btnInstall.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnInstall.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
 			this.btnInstall.Location = new System.Drawing.Point(18, 341);
 			this.btnInstall.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.btnInstall.Name = "btnInstall";
@@ -61,8 +61,8 @@
 			// 
 			// btnFinish
 			// 
-			this.btnFinish.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnFinish.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
 			this.btnFinish.Enabled = false;
 			this.btnFinish.Location = new System.Drawing.Point(18, 407);
 			this.btnFinish.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -71,6 +71,7 @@
 			this.btnFinish.TabIndex = 2;
 			this.btnFinish.Text = "Finish";
 			this.btnFinish.UseVisualStyleBackColor = true;
+			this.btnFinish.Click += new System.EventHandler(this.btnFinish_Click);
 			// 
 			// frmMain
 			// 
@@ -80,7 +81,7 @@
 			this.Controls.Add(this.btnFinish);
 			this.Controls.Add(this.btnInstall);
 			this.Controls.Add(this.inConsole);
-			this.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
 			this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.Name = "frmMain";
 			this.Text = "Spaceport Plugin Installer";

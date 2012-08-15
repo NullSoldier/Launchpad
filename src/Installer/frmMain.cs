@@ -65,6 +65,12 @@ namespace PluginInstaller
 			installer.Start (manifestRoot, flashDeveloperRoot);
 		}
 
+		private void finishedInstalling()
+		{
+			LogMessage ("Files finished installing.");
+			btnFinish.Enabled = true;
+		}
+
 		private void btnInstall_Click(object sender, EventArgs e)
 		{
 			btnInstall.Enabled = false;
@@ -72,10 +78,9 @@ namespace PluginInstaller
 			StartInstalling();
 		}
 
-		private void finishedInstalling()
+		private void btnFinish_Click(object sender, EventArgs e)
 		{
-			LogMessage ("Files finished installing.");
-			btnFinish.Enabled = true;
+			this.Close();
 		}
 	}
 }
