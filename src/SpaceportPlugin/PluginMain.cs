@@ -15,7 +15,7 @@ namespace SpaceportPlugin
 {
 	public class PluginMain : IPlugin
 	{
-		private const string guid = "3a015ec0-53f3-493a-a5f7-07a55bb93b64";
+		private const string guid = "7b05efcc-d6e8-49c4-85b9-85ae9e22ead9";
 		private const string name = "Spaceport Plugin";
 		private const string help = "http://spaceport.io";
 		private const string author = "Jason (Null) Spafford";
