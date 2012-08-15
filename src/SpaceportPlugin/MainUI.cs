@@ -7,7 +7,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-namespace SpaceportPlugin
+namespace PluginSpaceport
 {
 	public partial class MainUI : UserControl
 	{

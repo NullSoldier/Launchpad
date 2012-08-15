@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SpaceportPlugin.Properties {
+namespace PluginSpaceport.Properties {
     using System;
     
     
@@ -60,9 +60,9 @@ namespace SpaceportPlugin.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap pluginIcon {
+        internal static System.Drawing.Bitmap spaceportIcon {
             get {
-                object obj = ResourceManager.GetObject("pluginIcon", resourceCulture);
+                object obj = ResourceManager.GetObject("spaceportIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

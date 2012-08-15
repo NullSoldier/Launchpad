@@ -52,9 +52,6 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cadenza">
-      <HintPath>..\lib\Cadenza.dll</HintPath>
-    </Reference>
     <Reference Include="INIFileParser">
       <HintPath>..\lib\INIFileParser.dll</HintPath>
     </Reference>
@@ -63,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExtensionAttribute.cs" />
     <Compile Include="IniWrapper.cs" />
     <Compile Include="InstallFileList.cs" />
     <Compile Include="Installer.cs" />

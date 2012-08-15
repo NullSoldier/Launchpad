@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Net.Mime;
 using System.Text;
+using System.Threading;
 using PluginCommon;
 using PluginCore;
 using PluginCore.Managers;
+using PluginSpaceport;
 using WeifenLuo.WinFormsUI.Docking;
+using System.Windows.Forms;
 
-namespace SpaceportUpdaterPlugin
+namespace PluginUpdater
 {
 	public class UpdaterPlugin : IPlugin
 	{
@@ -17,15 +20,30 @@ namespace SpaceportUpdaterPlugin
 		private const string author = "Jason (Null) Spafford";
 		private const string description = "A spaceport IDE plugin to check for, and update the Spaceport plugin.";
 		private const int apiLevel = 1;
-		private object settingsObject;
+		private const string spaceportPluginGuid = "7b05efcc-d6e8-49c4-85b9-85ae9e22ead9";
+		private object settingsObject = null;
+		private SpaceportPlugin spaceportPlugin;
 		private SpaceportMenu spaceportMenu;
 		private UpdateMenu updateMenu;
 
 		public void Initialize()
 		{
-			TraceManager.AddAsync ("Starting Spaceport Plugin v0.00001");
+			spaceportPlugin = PluginHelper.CheckPluginLoaded<SpaceportPlugin> (spaceportPluginGuid);
+			if (spaceportPlugin == null)
+				throw new InvalidOperationException ("The primary spaceport plugin was not loaded.");
 
-			HookIntoMenu();
+			ThreadPool.QueueUserWorkItem ((a) => WaitForSpaceportPlugin());
+		}
+
+		private void WaitForSpaceportPlugin ()
+		{
+			var form = PluginBase.MainForm.MenuStrip.Parent.Parent;
+
+			TraceManager.AddAsync ("Waiting for Spaceport plugin to start.");
+			while (!spaceportPlugin.IsInitialized || !form.IsHandleCreated )
+				Thread.Sleep (1);
+
+			PluginBase.MainForm.MenuStrip.Parent.Parent.Invoke (new MethodInvoker (Load));
 		}
 
 		public void Dispose()
@@ -38,15 +56,18 @@ namespace SpaceportUpdaterPlugin
 			throw new NotImplementedException();
 		}
 
+		private void Load()
+		{
+			TraceManager.AddAsync ("Starting Spaceport Update Plugin v0.1");
+
+			spaceportMenu = spaceportPlugin.SpaceportMenu;
+			HookIntoMenu();
+		}
+
 		private void HookIntoMenu()
 		{
-			var spaceportMenuItem = PluginBase.MainForm.FindMenuItem ("Spaceport");
-			if (spaceportMenuItem == null)
-			{
-				TraceManager.Add ("Spaceport menu item not found.");
-				return;
-			}
-
+			var spaceportMenuItem = spaceportMenu.SpaceportItem;
+			
 			spaceportMenu = (SpaceportMenu)spaceportMenuItem.Tag;
 			updateMenu = new UpdateMenu (spaceportMenu);
 

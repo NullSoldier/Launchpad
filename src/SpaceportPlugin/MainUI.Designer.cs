@@ -1,4 +1,4 @@
-﻿namespace SpaceportPlugin
+﻿namespace PluginSpaceport
 {
 	partial class MainUI
 	{

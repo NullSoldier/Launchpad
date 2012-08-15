@@ -56,7 +56,7 @@
       <DependentUpon>MainUI.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SpaceportPlugin.cs" />
+    <Compile Include="SpaceportPluginEntry.cs" />
     <EmbeddedResource Include="MainUI.resx">
       <DependentUpon>MainUI.cs</DependentUpon>
     </EmbeddedResource>
@@ -81,13 +81,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\favicons.png" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\PluginCommon\PluginCommon.csproj">
       <Project>{E8893B9D-F4C3-4F3A-AE2F-FDB11FC2B6C3}</Project>
       <Name>PluginCommon</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\spaceportIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
@@ -96,7 +96,8 @@
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>"C:\windows\system32\xcopy" "$(TargetPath)" "C:\Program Files\FlashDevelop\Plugins" /Y /Q
-"C:\windows\system32\xcopy" "$(TargetPath)" "$(SolutionDir)src\PluginInstaller\bin\Debug\files\Plugins\" /Y /Q</PostBuildEvent>
+"C:\windows\system32\xcopy" "$(TargetPath)" "$(SolutionDir)src\PluginInstaller\bin\Debug\files\Plugins\" /Y /Q
+"C:\windows\system32\xcopy" "$(TargetPath)" "C:\Users\Null-Laptop\Desktop\Projects\FlashDevelop\FlashDevelop\Bin\Debug\Plugins" /Y /Q</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

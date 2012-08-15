@@ -16,8 +16,9 @@ namespace PluginCommon
 			CheckUpdatesItem.CheckOnClick = true;
 			
 			var updateIndex = menu.SpaceportItem.DropDownItems.IndexOf (menu.AboutItem) - 1;
-			menu.SpaceportItem.DropDownItems.Insert (updateIndex, UpdateItem);
 			menu.SpaceportItem.DropDownItems.Insert (updateIndex, CheckUpdatesItem);
+			menu.SpaceportItem.DropDownItems.Insert (updateIndex, UpdateItem);
+			menu.SpaceportItem.DropDownItems.Insert (updateIndex, new ToolStripSeparator());
 		}
 
 		public ToolStripButton UpdateItem

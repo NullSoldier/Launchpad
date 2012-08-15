@@ -21,7 +21,6 @@ namespace PluginInstaller
 			InitializeComponent();
 		}
 
-		private string manifestPath;
 		private string manifestRoot;
 		private string flashDeveloperRoot;
 

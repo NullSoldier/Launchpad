@@ -12,7 +12,7 @@ namespace PluginCommon
 		{
 			SpaceportItem = new ToolStripMenuItem ("Spaceport");
 			this.MakeAwesomeItem = new ToolStripMenuItem ("Make Spaceport Awesome");
-			this.AboutItem = new ToolStripMenuItem ("AboutItem");
+			this.AboutItem = new ToolStripMenuItem ("About");
 
 			SpaceportItem.DropDownItems.Add (MakeAwesomeItem);
 			SpaceportItem.DropDownItems.Add (new ToolStripSeparator ());

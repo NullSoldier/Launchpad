@@ -9,33 +9,33 @@ using PluginCommon;
 using PluginCore;
 using PluginCore.Helpers;
 using PluginCore.Managers;
-using SpaceportPlugin.Properties;
+using PluginSpaceport.Properties;
 using WeifenLuo.WinFormsUI.Docking;
 
-namespace SpaceportPlugin
+namespace PluginSpaceport
 {
 	public class SpaceportPlugin : IPlugin
 	{
-		private const string guid = "7b05efcc-d6e8-49c4-85b9-85ae9e22ead9";
-		private const string name = "Spaceport Plugin";
-		private const string help = "http://spaceport.io";
-		private const string author = "Jason (Null) Spafford";
-		private const string description = "A spaceport IDE plugin for Flash develop.";
-		private const int apiLevel = 1;
-		private Image icon;
-		private object settingsObject;
-		private DockContent mainPanel;
-		private SpaceportMenu spaceportMenu;
+		public bool IsInitialized
+		{
+			get { return isInitialized; }
+		}
+
+		public SpaceportMenu SpaceportMenu
+		{
+			get { return spaceportMenu; }
+		}
 
 		public void Initialize()
 		{
 			TraceManager.AddAsync ("Starting Spaceport Plugin v0.00002");
 			EventManager.AddEventHandler (this, EventType.FileSave);
 
-			icon = Image.FromHbitmap (Resources.pluginIcon.GetHbitmap());
+			icon = Image.FromHbitmap (Resources.spaceportIcon.GetHbitmap());
 			mainPanel = PluginBase.MainForm.CreateDockablePanel (new MainUI(), guid, icon, DockState.Hidden);
 
 			HookIntoMenu();
+			isInitialized = true;
 		}
 
 		public void Dispose()
@@ -48,6 +48,18 @@ namespace SpaceportPlugin
 			if (e.Type == EventType.FileSave)
 				TraceManager.AddAsync ("Spaceport Plugin detected file saved " + e);
 		}
+
+		private const string guid = "7b05efcc-d6e8-49c4-85b9-85ae9e22ead9";
+		private const string name = "Spaceport Plugin";
+		private const string help = "http://spaceport.io";
+		private const string author = "Jason (Null) Spafford";
+		private const string description = "A spaceport IDE plugin for Flash develop.";
+		private const int apiLevel = 1;
+		private Image icon;
+		private object settingsObject = null;
+		private DockContent mainPanel;
+		private SpaceportMenu spaceportMenu;
+		private bool isInitialized;
 
 		private void HookIntoMenu()
 		{
