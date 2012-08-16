@@ -55,7 +55,6 @@ namespace PluginSpaceport
 
 		public void Dispose()
 		{
-			TraceManager.AddAsync ("Destroying Spaceport Plugin");
 		}
 
 		private Image icon;
@@ -69,8 +68,18 @@ namespace PluginSpaceport
 		{
 			spaceportMenu = new SpaceportMenu (PluginBase.MainForm.MenuStrip);
 			
-			spaceportMenu.AboutItem.Click += (s, a) => Process.Start ("http://spaceport.io");
-			spaceportMenu.MakeAwesomeItem.Click += (s, a) => mainPanel.Show();
+			spaceportMenu.AboutItem.Click += About_Click;
+			spaceportMenu.MakeAwesomeItem.Click += MakeAwesomeItem_Click;
+		}
+
+		private void MakeAwesomeItem_Click (object sender, EventArgs e)
+		{
+			mainPanel.Show();
+		}
+
+		private void About_Click (object sender, EventArgs e)
+		{
+			Process.Start ("http://spaceport.io");
 		}
 
 		#region Required Properties
