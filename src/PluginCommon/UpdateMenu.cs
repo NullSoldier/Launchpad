@@ -12,6 +12,7 @@ namespace PluginCommon
 			UpdateItem = new ToolStripButton ("Update Spaceport Plugin");
 			CheckUpdatesItem = new ToolStripMenuItem ("Check for updates automatically");
 
+			UpdateItem.Enabled = false;
 			CheckUpdatesItem.Checked = true;
 			CheckUpdatesItem.CheckOnClick = true;
 			
@@ -31,6 +32,11 @@ namespace PluginCommon
 		{
 			get;
 			private set;
+		}
+
+		public void SetUpdateEnabled (bool enabled)
+		{
+			UpdateItem.Enabled = enabled;
 		}
 	}
 }

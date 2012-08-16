@@ -67,6 +67,8 @@
     <Compile Include="InstallerEventArgs.cs" />
     <Compile Include="InstallerFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UpdateCheckerEventArgs.cs" />
+    <Compile Include="UpdateDownloader.cs" />
     <Compile Include="UpdateHelper.cs" />
     <Compile Include="UpdateRunner.cs" />
   </ItemGroup>

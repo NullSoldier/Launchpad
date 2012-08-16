@@ -14,9 +14,9 @@ namespace InstallerCore
 			this.currentVersion = currentVersion;
 		}
 
-		public event EventHandler UpdateFound;
 		public event EventHandler CheckUpdateStarted;
 		public event EventHandler CheckUpdateStopped;
+		public event EventHandler<UpdateCheckerEventArgs> UpdateFound;
 		public event EventHandler<UnhandledExceptionEventArgs> CheckUpdateFailed;
 
 		public void Start()
@@ -59,14 +59,15 @@ namespace InstallerCore
 				}
 
 				//TODO: reduce point of failure at version string formatting
-				if (new Version(version) <= currentVersion)
+				var versionFound = new Version (version);
+				if (versionFound <= currentVersion)
 				{
 					Thread.Sleep (checkSleepTime);
 					continue;
 				}
 
 				Stop();
-				onUpdateFound();
+				onUpdateFound(versionFound);
 				return;
 			}
 		}
@@ -85,11 +86,11 @@ namespace InstallerCore
 				handler (this, EventArgs.Empty);
 		}
 
-		private void onUpdateFound ()
+		private void onUpdateFound (Version version)
 		{
 			var handler = UpdateFound;
 			if (handler != null)
-				handler (this, EventArgs.Empty);
+				handler (this, new UpdateCheckerEventArgs (version));
 		}
 
 		private void onCheckUpdateFailed (Exception ex)
