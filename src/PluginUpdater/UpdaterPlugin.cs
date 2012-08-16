@@ -20,7 +20,7 @@ namespace PluginUpdater
 	{
 		public void Initialize()
 		{
-			var spaceportPlugin = PluginHelper.CheckPluginLoaded<SpaceportPlugin> (Resources.SpaceportPluginGuid);
+			spaceportPlugin = PluginHelper.CheckPluginLoaded<SpaceportPlugin> (Resources.SpaceportPluginGuid);
 			controller = new UpdaterController (spaceportPlugin);
 			
 			ThreadPool.QueueUserWorkItem (a => WaitForSpaceportPlugin());
@@ -101,10 +101,10 @@ namespace PluginUpdater
 		#region IPlugin Methods
 		private void WaitForSpaceportPlugin ()
 		{
-			var form = PluginBase.MainForm.MenuStrip.Parent.Parent;
+			mainForm = PluginBase.MainForm.MenuStrip.Parent.Parent;
 
 			TraceManager.AddAsync ("Waiting for Spaceport plugin to start.");
-			while (!spaceportPlugin.IsInitialized || !form.IsHandleCreated )
+			while (!spaceportPlugin.IsInitialized || !mainForm.IsHandleCreated )
 				Thread.Sleep (1);
 
 			mainForm.Invoke (new MethodInvoker (Load));

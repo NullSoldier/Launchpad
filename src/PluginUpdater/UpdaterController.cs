@@ -47,12 +47,12 @@ namespace SpaceportUpdaterPlugin
 
 		public void StartUpdateRunner()
 		{
-			updateRunner.Start();
+			UpdateRunner.Start();
 		}
 
 		public void StopUpdateRunner()
 		{
-			updateRunner.Stop();
+			UpdateRunner.Stop();
 		}
 
 		public void DownloadUpdate()
@@ -64,12 +64,10 @@ namespace SpaceportUpdaterPlugin
 			StopUpdateRunner();
 		}
 
-		private UpdateRunner updateRunner;
-
 		private void Init()
 		{
-			updateRunner = new UpdateRunner (new Uri (updateURL), SpaceportVersion);
-			updateRunner.UpdateFound += (o, e) => FoundVersion = e.Version;
+			UpdateRunner = new UpdateRunner (new Uri (updateURL), SpaceportVersion);
+			UpdateRunner.UpdateFound += (o, e) => FoundVersion = e.Version;
 		}
 	}
 }
