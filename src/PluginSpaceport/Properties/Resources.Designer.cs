@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PluginSpaceport.Properties {
+namespace SpaceportPlugin.Properties {
     using System;
     
     
@@ -57,6 +57,51 @@ namespace PluginSpaceport.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Jason (Null) Spafford.
+        /// </summary>
+        internal static string PluginAuthor {
+            get {
+                return ResourceManager.GetString("PluginAuthor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A spaceport IDE plugin for Flash develop..
+        /// </summary>
+        internal static string PluginDescription {
+            get {
+                return ResourceManager.GetString("PluginDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 7b05efcc-d6e8-49c4-85b9-85ae9e22ead9.
+        /// </summary>
+        internal static string PluginGuid {
+            get {
+                return ResourceManager.GetString("PluginGuid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to http://spaceport.io.
+        /// </summary>
+        internal static string PluginHelp {
+            get {
+                return ResourceManager.GetString("PluginHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spaceport Plugin.
+        /// </summary>
+        internal static string PluginName {
+            get {
+                return ResourceManager.GetString("PluginName", resourceCulture);
             }
         }
         

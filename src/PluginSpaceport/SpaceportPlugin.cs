@@ -11,17 +11,13 @@ using PluginCore;
 using PluginCore.Helpers;
 using PluginCore.Managers;
 using PluginSpaceport.Properties;
+using SpaceportPlugin.Properties;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace PluginSpaceport
 {
 	public class SpaceportPlugin : IPlugin
 	{
-		public bool IsInitialized
-		{
-			get { return isInitialized; }
-		}
-
 		public SpaceportMenu SpaceportMenu
 		{
 			get { return spaceportMenu; }
@@ -32,10 +28,15 @@ namespace PluginSpaceport
 			get { return currentVersion; }
 		}
 
+		public bool IsInitialized
+		{
+			get { return isInitialized; }
+		}
+
 		public void Initialize()
 		{
 			icon = Image.FromHbitmap (Resources.spaceportIcon.GetHbitmap());
-			mainPanel = PluginBase.MainForm.CreateDockablePanel (new MainUI(), guid, icon, DockState.Hidden);
+			mainPanel = PluginBase.MainForm.CreateDockablePanel (new MainUI(), Guid, icon, DockState.Hidden);
 			currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
 
 			HookIntoMenu();
@@ -46,28 +47,22 @@ namespace PluginSpaceport
 			isInitialized = true;
 		}
 
-		public void Dispose()
-		{
-			TraceManager.AddAsync ("Destroying Spaceport Plugin");
-		}
-
 		public void HandleEvent(object sender, NotifyEvent e, HandlingPriority priority)
 		{
 			if (e.Type == EventType.FileSave)
 				TraceManager.AddAsync ("Spaceport Plugin detected file saved " + e);
 		}
 
-		private const string guid = "7b05efcc-d6e8-49c4-85b9-85ae9e22ead9";
-		private const string name = "Spaceport Plugin";
-		private const string help = "http://spaceport.io";
-		private const string author = "Jason (Null) Spafford";
-		private const string description = "A spaceport IDE plugin for Flash develop.";
-		private const int apiLevel = 1;
-		private object settingsObject = null;
+		public void Dispose()
+		{
+			TraceManager.AddAsync ("Destroying Spaceport Plugin");
+		}
+
 		private Image icon;
 		private DockContent mainPanel;
 		private SpaceportMenu spaceportMenu;
 		private Version currentVersion;
+		private object settingsObject = null;
 		private bool isInitialized;
 
 		private void HookIntoMenu()
@@ -81,32 +76,32 @@ namespace PluginSpaceport
 		#region Required Properties
 		public int Api
 		{
-			get { return apiLevel; }
+			get { return 1; }
 		}
 
 		public string Name
 		{
-			get { return name; }
+			get { return Resources.PluginName; }
 		}
 
 		public string Guid
 		{
-			get { return guid; }
+			get { return Resources.PluginGuid; }
 		}
 
 		public string Help
 		{
-			get { return help; }
+			get { return Resources.PluginHelp; }
 		}
 
 		public string Author
 		{
-			get { return author; }
+			get { return Resources.PluginAuthor; }
 		}
 
 		public string Description
 		{
-			get { return description; }
+			get { return Resources.PluginDescription; }
 		}
 
 		public object Settings
