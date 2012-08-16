@@ -70,6 +70,7 @@
     <Compile Include="Update\UpdateCheckerEventArgs.cs" />
     <Compile Include="Update\UpdateDownloader.cs" />
     <Compile Include="Update\UpdateHelper.cs" />
+    <Compile Include="Update\UpdateInformation.cs" />
     <Compile Include="Update\UpdateRunner.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

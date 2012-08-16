@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using System.Threading;
+using InstallerCore.Update;
 
 namespace InstallerCore
 {
@@ -38,7 +39,7 @@ namespace InstallerCore
 			onStopCheckUpdate();
 		}
 
-		public  bool TryCheckOnceForUpdate (out Version versionFound, Version currentVersion)
+		public bool TryCheckOnceForUpdate (out Version versionFound)
 		{
 			Exception ex;
 			
@@ -62,6 +63,7 @@ namespace InstallerCore
 			while (isCheckingUpdates)
 			{
 				Version versionFound;
+				string patchNotes;
 				Exception ex;
 
 				if (!TryDownloadVersion (out versionFound, out ex))
@@ -77,8 +79,12 @@ namespace InstallerCore
 					continue;
 				}
 
+				Uri patchNotesURI = new Uri (updateLocation, "patchnotes");
+				if (!UpdateHelper.TryDownloadString (patchNotesURI, out patchNotes, out ex))
+					patchNotes = "No patch notes available.";
+
 				Stop();
-				onUpdateFound (versionFound);
+				onUpdateFound (versionFound, patchNotes);
 				return;
 			}
 		}
@@ -98,6 +104,7 @@ namespace InstallerCore
 			return true;
 		}
 
+		#region Event Handlers
 		private void onStartCheckUpdate()
 		{
 			var handler = CheckUpdateStarted;
@@ -112,11 +119,16 @@ namespace InstallerCore
 				handler (this, EventArgs.Empty);
 		}
 
-		private void onUpdateFound (Version version)
+		private void onUpdateFound (Version version, string patchNotes)
 		{
 			var handler = UpdateFound;
 			if (handler != null)
-				handler (this, new UpdateCheckerEventArgs (version));
+			{
+				var zipURI = new Uri (updateLocation, version + ".zip");
+				var updateInfo = new UpdateInformation (version, patchNotes, zipURI);
+
+				handler (this, new UpdateCheckerEventArgs (updateInfo));
+			}
 		}
 
 		private void onCheckUpdateFailed (Exception ex)
@@ -125,5 +137,6 @@ namespace InstallerCore
 			if (handler != null)
 				handler (this, new UpdateCheckerEventArgs (updateLocation, ex));
 		}
+		#endregion
 	}
 }

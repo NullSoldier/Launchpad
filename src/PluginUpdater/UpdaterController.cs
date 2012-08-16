@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using InstallerCore;
+using InstallerCore.Update;
 using PluginCore.Managers;
 using PluginSpaceport;
 using PluginUpdater;
@@ -55,11 +56,23 @@ namespace SpaceportUpdaterPlugin
 			UpdateRunner.Stop();
 		}
 
-		public void DownloadUpdate()
+		public void DownloadUpdate (Version version)
+		{
+			StopUpdateRunner();
+
+			if (FoundVersion == null)
+			{
+				Version versionFound;
+				UpdateRunner.TryCheckOnceForUpdate (out versionFound);
+			}
+		}
+
+		public UpdateInformation GetUpdateInformation()
 		{
 			if (FoundVersion == null)
 			{
-				//UpdateRunner.CheckOnceForUpdate();
+				Version versionFound;
+				UpdateRunner.TryCheckOnceForUpdate (out versionFound);
 			}
 		}
 

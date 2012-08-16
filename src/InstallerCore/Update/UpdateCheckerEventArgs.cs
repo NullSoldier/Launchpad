@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using InstallerCore.Update;
 
 namespace InstallerCore
 {
 	public class UpdateCheckerEventArgs : EventArgs
 	{
-		public UpdateCheckerEventArgs (Version version)
+		public UpdateCheckerEventArgs (UpdateInformation updateInfo)
 		{
-			this.Version = version;
+			this.UpdateInfo = updateInfo;
 		}
 
 		public UpdateCheckerEventArgs (Uri checkLocation, Exception exception)
@@ -17,10 +18,15 @@ namespace InstallerCore
 			this.Exception = exception;
 		}
 
-		public Version Version
+		public UpdateInformation UpdateInfo
 		{
 			get;
 			private set;
+		}
+
+		public Version Version
+		{
+			get { return UpdateInfo.Version; }
 		}
 
 		public Uri CheckLocation
