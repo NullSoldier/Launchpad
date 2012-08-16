@@ -24,7 +24,7 @@ namespace InstallerCore
 		{
 			string versionFile = version + ".zip";
 			Uri patchUri = new Uri (Path.Combine (updateLocation.AbsoluteUri, versionFile));
-			Uri localDestination = new Uri (localUpdateLocation, version + ".zip");
+			Uri localDestination = new Uri (localUpdateLocation, "" + version + ".zip");
 
 			downloadUpdate (patchUri, localDestination);
 		}
@@ -65,6 +65,8 @@ namespace InstallerCore
 					downloadClient.DownloadFileCompleted += onFileDownloaded;
 					downloadClient.DownloadProgressChanged += onProgressChanged;
 					downloadClient.DownloadFileAsync (remoteUpdateLocation, destination.AbsolutePath);
+
+					onFileStarted();
 				}
 				catch (Exception ex)
 				{
@@ -79,6 +81,13 @@ namespace InstallerCore
 			var handler = Finished;
 			if (handler != null)
 				handler (this, ev);
+		}
+
+		private void onFileStarted ()
+		{
+			var handler = Started;
+			if (handler != null)
+				handler (this, EventArgs.Empty);
 		}
 
 		private void onProgressChanged (object sender, DownloadProgressChangedEventArgs ev)

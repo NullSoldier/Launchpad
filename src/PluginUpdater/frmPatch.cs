@@ -21,8 +21,10 @@ namespace SpaceportUpdaterPlugin
 			else
 			{
 				controller.UpdateRunner.UpdateFound += (s, e) => loadUpdateInformation (e.UpdateInfo);
+
 				controller.UpdateDownloader.Started += (s, e) => SetDownloadingMode ();
 				controller.UpdateDownloader.ProgressChanged += (s, e) => SetDownloadProgress (e.ProgressPercentage);
+				controller.UpdateDownloader.Finished += (s, e) => SetUnzippingMode();
 
 				SetWaitingMode();
 			}
@@ -64,14 +66,14 @@ namespace SpaceportUpdaterPlugin
 		private void SetDownloadingMode ()
 		{
 			btnInstall.Enabled = false;
-			lnkNotes.Text = "Downloading update from entitygames.net...";
+			lblInstruction.Text = "Downloading update from entitygames.net...";
 			progressBar.Style = ProgressBarStyle.Continuous;
 		}
 
 		private void SetUnzippingMode()
 		{
 			btnInstall.Enabled = false;
-			lnkNotes.Text = "Unzipping updates...";
+			lblInstruction.Text = "Unzipping updates...";
 			progressBar.Style = ProgressBarStyle.Continuous;
 		}
 
@@ -117,9 +119,9 @@ namespace SpaceportUpdaterPlugin
 
 		private void btnInstall_Click(object sender, EventArgs e)
 		{
-			if (controller.DownloadUpdate())
-				SetDownloadingMode ();
-			else
+			btnInstall.Enabled = false;
+
+			if (!controller.DownloadUpdate())
 				SetUnzippingMode();
 		}
 	}

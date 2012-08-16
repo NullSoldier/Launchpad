@@ -105,7 +105,7 @@ namespace SpaceportUpdaterPlugin
 			UpdateRunner = new UpdateRunner (new Uri (updateURL), SpaceportVersion);
 			UpdateRunner.UpdateFound += (o, e) => WaitingUpdate = e.UpdateInfo;
 
-			UpdateDownloader = new UpdateDownloader (new Uri (updateURL), new Uri (PathHelper.DataDir));
+			UpdateDownloader = new UpdateDownloader (new Uri (updateURL), new Uri (PathHelper.DataDir + "/"));
 		}
 	}
 }
