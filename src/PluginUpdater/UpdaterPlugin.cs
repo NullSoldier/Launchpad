@@ -20,7 +20,7 @@ namespace PluginUpdater
 	{
 		public void Initialize()
 		{
-			var spaceportPlugin = PluginHelper.CheckPluginLoaded<SpaceportPlugin> (spaceportPluginGuid);
+			var spaceportPlugin = PluginHelper.CheckPluginLoaded<SpaceportPlugin> (Resources.SpaceportPluginGuid);
 			controller = new UpdaterController (spaceportPlugin);
 			
 			ThreadPool.QueueUserWorkItem (a => WaitForSpaceportPlugin());
