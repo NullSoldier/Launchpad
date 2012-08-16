@@ -25,7 +25,7 @@ namespace InstallerCore
 				throw error;
 		}
 		
-		public bool TryGetWaitingPatch (out Version versionWaiting)
+		public bool TryGetWaitingPatchOnDisk (out Version versionWaiting)
 		{
 			DirectoryInfo dir = new DirectoryInfo (localUpdateLocation.AbsolutePath);
 			if (!dir.Exists)
@@ -49,7 +49,7 @@ namespace InstallerCore
 			return latestVersionFound != null;
 		}
 
-		private Uri updateLocation;
-		private Uri localUpdateLocation;
+		private readonly Uri updateLocation;
+		private readonly Uri localUpdateLocation;
 	}
 }

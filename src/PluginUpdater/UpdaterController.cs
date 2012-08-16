@@ -9,7 +9,7 @@ using PluginUpdater;
 
 namespace SpaceportUpdaterPlugin
 {
-	public class UpdaterController
+	public class UpdaterController : IDisposable
 	{
 		private const string updateURL = "http://entitygames.net/games/updates/update";
 
@@ -57,6 +57,11 @@ namespace SpaceportUpdaterPlugin
 
 		public void DownloadUpdate()
 		{
+		}
+
+		public void Dispose()
+		{
+			StopUpdateRunner();
 		}
 
 		private UpdateRunner updateRunner;

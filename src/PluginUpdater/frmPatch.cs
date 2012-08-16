@@ -10,9 +10,26 @@ namespace SpaceportUpdaterPlugin
 {
 	public partial class frmPatch : Form
 	{
-		public frmPatch()
+		public frmPatch (UpdaterController controller)
 		{
 			InitializeComponent ();
+		}
+
+		private UpdaterController controller;
+
+		private void frmPatch_Load(object sender, EventArgs e)
+		{
+			this.HidePatchNotes();
+		}
+
+		private void HidePatchNotes()
+		{
+			this.Size = new Size (this.Size.Width, this.inNotes.Bounds.Top);
+		}
+
+		private void ShowPatchNotes()
+		{
+			this.Size = new Size (this.Size.Width, this.inNotes.Bounds.Bottom);
 		}
 	}
 }

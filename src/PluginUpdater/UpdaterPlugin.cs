@@ -78,13 +78,24 @@ namespace PluginUpdater
 			spaceportMenu = (SpaceportMenu)spaceportMenuItem.Tag;
 			updateMenu = new UpdateMenu (spaceportMenu);
 
-			//updateMenu.UpdateItem.Click += (s, e) => DownloadUpdate();
-			updateMenu.CheckUpdatesItem.CheckedChanged += (s, e) =>
-			{
-				if (updateMenu.CheckUpdatesItem.Checked) controller.StartUpdateRunner();
-				else controller.StopUpdateRunner();
-			};
+			updateMenu.UpdateItem.Click += UpdateSpaceport_Click;
+			updateMenu.CheckUpdatesItem.CheckedChanged += CheckUpdates_CheckChanged;
 			TraceManager.Add ("Spaceport updater plugin inserted into primary menu.");
+		}
+
+		private void UpdateSpaceport_Click (object sender, EventArgs e)
+		{
+			frmPatch patch = new frmPatch (controller);
+			controller.DownloadUpdate();
+			patch.ShowDialog (PluginBase.MainForm);
+		}
+
+		private void CheckUpdates_CheckChanged (object sender, EventArgs e)
+		{
+			if (updateMenu.CheckUpdatesItem.Checked)
+				controller.StartUpdateRunner();
+			else
+				controller.StopUpdateRunner();
 		}
 
 		#region IPlugin Methods
@@ -102,7 +113,7 @@ namespace PluginUpdater
 		public void Dispose()
 		{
 			TraceManager.AddAsync ("Destroying Spaceport Updater Plugin");
-			updateRunner.Stop();
+			controller.Dispose();
 		}
 
 		public void HandleEvent(object sender, NotifyEvent e, HandlingPriority priority)
