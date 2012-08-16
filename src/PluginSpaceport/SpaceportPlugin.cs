@@ -11,7 +11,6 @@ using PluginCore;
 using PluginCore.Helpers;
 using PluginCore.Managers;
 using PluginSpaceport.Properties;
-using SpaceportPlugin.Properties;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace PluginSpaceport
