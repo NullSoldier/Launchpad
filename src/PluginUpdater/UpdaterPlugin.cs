@@ -9,6 +9,8 @@ using PluginCommon;
 using PluginCore;
 using PluginCore.Managers;
 using PluginSpaceport;
+using SpaceportUpdaterPlugin;
+using SpaceportUpdaterPlugin.Properties;
 using WeifenLuo.WinFormsUI.Docking;
 using System.Windows.Forms;
 
@@ -26,25 +28,11 @@ namespace PluginUpdater
 			ThreadPool.QueueUserWorkItem ((a) => WaitForSpaceportPlugin());
 		}
 
-		private const string spaceportPluginGuid = "7b05efcc-d6e8-49c4-85b9-85ae9e22ead9";
-		private const string guid = "f9319e74-26a8-4d85-a91d-17d05a5a8846";
-		private const string name = "Spaceport Updater Plugin";
-		private const string help = "http://spaceport.io";
-		private const string author = "Jason (Null) Spafford";
-		private const string description = "A spaceport IDE plugin to check for, and update the Spaceport plugin.";
-		private const int apiLevel = 1;
-		private const string updateURL = "http://entitygames.net/games/updates/update";
-		private object settingsObject = null;
-		
 		private Control MainForm;
 		private SpaceportPlugin spaceportPlugin;
 		private SpaceportMenu spaceportMenu;
 		private UpdateMenu updateMenu;
-		private UpdateRunner updateRunner;
-
-		private Version spaceportPluginVersion;
-		private Version currentVersion;
-		private Version foundVersion;
+		private UpdaterController controller;
 
 		private void Load()
 		{
@@ -118,37 +106,37 @@ namespace PluginUpdater
 		#region IPlugin Properties
 		public int Api
 		{
-			get { return apiLevel; }
+			get { return 1; }
 		}
 
 		public string Name
 		{
-			get { return name; }
+			get { return Resources.PluginName; }
 		}
 
 		public string Guid
 		{
-			get { return guid; }
+			get { return Resources.PluginGuid; }
 		}
 
 		public string Help
 		{
-			get { return help; }
+			get { return Resources.PluginHelp; }
 		}
 
 		public string Author
 		{
-			get { return author; }
+			get { return Resources.PluginAuthor; }
 		}
 
 		public string Description
 		{
-			get { return description; }
+			get { return Resources.PluginDescription; }
 		}
 
 		public object Settings
 		{
-			get { return settingsObject; }
+			get { return null; }
 		}
 		#endregion
 	}
