@@ -39,17 +39,33 @@ namespace InstallerCore
 			onStopCheckUpdate();
 		}
 
-		public bool TryCheckOnceForUpdate (out Version versionFound)
+		public bool TryCheckOnceForUpdate (out UpdateInformation updateInfo)
 		{
+			updateInfo = null;
+
 			Exception ex;
-			
+			Version versionFound;
+			string patchNotes;
+
 			if (!TryDownloadVersion (out versionFound, out ex))
 			{
 				onCheckUpdateFailed (ex);
 				return false;
 			}
 
-			return versionFound > currentVersion;
+			// No need to go further, this is not a new version
+			if (versionFound <= currentVersion)
+				return false;
+
+			// Grab patch notes too
+			Uri patchNotesURI = new Uri (updateLocation, versionFound + ".patchnotes");
+			if (!UpdateHelper.TryDownloadString (patchNotesURI, out patchNotes, out ex))
+				patchNotes = "No patch notes available.";
+
+			updateInfo = new UpdateInformation (versionFound, patchNotes,
+				new Uri(updateLocation, versionFound + ".zip"));
+
+			return true;
 		}
 
 		private const int checkSleepTime = 60000;
@@ -79,7 +95,7 @@ namespace InstallerCore
 					continue;
 				}
 
-				Uri patchNotesURI = new Uri (updateLocation, "patchnotes");
+				Uri patchNotesURI = new Uri (updateLocation, versionFound + ".patchnotes");
 				if (!UpdateHelper.TryDownloadString (patchNotesURI, out patchNotes, out ex))
 					patchNotes = "No patch notes available.";
 

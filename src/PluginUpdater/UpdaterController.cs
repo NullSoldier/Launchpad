@@ -40,7 +40,7 @@ namespace SpaceportUpdaterPlugin
 			private set;
 		}
 
-		public Version FoundVersion
+		public UpdateInformation WaitingUpdate
 		{
 			get;
 			private set;
@@ -56,24 +56,19 @@ namespace SpaceportUpdaterPlugin
 			UpdateRunner.Stop();
 		}
 
-		public void DownloadUpdate (Version version)
+		public void DownloadUpdate ()
 		{
 			StopUpdateRunner();
 
-			if (FoundVersion == null)
+			if (WaitingUpdate == null)
 			{
-				Version versionFound;
-				UpdateRunner.TryCheckOnceForUpdate (out versionFound);
+				// don't do anything with the result because anything that
+				// needs it will be listening to UpdateRunner events
+				UpdateInformation waitingUpdate;
+				UpdateRunner.TryCheckOnceForUpdate (out waitingUpdate);
 			}
-		}
 
-		public UpdateInformation GetUpdateInformation()
-		{
-			if (FoundVersion == null)
-			{
-				Version versionFound;
-				UpdateRunner.TryCheckOnceForUpdate (out versionFound);
-			}
+			TraceManager.AddAsync ("Preparing to download version v" + WaitingUpdate.Version);
 		}
 
 		public void Dispose()
@@ -84,7 +79,7 @@ namespace SpaceportUpdaterPlugin
 		private void Init()
 		{
 			UpdateRunner = new UpdateRunner (new Uri (updateURL), SpaceportVersion);
-			UpdateRunner.UpdateFound += (o, e) => FoundVersion = e.Version;
+			UpdateRunner.UpdateFound += (o, e) => WaitingUpdate = e.UpdateInfo;
 		}
 	}
 }

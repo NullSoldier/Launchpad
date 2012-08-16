@@ -86,7 +86,7 @@ namespace PluginUpdater
 		private void UpdateSpaceport_Click (object sender, EventArgs e)
 		{
 			frmPatch patch = new frmPatch (controller);
-			controller.DownloadUpdate();
+			controller.DownloadUpdate ();
 			patch.ShowDialog (PluginBase.MainForm);
 		}
 

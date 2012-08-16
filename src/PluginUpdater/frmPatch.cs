@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using InstallerCore.Update;
 
 namespace SpaceportUpdaterPlugin
 {
@@ -12,18 +13,35 @@ namespace SpaceportUpdaterPlugin
 	{
 		public frmPatch (UpdaterController controller)
 		{
+			this.controller = controller;
 			InitializeComponent ();
+
+			if (controller.WaitingUpdate != null)
+				loadUpdateInformation (controller.WaitingUpdate);
+			else
+			{
+				controller.UpdateRunner.UpdateFound += (s, e) => loadUpdateInformation (e.UpdateInfo);
+			}
 		}
 
 		private UpdaterController controller;
 		private int fullHeight;
+		private string preparingFormat = "Preparing to install version v{0}";
 
 		private void frmPatch_Load(object sender, EventArgs e)
 		{
 			fullHeight = Size.Height;
-			MinimumSize = new Size (MinimumSize.Width, fullHeight - inNotes.Height); 
+			MinimumSize = new Size (MinimumSize.Width, fullHeight - inNotes.Height);
 
-			this.HidePatchNotes();
+			HidePatchNotes();
+		}
+
+		private void loadUpdateInformation (UpdateInformation waitingUpdate)
+		{
+			this.inNotes.Text = waitingUpdate.PatchNotes.Replace ("\n", Environment.NewLine);
+			this.lblInstruction.Text = string.Format (preparingFormat, waitingUpdate.Version);
+
+			this.lnkNotes.Visible = true;
 		}
 
 		private void HidePatchNotes()

@@ -87,6 +87,7 @@
 			this.lnkNotes.TabIndex = 4;
 			this.lnkNotes.TabStop = true;
 			this.lnkNotes.Text = "View update notes...";
+			this.lnkNotes.Visible = false;
 			this.lnkNotes.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkNotes_LinkClicked);
 			// 
 			// frmPatch
@@ -100,7 +101,7 @@
 			this.Controls.Add(this.progressBar1);
 			this.Controls.Add(this.inNotes);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-			this.MinimumSize = new System.Drawing.Size(469, 0);
+			this.MinimumSize = new System.Drawing.Size(469, 38);
 			this.Name = "frmPatch";
 			this.Text = "Patch";
 			this.Load += new System.EventHandler(this.frmPatch_Load);
