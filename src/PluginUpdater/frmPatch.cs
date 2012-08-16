@@ -21,6 +21,10 @@ namespace SpaceportUpdaterPlugin
 			else
 			{
 				controller.UpdateRunner.UpdateFound += (s, e) => loadUpdateInformation (e.UpdateInfo);
+				controller.UpdateDownloader.Started += (s, e) => SetDownloadingMode ();
+				controller.UpdateDownloader.ProgressChanged += (s, e) => SetDownloadProgress (e.ProgressPercentage);
+
+				SetWaitingMode();
 			}
 		}
 
@@ -39,9 +43,42 @@ namespace SpaceportUpdaterPlugin
 		private void loadUpdateInformation (UpdateInformation waitingUpdate)
 		{
 			this.inNotes.Text = waitingUpdate.PatchNotes.Replace ("\n", Environment.NewLine);
-			this.lblInstruction.Text = string.Format (preparingFormat, waitingUpdate.Version);
+			SetWaitingInstallMode (waitingUpdate);
+		}
 
-			this.lnkNotes.Visible = true;
+		private void SetWaitingMode()
+		{
+			lblInstruction.Text = "Waiting for update information...";
+			btnInstall.Enabled = false;
+			progressBar.Style = ProgressBarStyle.Marquee;
+		}
+		
+		private void SetWaitingInstallMode (UpdateInformation waitingUpdate)
+		{
+			lblInstruction.Text = string.Format (preparingFormat, waitingUpdate.Version);
+			lnkNotes.Visible = true;
+			btnInstall.Enabled = true;
+			progressBar.Style = ProgressBarStyle.Continuous;
+		}
+
+		private void SetDownloadingMode ()
+		{
+			btnInstall.Enabled = false;
+			lnkNotes.Text = "Downloading update from entitygames.net...";
+			progressBar.Style = ProgressBarStyle.Continuous;
+		}
+
+		private void SetUnzippingMode()
+		{
+			btnInstall.Enabled = false;
+			lnkNotes.Text = "Unzipping updates...";
+			progressBar.Style = ProgressBarStyle.Continuous;
+		}
+
+		private void SetDownloadProgress (float percentage)
+		{
+			progressBar.Value = (int)(((progressBar.Maximum - progressBar.Minimum) * percentage)
+				+ progressBar.Minimum);
 		}
 
 		private void HidePatchNotes()
@@ -76,6 +113,14 @@ namespace SpaceportUpdaterPlugin
 		{
 			if (inNotes.Visible)
 				fullHeight = Size.Height;
+		}
+
+		private void btnInstall_Click(object sender, EventArgs e)
+		{
+			if (controller.DownloadUpdate())
+				SetDownloadingMode ();
+			else
+				SetUnzippingMode();
 		}
 	}
 }

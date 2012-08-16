@@ -4,6 +4,8 @@ using System.Reflection;
 using System.Text;
 using InstallerCore;
 using InstallerCore.Update;
+using PluginCore;
+using PluginCore.Helpers;
 using PluginCore.Managers;
 using PluginSpaceport;
 using PluginUpdater;
@@ -13,6 +15,7 @@ namespace SpaceportUpdaterPlugin
 	public class UpdaterController : IDisposable
 	{
 		private const string updateURL = "http://entitygames.net/games/updates/update";
+		private const string localUpdateRelative = "/Spaceport/updatecache";
 
 		public UpdaterController (SpaceportPlugin spaceportPlugin)
 		{
@@ -20,6 +23,12 @@ namespace SpaceportUpdaterPlugin
 			SpaceportVersion = spaceportPlugin.Version;
 
 			Init();
+		}
+
+		public UpdateDownloader UpdateDownloader
+		{
+			get;
+			private set;
 		}
 
 		public UpdateRunner UpdateRunner
@@ -56,19 +65,34 @@ namespace SpaceportUpdaterPlugin
 			UpdateRunner.Stop();
 		}
 
-		public void DownloadUpdate ()
+		public bool DownloadUpdate()
 		{
-			StopUpdateRunner();
+			TraceManager.AddAsync ("Preparing to download version v" + WaitingUpdate.Version);
 
-			if (WaitingUpdate == null)
+			Version versionOnDisk;
+			UpdateDownloader.TryGetWaitingPatchOnDisk (out versionOnDisk);
+			
+			// Make sure we actually need to download the update
+			if (versionOnDisk == null || versionOnDisk < WaitingUpdate.Version)
 			{
-				// don't do anything with the result because anything that
-				// needs it will be listening to UpdateRunner events
-				UpdateInformation waitingUpdate;
-				UpdateRunner.TryCheckOnceForUpdate (out waitingUpdate);
+				UpdateDownloader.Download (WaitingUpdate.Version);
+				return true;
 			}
 
-			TraceManager.AddAsync ("Preparing to download version v" + WaitingUpdate.Version);
+			return false;
+		}
+		public void GetUpdateInformation()
+		{
+			// We already have update information
+			if (WaitingUpdate != null)
+				return;
+
+			StopUpdateRunner();
+
+			// don't do anything with the result because anything that
+			// needs it will be listening to UpdateRunner events
+			UpdateInformation waitingUpdate;
+			UpdateRunner.TryCheckOnceForUpdate (out waitingUpdate);
 		}
 
 		public void Dispose()
@@ -80,6 +104,8 @@ namespace SpaceportUpdaterPlugin
 		{
 			UpdateRunner = new UpdateRunner (new Uri (updateURL), SpaceportVersion);
 			UpdateRunner.UpdateFound += (o, e) => WaitingUpdate = e.UpdateInfo;
+
+			UpdateDownloader = new UpdateDownloader (new Uri (updateURL), new Uri (PathHelper.DataDir));
 		}
 	}
 }

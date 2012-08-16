@@ -29,7 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.inNotes = new System.Windows.Forms.TextBox();
-			this.progressBar1 = new System.Windows.Forms.ProgressBar();
+			this.progressBar = new System.Windows.Forms.ProgressBar();
 			this.btnInstall = new System.Windows.Forms.Button();
 			this.lblInstruction = new System.Windows.Forms.Label();
 			this.lnkNotes = new System.Windows.Forms.LinkLabel();
@@ -49,14 +49,16 @@
 			this.inNotes.Text = "Fixes:\r\n\t- Fixed some bugs in A2J\r\n\t- Fixed a crash in the simulator\r\nEnhancement" +
 				"s:\r\n\t- Added new feature\r\n";
 			// 
-			// progressBar1
+			// progressBar
 			// 
-			this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.progressBar1.Location = new System.Drawing.Point(14, 32);
-			this.progressBar1.Name = "progressBar1";
-			this.progressBar1.Size = new System.Drawing.Size(328, 27);
-			this.progressBar1.TabIndex = 1;
+			this.progressBar.Location = new System.Drawing.Point(14, 32);
+			this.progressBar.MarqueeAnimationSpeed = 10;
+			this.progressBar.Name = "progressBar";
+			this.progressBar.Size = new System.Drawing.Size(328, 27);
+			this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+			this.progressBar.TabIndex = 1;
 			// 
 			// btnInstall
 			// 
@@ -67,6 +69,7 @@
 			this.btnInstall.TabIndex = 2;
 			this.btnInstall.Text = "Install";
 			this.btnInstall.UseVisualStyleBackColor = true;
+			this.btnInstall.Click += new System.EventHandler(this.btnInstall_Click);
 			// 
 			// lblInstruction
 			// 
@@ -98,7 +101,7 @@
 			this.Controls.Add(this.lnkNotes);
 			this.Controls.Add(this.lblInstruction);
 			this.Controls.Add(this.btnInstall);
-			this.Controls.Add(this.progressBar1);
+			this.Controls.Add(this.progressBar);
 			this.Controls.Add(this.inNotes);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
 			this.MinimumSize = new System.Drawing.Size(469, 38);
@@ -114,7 +117,7 @@
 		#endregion
 
 		private System.Windows.Forms.TextBox inNotes;
-		private System.Windows.Forms.ProgressBar progressBar1;
+		private System.Windows.Forms.ProgressBar progressBar;
 		private System.Windows.Forms.Button btnInstall;
 		private System.Windows.Forms.Label lblInstruction;
 		private System.Windows.Forms.LinkLabel lnkNotes;

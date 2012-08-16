@@ -65,6 +65,7 @@ namespace InstallerCore
 			updateInfo = new UpdateInformation (versionFound, patchNotes,
 				new Uri(updateLocation, versionFound + ".zip"));
 
+			onUpdateFound (versionFound, patchNotes);
 			return true;
 		}
 

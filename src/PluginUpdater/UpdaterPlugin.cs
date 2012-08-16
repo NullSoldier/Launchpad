@@ -45,8 +45,8 @@ namespace PluginUpdater
 			controller.UpdateRunner.CheckUpdateFailed += UpdateRunnerFailed;
 			controller.UpdateRunner.UpdateFound += UpdateFound;
 
-			if (updateMenu.CheckUpdatesItem.Checked)
-				controller.StartUpdateRunner();
+			//if (updateMenu.CheckUpdatesItem.Checked)
+				//controller.StartUpdateRunner();
 		}
 
 		private void UpdaterRunnerStarted(Object sender, EventArgs e)
@@ -86,7 +86,7 @@ namespace PluginUpdater
 		private void UpdateSpaceport_Click (object sender, EventArgs e)
 		{
 			frmPatch patch = new frmPatch (controller);
-			controller.DownloadUpdate ();
+			controller.GetUpdateInformation();
 			patch.ShowDialog (PluginBase.MainForm);
 		}
 

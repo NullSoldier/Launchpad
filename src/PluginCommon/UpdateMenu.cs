@@ -9,7 +9,7 @@ namespace PluginCommon
 	{
 		public UpdateMenu (SpaceportMenu menu)
 		{
-			UpdateItem = new ToolStripButton ("Update Spaceport Plugin");
+			UpdateItem = new ToolStripMenuItem ("Update Spaceport Plugin");
 			CheckUpdatesItem = new ToolStripMenuItem ("Check for updates automatically");
 
 			CheckUpdatesItem.Checked = true;
@@ -21,7 +21,7 @@ namespace PluginCommon
 			menu.SpaceportItem.DropDownItems.Insert (updateIndex, new ToolStripSeparator());
 		}
 
-		public ToolStripButton UpdateItem
+		public ToolStripMenuItem UpdateItem
 		{
 			get;
 			private set;
