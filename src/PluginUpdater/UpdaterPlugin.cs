@@ -20,15 +20,13 @@ namespace PluginUpdater
 	{
 		public void Initialize()
 		{
-			spaceportPlugin = PluginHelper.CheckPluginLoaded<SpaceportPlugin> (spaceportPluginGuid);
-			spaceportPluginVersion = spaceportPlugin.Version;
-			currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
-			MainForm = PluginBase.MainForm.MenuStrip.Parent.Parent; //TODO: convert to Find Parent Form
+			var spaceportPlugin = PluginHelper.CheckPluginLoaded<SpaceportPlugin> (spaceportPluginGuid);
+			controller = new UpdaterController (spaceportPlugin);
 			
-			ThreadPool.QueueUserWorkItem ((a) => WaitForSpaceportPlugin());
+			ThreadPool.QueueUserWorkItem (a => WaitForSpaceportPlugin());
 		}
 
-		private Control MainForm;
+		private Control mainForm;
 		private SpaceportPlugin spaceportPlugin;
 		private SpaceportMenu spaceportMenu;
 		private UpdateMenu updateMenu;
@@ -36,32 +34,41 @@ namespace PluginUpdater
 
 		private void Load()
 		{
-			TraceManager.AddAsync ("Starting Spaceport Update Plugin v" + currentVersion);
+			TraceManager.AddAsync ("Starting Spaceport Update Plugin v" + controller.SpaceportVersion);
 			spaceportMenu = spaceportPlugin.SpaceportMenu;
+			mainForm = PluginBase.MainForm.MenuStrip.Parent.Parent; //TODO: convert to Find Parent Form
+			
 			HookIntoMainForm();
 
-			updateRunner = new UpdateRunner (new Uri (updateURL), spaceportPluginVersion);
-			updateRunner.CheckUpdateStarted += (s, a) => TraceManager.AddAsync ("Spaceport updater runner started"); 
-			updateRunner.CheckUpdateStopped += (s, a) => TraceManager.AddAsync ("Spaceport updater runner stopped");
-			updateRunner.CheckUpdateFailed += (s, a) => TraceManager.AddAsync (String.Format ("Spaceport failed to get update from {0}: {1}",
-				updateURL, ((Exception)a.ExceptionObject).Message));
-			updateRunner.UpdateFound += (s, a) => {
-				foundVersion = a.Version;
-				MainForm.Invoke (new MethodInvoker (UpdateFound));
-			};
+			controller.UpdateRunner.CheckUpdateStarted += UpdaterRunnerStarted;
+			controller.UpdateRunner.CheckUpdateStopped += UpdaterRunnerStopped;
+			controller.UpdateRunner.CheckUpdateFailed += UpdateRunnerFailed;
+			controller.UpdateRunner.UpdateFound += UpdateFound;
 
 			if (updateMenu.CheckUpdatesItem.Checked)
-				updateRunner.Start();
+				controller.StartUpdateRunner();
 		}
 
-		private void UpdateFound()
+		private void UpdaterRunnerStarted(Object sender, EventArgs e)
 		{
-			TraceManager.AddAsync ("Update found with version v" + foundVersion);
-			updateMenu.SetUpdateEnabled (true);
+			TraceManager.AddAsync ("Spaceport updater runner started");
 		}
 
-		private void DownloadUpdate()
+		private void UpdaterRunnerStopped(Object sender, EventArgs e)
 		{
+			TraceManager.AddAsync ("Spaceport updater runner stopped");
+		}
+
+		private void UpdateRunnerFailed(Object sender, UpdateCheckerEventArgs e)
+		{
+			TraceManager.AddAsync (String.Format ("Spaceport failed to get update from {0}: {1}",
+				e.CheckLocation, e.Exception.Message));
+		}
+
+		private void UpdateFound(object sender, UpdateCheckerEventArgs e)
+		{
+			TraceManager.AddAsync ("Update found with version v" + e.Version);
+			mainForm.Invoke ((MethodInvoker)(() => updateMenu.SetUpdateEnabled (true)));
 		}
 
 		private void HookIntoMainForm()
@@ -71,10 +78,11 @@ namespace PluginUpdater
 			spaceportMenu = (SpaceportMenu)spaceportMenuItem.Tag;
 			updateMenu = new UpdateMenu (spaceportMenu);
 
-			updateMenu.UpdateItem.Click += (s, e) => DownloadUpdate();
-			updateMenu.CheckUpdatesItem.CheckedChanged += (s, e) => {
-				if (updateMenu.CheckUpdatesItem.Checked) updateRunner.Start();
-				else updateRunner.Stop();
+			//updateMenu.UpdateItem.Click += (s, e) => DownloadUpdate();
+			updateMenu.CheckUpdatesItem.CheckedChanged += (s, e) =>
+			{
+				if (updateMenu.CheckUpdatesItem.Checked) controller.StartUpdateRunner();
+				else controller.StopUpdateRunner();
 			};
 			TraceManager.Add ("Spaceport updater plugin inserted into primary menu.");
 		}
@@ -88,7 +96,7 @@ namespace PluginUpdater
 			while (!spaceportPlugin.IsInitialized || !form.IsHandleCreated )
 				Thread.Sleep (1);
 
-			MainForm.Invoke (new MethodInvoker (Load));
+			mainForm.Invoke (new MethodInvoker (Load));
 		}
 
 		public void Dispose()

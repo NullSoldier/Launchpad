@@ -17,7 +17,7 @@ namespace InstallerCore
 		public event EventHandler CheckUpdateStarted;
 		public event EventHandler CheckUpdateStopped;
 		public event EventHandler<UpdateCheckerEventArgs> UpdateFound;
-		public event EventHandler<UnhandledExceptionEventArgs> CheckUpdateFailed;
+		public event EventHandler<UpdateCheckerEventArgs> CheckUpdateFailed;
 
 		public void Start()
 		{
@@ -67,7 +67,7 @@ namespace InstallerCore
 				}
 
 				Stop();
-				onUpdateFound(versionFound);
+				onUpdateFound (versionFound);
 				return;
 			}
 		}
@@ -97,7 +97,7 @@ namespace InstallerCore
 		{
 			var handler = CheckUpdateFailed;
 			if (handler != null)
-				handler (this, new UnhandledExceptionEventArgs (ex, false));
+				handler (this, new UpdateCheckerEventArgs (updateLocation, ex));
 		}
 	}
 }

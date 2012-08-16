@@ -17,8 +17,16 @@ namespace SpaceportUpdaterPlugin
 		{
 			UpdaterVersion = Assembly.GetExecutingAssembly().GetName().Version;
 			SpaceportVersion = spaceportPlugin.Version;
+
+			Init();
 		}
-		
+
+		public UpdateRunner UpdateRunner
+		{
+			get;
+			private set;
+		}
+
 		public Version UpdaterVersion
 		{
 			get;
@@ -34,7 +42,7 @@ namespace SpaceportUpdaterPlugin
 		public Version FoundVersion
 		{
 			get;
-			set;
+			private set;
 		}
 
 		public void StartUpdateRunner()
@@ -56,12 +64,7 @@ namespace SpaceportUpdaterPlugin
 		private void Init()
 		{
 			updateRunner = new UpdateRunner (new Uri (updateURL), SpaceportVersion);
-			updateRunner.CheckUpdateStarted += (s, a) => TraceManager.AddAsync ("Spaceport updater runner started"); 
-			updateRunner.CheckUpdateStopped += (s, a) => TraceManager.AddAsync ("Spaceport updater runner stopped");
-			updateRunner.CheckUpdateFailed += (s, a) => TraceManager.AddAsync (String.Format ("Spaceport failed to get update from {0}: {1}",
-				updateURL, ((Exception)a.ExceptionObject).Message));
-			updateRunner.UpdateFound += (s, a) => {
-				foundVersion = a.Version;
+			updateRunner.UpdateFound += (o, e) => FoundVersion = e.Version;
 		}
 	}
 }
