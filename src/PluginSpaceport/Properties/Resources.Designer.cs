@@ -70,7 +70,7 @@ namespace PluginSpaceport.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A spaceport IDE plugin for Flash develop..
+        ///   Looks up a localized string similar to A spaceport IDE.
         /// </summary>
         internal static string PluginDescription {
             get {
