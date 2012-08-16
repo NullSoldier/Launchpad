@@ -44,7 +44,7 @@
 			this.inNotes.Multiline = true;
 			this.inNotes.Name = "inNotes";
 			this.inNotes.ReadOnly = true;
-			this.inNotes.Size = new System.Drawing.Size(427, 123);
+			this.inNotes.Size = new System.Drawing.Size(427, 138);
 			this.inNotes.TabIndex = 0;
 			this.inNotes.Text = "Fixes:\r\n\t- Fixed some bugs in A2J\r\n\t- Fixed a crash in the simulator\r\nEnhancement" +
 				"s:\r\n\t- Added new feature\r\n";
@@ -87,21 +87,24 @@
 			this.lnkNotes.TabIndex = 4;
 			this.lnkNotes.TabStop = true;
 			this.lnkNotes.Text = "View update notes...";
+			this.lnkNotes.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkNotes_LinkClicked);
 			// 
 			// frmPatch
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(453, 219);
+			this.ClientSize = new System.Drawing.Size(453, 234);
 			this.Controls.Add(this.lnkNotes);
 			this.Controls.Add(this.lblInstruction);
 			this.Controls.Add(this.btnInstall);
 			this.Controls.Add(this.progressBar1);
 			this.Controls.Add(this.inNotes);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+			this.MinimumSize = new System.Drawing.Size(469, 0);
 			this.Name = "frmPatch";
 			this.Text = "Patch";
 			this.Load += new System.EventHandler(this.frmPatch_Load);
+			this.Resize += new System.EventHandler(this.frmPatch_Resize);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

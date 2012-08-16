@@ -38,6 +38,19 @@ namespace InstallerCore
 			onStopCheckUpdate();
 		}
 
+		public  bool TryCheckOnceForUpdate (out Version versionFound, Version currentVersion)
+		{
+			Exception ex;
+			
+			if (!TryDownloadVersion (out versionFound, out ex))
+			{
+				onCheckUpdateFailed (ex);
+				return false;
+			}
+
+			return versionFound > currentVersion;
+		}
+
 		private const int checkSleepTime = 60000;
 		private readonly Uri updateLocation;
 		private readonly Version currentVersion;
@@ -48,18 +61,16 @@ namespace InstallerCore
 		{
 			while (isCheckingUpdates)
 			{
-				string version;
+				Version versionFound;
 				Exception ex;
 
-				if (!UpdateHelper.TryDownloadString (this.updateLocation, out version, out ex))
+				if (!TryDownloadVersion (out versionFound, out ex))
 				{
 					onCheckUpdateFailed (ex);
 					Thread.Sleep (checkSleepTime);
 					continue;
 				}
 
-				//TODO: reduce point of failure at version string formatting
-				var versionFound = new Version (version);
 				if (versionFound <= currentVersion)
 				{
 					Thread.Sleep (checkSleepTime);
@@ -70,6 +81,21 @@ namespace InstallerCore
 				onUpdateFound (versionFound);
 				return;
 			}
+		}
+
+		private bool TryDownloadVersion (out Version versionFound, out Exception ex)
+		{
+			string version;
+
+			if (!UpdateHelper.TryDownloadString (this.updateLocation, out version, out ex))
+			{
+				versionFound = null;
+				return false;
+			}
+
+			//TODO: reduce point of failure at version string formatting
+			versionFound = new Version (version);
+			return true;
 		}
 
 		private void onStartCheckUpdate()

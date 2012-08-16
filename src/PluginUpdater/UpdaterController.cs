@@ -57,6 +57,10 @@ namespace SpaceportUpdaterPlugin
 
 		public void DownloadUpdate()
 		{
+			if (FoundVersion == null)
+			{
+				//UpdateRunner.CheckOnceForUpdate();
+			}
 		}
 
 		public void Dispose()
