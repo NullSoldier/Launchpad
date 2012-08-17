@@ -64,9 +64,7 @@ namespace InstallerCore
 			{
 				try
 				{
-					string destDir = new FileInfo (localDestination).Directory.FullName;
-					if (!Directory.Exists (destDir))
-						Directory.CreateDirectory (destDir);
+					FileHelper.EnsureFileDirExists (localDestination);
 
 					downloadClient.DownloadFileCompleted += onFileDownloaded;
 					downloadClient.DownloadProgressChanged += onProgressChanged;
