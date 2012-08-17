@@ -27,7 +27,6 @@ namespace PluginInstaller
 				FlashDevelopRoot = new FileInfo (FlashDevelopAssembly).Directory.FullName;
 			}
 
-
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 

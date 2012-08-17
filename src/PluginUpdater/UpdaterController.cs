@@ -78,7 +78,7 @@ namespace SpaceportUpdaterPlugin
 		{
 			installOnClose = true;
 			startInstaller();
-			//PluginBase.MainForm.CallCommand ("Exit", String.Empty);
+			PluginBase.MainForm.CallCommand ("Exit", String.Empty);
 		}
 
 		/// <summary>
@@ -164,7 +164,7 @@ namespace SpaceportUpdaterPlugin
 		private void startInstaller()
 		{
 			// [0] = Version, [1] = FlashDevelop root
-			string arguments = string.Format ("\"{0}\" \"{1}\" \"{2}\"", string.Empty, WaitingUpdate.Version,
+			string arguments = string.Format ("\"{0}\" \"{1}\"", WaitingUpdate.Version,
 				new Uri (Assembly.GetEntryAssembly().CodeBase).AbsolutePath);
 			string installerPath = Path.Combine (PathHelper.DataDir, localInstallerRelative);
 

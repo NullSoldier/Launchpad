@@ -38,16 +38,16 @@ namespace PluginInstaller
 		{
 			if (Program.WaitForFlashDevelopClose)
 			{
-
-				MessageBox.Show ("Starting wait runner");
 				flashDevelopRoot = Program.FlashDevelopRoot;
 				updateCacheDir = Path.Combine (flashDevelopRoot, @"Data\Spaceport\updatecache\");
 				updateZipPath = Path.Combine (updateCacheDir, Program.VersionToInstall + ".zip");
 				filesDirectory = Path.Combine (updateCacheDir, "files");
 
-				var waitRunner = new Thread ((o) => StartWaitRunner());
+				var waitRunner = new Thread ((o) => StartWaitRunner(GetFlashDevelopProcesses()));
 				waitRunner.Name = "Waiting for Flash Developer Close Thread";
 				waitRunner.Start();
+
+				Show();
 				return;
 			}
 
@@ -79,7 +79,6 @@ namespace PluginInstaller
 
 		private void RunInstaller()
 		{
-			MessageBox.Show ("Running installer");
 			progressForm.SetInstruction ("Extracting files files from " + Program.VersionToInstall + ".zip");
 			progressForm.Show(this);
 			
@@ -87,7 +86,10 @@ namespace PluginInstaller
 			extractor.ProgressChanged += (s, e) =>
 			{
 				if (e.TotalBytesToTransfer != 0)
+				{
 					progressForm.SetProgress ((e.BytesTransferred / e.TotalBytesToTransfer) * 100);
+					progressForm.SetInstruction ("Unzipping " + e.CurrentEntry.FileName);
+				}
 			};
 			extractor.Finished += (s, e) => 
 			{
@@ -109,24 +111,47 @@ namespace PluginInstaller
 			btnFinish.Enabled = true;
 			
 			MessageBox.Show ("Update finished installing, starting FlashDevelop.");
-			Process.Start (Program.FlashDevelopAssembly);
-			Application.Exit ();
+			//Process.Start (Program.FlashDevelopAssembly);
+			//Application.Exit ();
 		}
 
 		private void LogMessage (string message)
 		{
-			if (this.InvokeRequired)
+			if (InvokeRequired)
 				base.Invoke ((Action)delegate { LogMessage (message); });
 			else
 				inConsole.Text += string.Format ("{0}{1}", message, Environment.NewLine);
 		}
 
-		private void StartWaitRunner ()
+		private void StartWaitRunner (IEnumerable<Process> processesToWaitFor)
 		{
-			while (Process.GetProcessesByName ("FlashDevelop.exe").Length > 0)		
-				Thread.Sleep (500);
+			foreach (var process in processesToWaitFor)
+				process.WaitForExit();
 
 			Invoke (new MethodInvoker (RunInstaller));
+		}
+
+		private IEnumerable<Process> GetFlashDevelopProcesses()
+		{
+			var knownAssembly = new FileInfo (Program.FlashDevelopAssembly);
+
+			foreach (Process process in Process.GetProcesses())
+			{
+				string processAssemblyPath;
+				try{ processAssemblyPath = process.MainModule.FileName; }
+				catch (Win32Exception) { continue; }
+				
+				//TODO: find a better way to do this than just comparing full names
+				//if (processAssemblyPath.Contains ("Flash"))
+					//Debugger.Launch();
+
+				var assembly = new FileInfo (processAssemblyPath);
+				if (assembly.FullName.ToLower() == knownAssembly.FullName.ToLower())
+				{
+					Console.WriteLine ("Process found: " + processAssemblyPath);
+					yield return process;
+				}
+			}
 		}
 
 		private void btnInstall_Click(object sender, EventArgs e)

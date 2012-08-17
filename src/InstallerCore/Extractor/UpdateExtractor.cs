@@ -43,13 +43,13 @@ namespace InstallerCore
 				zip.ExtractProgress += onProgressChanged;
 				zip.ZipError += (o, e) => onFailed (e.Exception);
 				zip.ExtractAll (unzipDirPath);
-				onFinished();
 			}
 			else
 				onFailed (new ZipException ("File is not a zip: " + zipFilePath));
 		}
 
 		private readonly string updateCacheDir;
+		private bool isFinished;
 
 		private void onFinished ()
 		{
@@ -60,6 +60,9 @@ namespace InstallerCore
 
 		private void onProgressChanged (object sender, ExtractProgressEventArgs ev)
 		{
+			if (ev.EventType == ZipProgressEventType.Extracting_AfterExtractAll)
+				onFinished();
+
 			var handler = ProgressChanged;
 			if (handler != null)
 				handler (sender, ev);

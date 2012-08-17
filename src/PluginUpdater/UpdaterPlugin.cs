@@ -45,8 +45,8 @@ namespace PluginUpdater
 			controller.UpdateRunner.CheckUpdateFailed += UpdateRunnerFailed;
 			controller.UpdateRunner.UpdateFound += UpdateFound;
 
-			//if (updateMenu.CheckUpdatesItem.Checked)
-				//controller.StartUpdateRunner();
+			if (updateMenu.CheckUpdatesItem.Checked)
+				controller.StartUpdateRunner();
 		}
 
 		private void UpdaterRunnerStarted(Object sender, EventArgs e)

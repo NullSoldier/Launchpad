@@ -49,6 +49,10 @@ namespace PluginInstaller
 
 			foreach (string filePath in Directory.GetFiles (filesDir, "*", SearchOption.AllDirectories))
 			{
+				// Prevent lazy loading issues
+				if (!File.Exists (filePath))
+					continue;
+
 				var file = new FileInfo (filePath);
 				var fileDir = new FileInfo (filePath).Directory;
 				string version = FileVersionInfo.GetVersionInfo (filePath).FileVersion ?? "0.0.0.0";

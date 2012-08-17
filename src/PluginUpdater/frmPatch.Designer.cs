@@ -106,6 +106,7 @@
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
 			this.MinimumSize = new System.Drawing.Size(469, 38);
 			this.Name = "frmPatch";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Patch";
 			this.Load += new System.EventHandler(this.frmPatch_Load);
 			this.Resize += new System.EventHandler(this.frmPatch_Resize);
