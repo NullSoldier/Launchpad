@@ -55,6 +55,12 @@
     <Reference Include="INIFileParser">
       <HintPath>..\lib\INIFileParser.dll</HintPath>
     </Reference>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\lib\Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="PluginCore">
+      <HintPath>..\lib\PluginCore.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -67,6 +73,7 @@
     <Compile Include="Install\InstallerEventArgs.cs" />
     <Compile Include="Install\InstallerFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Extractor\UpdateExtractor.cs" />
     <Compile Include="Update\UpdateCheckerEventArgs.cs" />
     <Compile Include="Update\UpdateDownloader.cs" />
     <Compile Include="Update\UpdateHelper.cs" />
@@ -76,7 +83,10 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>"C:\windows\system32\xcopy" "$(TargetPath)" "$(SolutionDir)\src\PluginInstaller\bin\Debug\files\Plugins" /Y /Q
-"C:\windows\system32\xcopy" "$(TargetPath)" "$(SolutionDir)\src\lib\FlashDevelop\FlashDevelop\Bin\Debug\Plugins" /Y /Q</PostBuildEvent>
+"C:\windows\system32\xcopy" "$(TargetPath)" "$(SolutionDir)\src\lib\FlashDevelop\FlashDevelop\Bin\Debug\Plugins" /Y /Q
+
+"C:\windows\system32\xcopy" "$(TargetDir)Ionic.Zip.dll" "$(SolutionDir)\src\PluginInstaller\bin\Debug\files\Plugins" /Y /Q
+"C:\windows\system32\xcopy" "$(TargetDir)Ionic.Zip.dll" "$(SolutionDir)\src\lib\FlashDevelop\FlashDevelop\Bin\Debug\Plugins" /Y /Q</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

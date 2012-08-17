@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using InstallerCore.Update;
+using PluginCore;
 
 namespace SpaceportUpdaterPlugin
 {
@@ -21,10 +22,9 @@ namespace SpaceportUpdaterPlugin
 			else
 			{
 				controller.UpdateRunner.UpdateFound += (s, e) => loadUpdateInformation (e.UpdateInfo);
-
 				controller.UpdateDownloader.Started += (s, e) => SetDownloadingMode ();
 				controller.UpdateDownloader.ProgressChanged += (s, e) => SetDownloadProgress (e.ProgressPercentage);
-				controller.UpdateDownloader.Finished += (s, e) => SetUnzippingMode();
+				controller.UpdateDownloader.Finished += (s, e) => OnDownloadFinished();
 
 				SetWaitingMode();
 			}
@@ -73,13 +73,14 @@ namespace SpaceportUpdaterPlugin
 		private void SetUnzippingMode()
 		{
 			btnInstall.Enabled = false;
-			lblInstruction.Text = "Unzipping updates...";
+			lblInstruction.Text = "Download finished. Waiting on restart.";
 			progressBar.Style = ProgressBarStyle.Continuous;
+			progressBar.Value = progressBar.Maximum;
 		}
 
 		private void SetDownloadProgress (float percentage)
 		{
-			progressBar.Value = (int)(((progressBar.Maximum - progressBar.Minimum) * percentage)
+			progressBar.Value = (int)(((progressBar.Maximum - progressBar.Minimum) * (percentage / 100))
 				+ progressBar.Minimum);
 		}
 
@@ -103,6 +104,23 @@ namespace SpaceportUpdaterPlugin
 			this.lnkNotes.Text = "Hide patch notes...";
 		}
 
+		private void OnDownloadFinished()
+		{
+			SetUnzippingMode();
+			var dialogResult = MessageBox.Show ("Restart now to finish installing?", "Restart", MessageBoxButtons.YesNo,
+				MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+
+			if (dialogResult != DialogResult.Yes)
+			{
+				controller.InstallOnClose = true;
+				Close();
+				return;
+			}
+			
+			Close();
+			controller.RestartForUpdate();
+		}
+
 		private void lnkNotes_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			if (inNotes.Visible)
@@ -121,8 +139,8 @@ namespace SpaceportUpdaterPlugin
 		{
 			btnInstall.Enabled = false;
 
-			if (!controller.DownloadUpdate())
-				SetUnzippingMode();
+			if (!controller.DownloadUpdate(controller.WaitingUpdate.Version))
+				OnDownloadFinished();
 		}
 	}
 }

@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using InstallerCore;
 using PluginInstaller.Properties;
@@ -19,6 +20,10 @@ namespace PluginInstaller
 		public frmMain()
 		{
 			InitializeComponent();
+
+			// Do this before frmMain_Load to hide it properly
+			if (Program.WaitForFlashDevelopClose)
+				Hide();
 		}
 
 		private string manifestRoot;
@@ -30,6 +35,19 @@ namespace PluginInstaller
 			manifestRoot = Path.Combine (Environment.CurrentDirectory, "files");
 			flashDeveloperRoot = @"C:\Program Files\FlashDevelop"; //TODO: autodetect this
 
+			if (Program.WaitForFlashDevelopClose)
+			{
+				Thread thread = new Thread(() => {
+					
+				});
+				return;
+			}
+
+			LoadInstaller();
+		}
+
+		private void LoadInstaller()
+		{
 			var installList = new InstallFileList ();
 			installList.Load (manifestRoot);
 

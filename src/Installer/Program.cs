@@ -5,14 +5,23 @@ using System.Windows.Forms;
 
 namespace PluginInstaller
 {
-	static class Program
+	public static class Program
 	{
-		/// <summary>
-		/// The main entry point for the application.
-		/// </summary>
+		public static Version VersionToInstall = null;
+		public static bool WaitForFlashDevelopClose = false;
+		public static string FlashDevelopRoot = String.Empty;
+
 		[STAThread]
 		static void Main()
 		{
+			string[] args = Environment.GetCommandLineArgs();
+			if (args.Length == 1)
+			{
+				WaitForFlashDevelopClose = true;
+				VersionToInstall = new Version (args[0]);
+				FlashDevelopRoot = args[1];
+			}
+
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			Application.Run(new frmMain());

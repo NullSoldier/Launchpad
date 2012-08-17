@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using System.Text;
 using InstallerCore;
@@ -15,6 +17,7 @@ namespace SpaceportUpdaterPlugin
 	public class UpdaterController : IDisposable
 	{
 		private const string updateURL = "http://entitygames.net/games/updates/update";
+		private const string updateRootURL = "http://entitygames.net/games/updates/";
 		private const string localUpdateRelative = "/Spaceport/updatecache";
 
 		public UpdaterController (SpaceportPlugin spaceportPlugin)
@@ -22,10 +25,16 @@ namespace SpaceportUpdaterPlugin
 			UpdaterVersion = Assembly.GetExecutingAssembly().GetName().Version;
 			SpaceportVersion = spaceportPlugin.Version;
 
-			Init();
+			init();
 		}
 
 		public UpdateDownloader UpdateDownloader
+		{
+			get;
+			private set;
+		}
+
+		public UpdateExtractor UpdateExtractor
 		{
 			get;
 			private set;
@@ -55,32 +64,71 @@ namespace SpaceportUpdaterPlugin
 			private set;
 		}
 
+		public bool InstallOnClose
+		{
+			get { return installOnClose; }
+			set { installOnClose = value; }
+		}
+
+		/// <summary>
+		/// Starts the update installer, and attempts to close FlashDevelop
+		/// </summary>
+		public void RestartForUpdate()
+		{
+			installOnClose = true;
+			startInstaller();
+			PluginBase.MainForm.CallCommand ("Exit", String.Empty);
+		}
+
+		/// <summary>
+		/// Start the update runner that checks for updates
+		/// </summary>
 		public void StartUpdateRunner()
 		{
 			UpdateRunner.Start();
 		}
 
+		/// <summary>
+		/// Stop the update runner that checks for updates
+		/// </summary>
 		public void StopUpdateRunner()
 		{
 			UpdateRunner.Stop();
 		}
 
-		public bool DownloadUpdate()
+		/// <summary>
+		/// Downloads an update from the web with the specified version
+		/// </summary>
+		public bool DownloadUpdate (Version version)
 		{
-			TraceManager.AddAsync ("Preparing to download version v" + WaitingUpdate.Version);
+			TraceManager.AddAsync ("Preparing to download version v" + version);
 
 			Version versionOnDisk;
 			UpdateDownloader.TryGetWaitingPatchOnDisk (out versionOnDisk);
 			
 			// Make sure we actually need to download the update
-			if (versionOnDisk == null || versionOnDisk < WaitingUpdate.Version)
+			if (versionOnDisk == null || versionOnDisk < version)
 			{
-				UpdateDownloader.Download (WaitingUpdate.Version);
+				UpdateDownloader.Download (version);
 				return true;
 			}
 
 			return false;
 		}
+
+		/// <summary>
+		/// Extracts an update located in updatecache with the
+		/// specified version to updatecache/files
+		/// </summary>
+		public void ExtractVersion (Version version)
+		{
+			UpdateExtractor.Unzip (version);
+		}
+
+		/// <summary>
+		/// Downloads the latest update information to WaitingUpdate,
+		/// but only if WaitingUpdate hasn't been set yet
+		/// </summary>
 		public void GetUpdateInformation()
 		{
 			// We already have update information
@@ -100,12 +148,28 @@ namespace SpaceportUpdaterPlugin
 			StopUpdateRunner();
 		}
 
-		private void Init()
+		private bool installOnClose;
+
+		private void init()
 		{
-			UpdateRunner = new UpdateRunner (new Uri (updateURL), SpaceportVersion);
+			var remotePatchDir = new Uri (updateURL);
+			var remoteRootDir = new Uri (updateRootURL);
+			var localUpdateDir = new Uri (PathHelper.DataDir + "/Spaceport/updatecache/");
+
+			UpdateRunner = new UpdateRunner (remotePatchDir, SpaceportVersion);
 			UpdateRunner.UpdateFound += (o, e) => WaitingUpdate = e.UpdateInfo;
 
-			UpdateDownloader = new UpdateDownloader (new Uri (updateURL), new Uri (PathHelper.DataDir + "/"));
+			UpdateDownloader = new UpdateDownloader (remoteRootDir, localUpdateDir);
+			UpdateExtractor = new UpdateExtractor (localUpdateDir);
+		}
+
+		private void startInstaller()
+		{
+			// [0] = Version, [1] = FlashDevelop root
+			string arguments = string.Format ("\"{0}\" \"{1}\"", WaitingUpdate.Version, PathHelper.AppDir);
+			string installerPath = Path.Combine (PathHelper.DataDir, "Spaceport/tools/Installer.exe");
+
+			ProcessHelper.StartAsync (installerPath, arguments);
 		}
 	}
 }

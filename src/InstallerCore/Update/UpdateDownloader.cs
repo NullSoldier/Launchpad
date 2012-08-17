@@ -43,7 +43,8 @@ namespace InstallerCore
 
 			foreach (FileInfo waitingPatch in waitingZips)
 			{
-				Version version = new Version(waitingPatch.Name);
+				string versionStr = Path.GetFileNameWithoutExtension (waitingPatch.Name);
+				Version version = new Version(versionStr);
 
 				if (latestVersionFound == null || version > latestVersionFound)
 					latestVersionFound = version;
