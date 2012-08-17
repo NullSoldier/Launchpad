@@ -27,31 +27,37 @@ namespace PluginInstaller
 		}
 
 		private string manifestRoot;
-		private string flashDeveloperRoot;
+		private string flashDevelopRoot;
+		private string zipPath;
 
 		private void frmMain_Load(object sender, EventArgs e)
 		{
 			Icon = Icon.FromHandle (Resources.icon.GetHicon ());
 			manifestRoot = Path.Combine (Environment.CurrentDirectory, "files");
-			flashDeveloperRoot = @"C:\Program Files\FlashDevelop"; //TODO: autodetect this
+			zipPath = Path.Combine (manifestRoot, Directory.GetFiles (manifestRoot, "*.zip").First());
+			flashDevelopRoot = @"C:\Program Files\FlashDevelop"; //TODO: autodetect this
 
 			if (Program.WaitForFlashDevelopClose)
 			{
-				Thread thread = new Thread(() => {
-					
-				});
+				flashDevelopRoot = Program.FlashDevelopRoot;
+				zipPath = Path.Combine (flashDevelopRoot, @"Data\Spaceport\updatecache\" + Program.VersionToInstall + ".zip");
+
+				var waitRunner = new Thread ((o) => StartWaitRunner());
+				waitRunner.Name = "Waiting for Flash Developer Close Thread";
+				waitRunner.Start();
 				return;
 			}
 
-			LoadInstaller();
+			LogMessage ("Spaceport installer " + Assembly.GetExecutingAssembly().GetName().Version + " loaded.");
+			Show();
+			ListInstallFiles();
 		}
 
-		private void LoadInstaller()
+		private void ListInstallFiles()
 		{
 			var installList = new InstallFileList ();
 			installList.Load (manifestRoot);
 
-			LogMessage ("Spaceport installer " + Assembly.GetExecutingAssembly().GetName().Version + " loaded.");
 			LogMessage ("Preparing to install: " + installList.Count + " files.");
 
 			foreach (InstallerFile file in installList.Files)
@@ -63,6 +69,33 @@ namespace PluginInstaller
 			}
 		}
 
+		private void RunInstaller()
+		{
+			frmPerformAction form = new frmPerformAction();
+			form.Show(this);
+			form.SetInstruction ("Extracting files files from " + Program.VersionToInstall + ".zip");
+			
+			UpdateExtractor extractor = new UpdateExtractor (new Uri (zipPath));
+			extractor.ProgressChanged += (s, e) => form.SetProgress (e.BytesTransferred / e.TotalBytesToTransfer);
+			extractor.Finished += (s, e) => 
+			{
+				Installer installer = new Installer();
+				installer.FileInstalled += (o, ev) => LogMessage ("File installed: " + ev.FileInstalled.FullName);
+				installer.FinishedInstalling += (o, ev) => Invoke ((Action)installer_FinishedInstalling);
+				installer.Start (manifestRoot, this.flashDevelopRoot);
+			};
+			extractor.Unzip (Program.VersionToInstall);
+
+			// Display Dialogue
+			// Open flashdev
+		}
+
+		private void installer_FinishedInstalling()
+		{
+			LogMessage ("Files finished installing.");
+			btnFinish.Enabled = true;
+		}
+
 		private void LogMessage (string message)
 		{
 			if (this.InvokeRequired)
@@ -71,34 +104,23 @@ namespace PluginInstaller
 				inConsole.Text += string.Format ("{0}{1}", message, Environment.NewLine);
 		}
 
-		private void StartInstalling()
+		private void StartWaitRunner ()
 		{
-			Installer installer = new Installer ();
-			installer.FileInstalled += (s, e) => LogMessage ("File installed: " + e.FileInstalled.FullName);
-			installer.FinishedInstalling += (s, e) =>
-			{
-				base.Invoke ((Action)finishedInstalling);
-			};
+			while (Process.GetProcessesByName ("FlashDevelop.exe").Length >= 0)		
+				Thread.Sleep (500);
 
-			installer.Start (manifestRoot, flashDeveloperRoot);
-		}
-
-		private void finishedInstalling()
-		{
-			LogMessage ("Files finished installing.");
-			btnFinish.Enabled = true;
+			Invoke (new MethodInvoker (RunInstaller));
 		}
 
 		private void btnInstall_Click(object sender, EventArgs e)
 		{
 			btnInstall.Enabled = false;
-
-			StartInstalling();
+			RunInstaller();
 		}
 
 		private void btnFinish_Click(object sender, EventArgs e)
 		{
-			this.Close();
+			Close();
 		}
 	}
 }

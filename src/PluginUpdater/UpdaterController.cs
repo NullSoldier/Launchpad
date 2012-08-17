@@ -154,7 +154,7 @@ namespace SpaceportUpdaterPlugin
 		{
 			var remotePatchDir = new Uri (updateURL);
 			var remoteRootDir = new Uri (updateRootURL);
-			var localUpdateDir = new Uri (PathHelper.DataDir + "/Spaceport/updatecache/");
+			var localUpdateDir = new Uri (PathHelper.DataDir + @"\Spaceport\updatecache\");
 
 			UpdateRunner = new UpdateRunner (remotePatchDir, SpaceportVersion);
 			UpdateRunner.UpdateFound += (o, e) => WaitingUpdate = e.UpdateInfo;
@@ -167,7 +167,7 @@ namespace SpaceportUpdaterPlugin
 		{
 			// [0] = Version, [1] = FlashDevelop root
 			string arguments = string.Format ("\"{0}\" \"{1}\"", WaitingUpdate.Version, PathHelper.AppDir);
-			string installerPath = Path.Combine (PathHelper.DataDir, "Spaceport/tools/Installer.exe");
+			string installerPath = Path.Combine (PathHelper.DataDir, @"Spaceport\tools\PluginInstaller.exe");
 
 			ProcessHelper.StartAsync (installerPath, arguments);
 		}
