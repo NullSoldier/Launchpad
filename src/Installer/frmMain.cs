@@ -46,8 +46,6 @@ namespace PluginInstaller
 				var waitRunner = new Thread ((o) => StartWaitRunner(GetFlashDevelopProcesses()));
 				waitRunner.Name = "Waiting for Flash Developer Close Thread";
 				waitRunner.Start();
-
-				Show();
 				return;
 			}
 
