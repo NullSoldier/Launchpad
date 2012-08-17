@@ -42,7 +42,7 @@ namespace InstallerCore
 			{
 				// Take the original path and chop off the install root,
 				// then append it to the flash develop folder
-				string relativeInstallPath = installFile.File.FullName.Substring (updateCacheDirectory.Length + 1);
+				string relativeInstallPath = installFile.File.FullName.Substring (filesDirectory.Length + 1);
 				string destPath = Path.Combine (flashDevelopRoot, relativeInstallPath);
 			
 				var destDirectory = new FileInfo (destPath).Directory;
