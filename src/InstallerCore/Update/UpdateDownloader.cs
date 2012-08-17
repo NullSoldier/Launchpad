@@ -9,10 +9,13 @@ namespace InstallerCore
 {
 	public class UpdateDownloader
 	{
-		public UpdateDownloader (Uri updateLocation, Uri localUpdateLocation)
+		/// <summary>
+		/// 
+		/// </summary>
+		public UpdateDownloader (string remoteUpdateDir, string updateCacheDir)
 		{
-			this.updateLocation = updateLocation;
-			this.localUpdateLocation = localUpdateLocation;
+			this.remoteUpdateDir = remoteUpdateDir;
+			this.updateCacheDir = updateCacheDir;
 		}
 		
 		public event EventHandler Started;
@@ -23,27 +26,25 @@ namespace InstallerCore
 		public void Download (Version version)
 		{
 			string versionFile = version + ".zip";
-			Uri patchUri = new Uri (Path.Combine (updateLocation.AbsoluteUri, versionFile));
-			Uri localDestination = new Uri (localUpdateLocation, "" + version + ".zip");
+			string remotePatchURL = Path.Combine (remoteUpdateDir, versionFile);
+			string localDestination = Path.Combine (updateCacheDir, versionFile);
 
-			downloadUpdate (patchUri, localDestination);
+			downloadUpdate (remotePatchURL, localDestination);
 		}
 		
 		public bool TryGetWaitingPatchOnDisk (out Version versionWaiting)
 		{
-			DirectoryInfo dir = new DirectoryInfo (localUpdateLocation.AbsolutePath);
-			if (!dir.Exists)
-			{
-				versionWaiting = null;
-				return false;
-			}
+			versionWaiting = null;
 
-			FileInfo[] waitingZips = dir.GetFiles ("*.zip", SearchOption.TopDirectoryOnly);
+			if (!Directory.Exists (updateCacheDir))
+				return false;
+
+			string[] waitingZips = Directory.GetFiles (updateCacheDir, "*.zip", SearchOption.TopDirectoryOnly);
 			Version latestVersionFound = null;
 
-			foreach (FileInfo waitingPatch in waitingZips)
+			foreach (string waitingPatch in waitingZips)
 			{
-				string versionStr = Path.GetFileNameWithoutExtension (waitingPatch.Name);
+				string versionStr = Path.GetFileNameWithoutExtension (waitingPatch);
 				Version version = new Version(versionStr);
 
 				if (latestVersionFound == null || version > latestVersionFound)
@@ -54,10 +55,15 @@ namespace InstallerCore
 			return latestVersionFound != null;
 		}
 
-		private readonly Uri updateLocation;
-		private readonly Uri localUpdateLocation;
+		private readonly string remoteUpdateDir;
+		private readonly string updateCacheDir;
 
-		private void downloadUpdate (Uri remoteUpdateLocation, Uri destination)
+		private bool doesUpdateCacheExist ()
+		{
+			return Directory.Exists (updateCacheDir);
+		}
+
+		private void downloadUpdate (string remotePatchURL, string localDestination)
 		{
 			using (var downloadClient = new WebClient ())
 			{
@@ -65,7 +71,7 @@ namespace InstallerCore
 				{
 					downloadClient.DownloadFileCompleted += onFileDownloaded;
 					downloadClient.DownloadProgressChanged += onProgressChanged;
-					downloadClient.DownloadFileAsync (remoteUpdateLocation, destination.AbsolutePath);
+					downloadClient.DownloadFileAsync (new Uri (remotePatchURL), localDestination);
 
 					onFileStarted();
 				}
@@ -77,6 +83,7 @@ namespace InstallerCore
 			}
 		}
 
+		#region Event Handlers
 		private void onFileDownloaded (object sender, AsyncCompletedEventArgs ev)
 		{
 			var handler = Finished;
@@ -97,5 +104,6 @@ namespace InstallerCore
 			if (handler != null)
 				handler (this, ev);
 		}
+		#endregion
 	}
 }

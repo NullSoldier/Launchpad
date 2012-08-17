@@ -10,44 +10,52 @@ namespace PluginInstaller
 {
 	public class InstallFileList
 	{
-		public void Load (string installDir)
+		/// <summary>
+		/// Takes a path to a files directory where files have been extracted
+		/// Ex: FlashDevelop/Data/updatecache/files
+		/// </summary>
+		public InstallFileList (string filesDir)
 		{
-			if (!Directory.Exists (installDir))
-				throw new FileNotFoundException ("Files directory not found at " + installDir);
-
-			BuildFileList (installDir);
-		}
-
-		public ReadOnlyCollection<InstallerFile> Files
-		{
-			get { return readOnlyFiles; }
+			this.filesDir = filesDir;
 		}
 
 		public int Count
 		{
-			get { return files.Count; }
+			get { return fileCount; }
 		}
 
-		private ReadOnlyCollection<InstallerFile> readOnlyFiles; 
-		private List<InstallerFile> files;
-
-		private void BuildFileList (string installManifestDir)
+		public IEnumerable<InstallerFile> Files
 		{
-			DirectoryInfo filesRoot = new DirectoryInfo (installManifestDir);
-			files = new List<InstallerFile> ();
-
-			foreach (FileInfo file in filesRoot.GetFiles("*", SearchOption.AllDirectories))
+			get
 			{
-				string version = FileVersionInfo.GetVersionInfo (file.FullName).FileVersion;
-				var fileDir = new DirectoryInfo (file.FullName).Parent;
-
-				if (version == null)
-					version = "0.0.0";
-
-				files.Add (new InstallerFile (fileDir, file, version));
+				if (fileCache == null)
+				{
+					fileCache = buildFileList();
+					fileCount = fileCache.Count();
+				}
+				
+				return fileCache;
 			}
+		}
 
-			readOnlyFiles = new ReadOnlyCollection<InstallerFile> (files);
+		private readonly string filesDir;
+		private int fileCount;
+		private IEnumerable<InstallerFile> fileCache;
+
+		private IEnumerable<InstallerFile> buildFileList()
+		{
+			if (!Directory.Exists (filesDir))
+				throw new FileNotFoundException ("Install file list doesn't exist at " + Environment.NewLine + filesDir);
+
+			foreach (string filePath in Directory.GetFiles (filesDir, "*", SearchOption.AllDirectories))
+			{
+				var file = new FileInfo (filePath);
+				var fileDir = new FileInfo (filePath).Directory;
+				string version = FileVersionInfo.GetVersionInfo (filePath).FileVersion ?? "0.0.0.0";
+
+				fileCount++;
+				yield return new InstallerFile (fileDir, file, version);
+			}
 		}
 	}
 }

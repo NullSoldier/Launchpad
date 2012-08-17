@@ -13,9 +13,9 @@ namespace InstallerCore
 		/// Takes a URI that points to a directory with an update zip and extracts to directory/files
 		/// Ex: FlashDevelop/Data/updatecache/0.0.2.0.zip
 		/// </summary>
-		public UpdateExtractor (string updateCacheDirectory)
+		public UpdateExtractor (string updateCacheDir)
 		{
-			this.updateCacheDirectory = updateCacheDirectory;
+			this.updateCacheDir = updateCacheDir;
 		}
 
 		public event EventHandler Finished;
@@ -24,8 +24,8 @@ namespace InstallerCore
 
 		public void Unzip (Version version)
 		{
-			string zipFilePath = Path.Combine (updateCacheDirectory, version + ".zip");
-			string unzipDirPath = Path.Combine (updateCacheDirectory, "files/");
+			string zipFilePath = Path.Combine (this.updateCacheDir, version + ".zip");
+			string unzipDirPath = Path.Combine (this.updateCacheDir, "files/");
 
 			try
 			{
@@ -49,7 +49,7 @@ namespace InstallerCore
 				onFailed (new ZipException ("File is not a zip: " + zipFilePath));
 		}
 
-		private readonly string updateCacheDirectory;
+		private readonly string updateCacheDir;
 
 		private void onFinished ()
 		{

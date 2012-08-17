@@ -28,17 +28,19 @@ namespace PluginInstaller
 				Hide();
 		}
 
-		private string manifestRoot;
 		private string flashDevelopRoot;
-		private string zipPath;
+		private string updateCacheDir;
+		private string updateZipPath;
+		private string filesDirectory;
 
 		private void frmMain_Load(object sender, EventArgs e)
 		{
 			if (Program.WaitForFlashDevelopClose)
 			{
 				flashDevelopRoot = Program.FlashDevelopRoot;
-				manifestRoot = Path.Combine (flashDevelopRoot, @"Data\Spaceport\updatecache\");
-				zipPath = Path.Combine (manifestRoot, Program.VersionToInstall + ".zip");
+				updateCacheDir = Path.Combine (flashDevelopRoot, @"Data\Spaceport\updatecache\");
+				updateZipPath = Path.Combine (updateCacheDir, Program.VersionToInstall + ".zip");
+				filesDirectory = Path.Combine (updateCacheDir, "files");
 
 				var waitRunner = new Thread ((o) => StartWaitRunner());
 				waitRunner.Name = "Waiting for Flash Developer Close Thread";
@@ -46,9 +48,10 @@ namespace PluginInstaller
 				return;
 			}
 
-			manifestRoot = Path.Combine (Environment.CurrentDirectory, "files");
-			zipPath = Path.Combine (manifestRoot, Directory.GetFiles (manifestRoot, "*.zip").First());
 			flashDevelopRoot = @"C:\Program Files\FlashDevelop"; //TODO: autodetect this
+			updateCacheDir = Environment.CurrentDirectory;
+			updateZipPath = Path.Combine (updateCacheDir, Directory.GetFiles (this.updateCacheDir, "*.zip").First());
+			filesDirectory = Path.Combine (updateCacheDir, "files");
 
 			LogMessage ("Spaceport installer " + Assembly.GetExecutingAssembly().GetName().Version + " loaded.");
 			Show();
@@ -57,17 +60,17 @@ namespace PluginInstaller
 
 		private void ListInstallFiles()
 		{
-			var installList = new InstallFileList ();
-			installList.Load (manifestRoot);
+			var installList = new InstallFileList (filesDirectory);
 
 			LogMessage ("Preparing to install: " + installList.Count + " files.");
 
-			foreach (InstallerFile file in installList.Files)
+			foreach (InstallerFile installerFile in installList.Files)
 			{
-				var filesDirIndex = file.File.FullName.IndexOf ("files") + 5;
-				var filesRelativePath = file.File.FullName.Substring (filesDirIndex);
+				var file = installerFile.File;
+				var filesDirIndex = file.FullName.IndexOf ("files") + 5;
+				var filesRelativePath = file.FullName.Substring (filesDirIndex);
 
-				LogMessage (string.Format ("* {0} ({1})", filesRelativePath, file.Version));
+				LogMessage (string.Format ("* {0} ({1})", filesRelativePath, installerFile.Version));
 			}
 		}
 
@@ -77,28 +80,26 @@ namespace PluginInstaller
 			form.Show(this);
 			form.SetInstruction ("Extracting files files from " + Program.VersionToInstall + ".zip");
 			
-			UpdateExtractor extractor = new UpdateExtractor (new Uri (zipPath));
+			UpdateExtractor extractor = new UpdateExtractor (updateCacheDir);
 			extractor.ProgressChanged += (s, e) => form.SetProgress (e.BytesTransferred / e.TotalBytesToTransfer);
 			extractor.Finished += (s, e) => 
 			{
-				form.SetInstruction ("Installing files to " + manifestRoot);
+				form.SetInstruction ("Installing files from " + filesDirectory + " to " + flashDevelopRoot);
 
 				Installer installer = new Installer();
 				installer.FileInstalled += (o, ev) => LogMessage ("File installed: " + ev.FileInstalled.FullName);
 				installer.FinishedInstalling += (o, ev) => Invoke ((Action)installer_FinishedInstalling);
-				installer.Start (manifestRoot, flashDevelopRoot);
+				installer.Start (updateCacheDir, flashDevelopRoot);
 			};
 			extractor.Unzip (Program.VersionToInstall);
-
-			// Display Dialogue
-			// Open flashdev
 		}
 
 		private void installer_FinishedInstalling()
 		{
 			LogMessage ("Files finished installing.");
 			btnFinish.Enabled = true;
-
+			
+			MessageBox.Show ("Update finished installing, starting FlashDevelop.");
 			Process.Start (Program.FlashDevelopRoot);
 		}
 
@@ -112,7 +113,7 @@ namespace PluginInstaller
 
 		private void StartWaitRunner ()
 		{
-			while (Process.GetProcessesByName ("FlashDevelop.exe").Length >= 0)		
+			while (Process.GetProcessesByName ("FlashDevelop.exe").Length > 0)		
 				Thread.Sleep (500);
 
 			Invoke (new MethodInvoker (RunInstaller));

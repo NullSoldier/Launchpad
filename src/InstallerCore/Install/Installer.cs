@@ -12,14 +12,19 @@ namespace InstallerCore
 		public event EventHandler FinishedInstalling;
 		public event EventHandler<InstallerEventArgs> FileInstalled;
 
-		public void Start (string installRoot, string flashDevelopRoot)
+		/// <summary>
+		/// Takes the update zip directory and assumes it was extracted to zipdirectory/files
+		/// Ex: FlashDevelop/Data/updatecache/
+		/// And also takes the FlashDevelop directory where FlashDevelop.exe is
+		/// Ex: FlashDevelop/
+		/// </summary>
+		public void Start (string updateCacheDirectory, string flashDevelopRoot)
 		{
 			installThread = new Thread (installThreadRunner);
 			installThread.Name = "Install Files Thread";
-			installThread.Start(new [] {installRoot, flashDevelopRoot});
+			installThread.Start(new [] {updateCacheDirectory, flashDevelopRoot});
 		}
 
-		private const string installManifestName = "files.ini";
 		private Thread installThread;
 
 		private void installThreadRunner(object arg)
@@ -28,22 +33,21 @@ namespace InstallerCore
 			startInstallProcess (args[0], args[1]);
 		}
 
-		private void startInstallProcess (string installRoot, string flashDevelopRoot)
+		private void startInstallProcess (string updateCacheDirectory, string flashDevelopRoot)
 		{
-			// Get list of files to install
-			var installList = new InstallFileList ();
-			installList.Load (installRoot);
+			string filesDirectory = Path.Combine (updateCacheDirectory, "files");
+			var installList = new InstallFileList (filesDirectory);
 
 			foreach (InstallerFile installFile in installList.Files)
 			{
 				// Take the original path and chop off the install root,
 				// then append it to the flash develop folder
-				string relativeDestPath = installFile.File.FullName.Substring (installRoot.Length + 1);
-				string destPath = Path.Combine (flashDevelopRoot, relativeDestPath);
+				string relativeInstallPath = installFile.File.FullName.Substring (updateCacheDirectory.Length + 1);
+				string destPath = Path.Combine (flashDevelopRoot, relativeInstallPath);
 			
-				var targetDir = new DirectoryInfo (destPath).Parent;
-				if (!targetDir.Exists)
-					targetDir.Create();
+				var destDirectory = new FileInfo (destPath).Directory;
+				if (!destDirectory.Exists)
+					destDirectory.Create();
 
 				installFile.File.CopyTo (destPath, true);
 				onFileInstalled (destPath);
