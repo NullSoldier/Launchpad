@@ -34,7 +34,7 @@ namespace PluginUpdater
 
 		private void Load()
 		{
-			TraceManager.AddAsync ("Starting Spaceport Update Plugin v" + controller.SpaceportVersion);
+			//TraceManager.AddAsync ("Starting Spaceport Update Plugin v" + controller.SpaceportVersion);
 			spaceportMenu = spaceportPlugin.SpaceportMenu;
 			mainForm = PluginBase.MainForm.MenuStrip.Parent.Parent; //TODO: convert to Find Parent Form
 			
@@ -103,7 +103,7 @@ namespace PluginUpdater
 		{
 			mainForm = PluginBase.MainForm.MenuStrip.Parent.Parent;
 
-			TraceManager.AddAsync ("Waiting for Spaceport plugin to start.");
+			//TraceManager.AddAsync ("Waiting for Spaceport plugin to start.");
 			while (!spaceportPlugin.IsInitialized || !mainForm.IsHandleCreated )
 				Thread.Sleep (1);
 

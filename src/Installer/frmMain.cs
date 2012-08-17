@@ -21,6 +21,8 @@ namespace PluginInstaller
 		{
 			InitializeComponent();
 
+			Icon = Icon.FromHandle (Resources.icon.GetHicon ());
+
 			// Do this before frmMain_Load to hide it properly
 			if (Program.WaitForFlashDevelopClose)
 				Hide();
@@ -32,21 +34,21 @@ namespace PluginInstaller
 
 		private void frmMain_Load(object sender, EventArgs e)
 		{
-			Icon = Icon.FromHandle (Resources.icon.GetHicon ());
-			manifestRoot = Path.Combine (Environment.CurrentDirectory, "files");
-			zipPath = Path.Combine (manifestRoot, Directory.GetFiles (manifestRoot, "*.zip").First());
-			flashDevelopRoot = @"C:\Program Files\FlashDevelop"; //TODO: autodetect this
-
 			if (Program.WaitForFlashDevelopClose)
 			{
 				flashDevelopRoot = Program.FlashDevelopRoot;
-				zipPath = Path.Combine (flashDevelopRoot, @"Data\Spaceport\updatecache\" + Program.VersionToInstall + ".zip");
+				manifestRoot = Path.Combine (flashDevelopRoot, @"Data\Spaceport\updatecache\");
+				zipPath = Path.Combine (manifestRoot, Program.VersionToInstall + ".zip");
 
 				var waitRunner = new Thread ((o) => StartWaitRunner());
 				waitRunner.Name = "Waiting for Flash Developer Close Thread";
 				waitRunner.Start();
 				return;
 			}
+
+			manifestRoot = Path.Combine (Environment.CurrentDirectory, "files");
+			zipPath = Path.Combine (manifestRoot, Directory.GetFiles (manifestRoot, "*.zip").First());
+			flashDevelopRoot = @"C:\Program Files\FlashDevelop"; //TODO: autodetect this
 
 			LogMessage ("Spaceport installer " + Assembly.GetExecutingAssembly().GetName().Version + " loaded.");
 			Show();
@@ -79,10 +81,12 @@ namespace PluginInstaller
 			extractor.ProgressChanged += (s, e) => form.SetProgress (e.BytesTransferred / e.TotalBytesToTransfer);
 			extractor.Finished += (s, e) => 
 			{
+				form.SetInstruction ("Installing files to " + manifestRoot);
+
 				Installer installer = new Installer();
 				installer.FileInstalled += (o, ev) => LogMessage ("File installed: " + ev.FileInstalled.FullName);
 				installer.FinishedInstalling += (o, ev) => Invoke ((Action)installer_FinishedInstalling);
-				installer.Start (manifestRoot, this.flashDevelopRoot);
+				installer.Start (manifestRoot, flashDevelopRoot);
 			};
 			extractor.Unzip (Program.VersionToInstall);
 
@@ -94,6 +98,8 @@ namespace PluginInstaller
 		{
 			LogMessage ("Files finished installing.");
 			btnFinish.Enabled = true;
+
+			Process.Start (Program.FlashDevelopRoot);
 		}
 
 		private void LogMessage (string message)

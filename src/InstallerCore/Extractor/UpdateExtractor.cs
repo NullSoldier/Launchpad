@@ -9,9 +9,13 @@ namespace InstallerCore
 {
 	public class UpdateExtractor
 	{
-		public UpdateExtractor (Uri localUpdateLocation)
+		/// <summary>
+		/// Takes a URI that points to a directory with an update zip and extracts to directory/files
+		/// Ex: FlashDevelop/Data/updatecache/0.0.2.0.zip
+		/// </summary>
+		public UpdateExtractor (string updateCacheDirectory)
 		{
-			this.localUpdateLocation = localUpdateLocation;
+			this.updateCacheDirectory = updateCacheDirectory;
 		}
 
 		public event EventHandler Finished;
@@ -20,35 +24,32 @@ namespace InstallerCore
 
 		public void Unzip (Version version)
 		{
-			string localPath = localUpdateLocation.AbsolutePath;
-			string zipPath = Path.Combine (localPath, version + ".zip");
-			string unzipPath = Path.Combine(localPath, "files/");
+			string zipFilePath = Path.Combine (updateCacheDirectory, version + ".zip");
+			string unzipDirPath = Path.Combine (updateCacheDirectory, "files/");
 
 			try
 			{
-				if (Directory.Exists (unzipPath))
-					Directory.Delete (unzipPath, true);
-			
 				// Make sure we have a valid, fresh directory to extract to
-				Directory.CreateDirectory (unzipPath);
+				if (Directory.Exists (unzipDirPath))
+					Directory.Delete (unzipDirPath, true);
+			
+				Directory.CreateDirectory (unzipDirPath);
 			}
 			catch (Exception ex) { onFailed (ex); }
 
-			if (!ZipFile.IsZipFile (zipPath))
+			if (ZipFile.IsZipFile (zipFilePath))
 			{
-				onFailed (new ZipException ("File is not a zip: " + zipPath));
-				return;
+				ZipFile zip = ZipFile.Read (zipFilePath);
+				zip.ExtractProgress += onProgressChanged;
+				zip.ZipError += (o, e) => onFailed (e.Exception);
+				zip.ExtractAll (unzipDirPath);
+				onFinished();
 			}
-
-			ZipFile zip = ZipFile.Read (zipPath);
-			zip.ExtractProgress += onProgressChanged;
-			zip.ZipError += (o, e) => onFailed (e.Exception);
-			zip.ExtractAll (unzipPath);
-
-			onFinished();
+			else
+				onFailed (new ZipException ("File is not a zip: " + zipFilePath));
 		}
 
-		private readonly Uri localUpdateLocation;
+		private readonly string updateCacheDirectory;
 
 		private void onFinished ()
 		{

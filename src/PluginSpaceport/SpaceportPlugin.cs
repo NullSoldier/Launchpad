@@ -40,7 +40,7 @@ namespace PluginSpaceport
 
 			HookIntoMenu();
 
-			TraceManager.AddAsync ("Starting Spaceport Plugin v" + currentVersion);
+			//TraceManager.AddAsync ("Starting Spaceport Plugin v" + currentVersion);
 			EventManager.AddEventHandler (this, EventType.FileSave);
 
 			isInitialized = true;
