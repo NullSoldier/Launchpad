@@ -78,7 +78,7 @@ namespace SpaceportUpdaterPlugin
 		{
 			installOnClose = true;
 			startInstaller();
-			PluginBase.MainForm.CallCommand ("Exit", String.Empty);
+			//PluginBase.MainForm.CallCommand ("Exit", String.Empty);
 		}
 
 		/// <summary>
@@ -156,7 +156,7 @@ namespace SpaceportUpdaterPlugin
 			UpdateRunner = new UpdateRunner (new Uri (remoteUpdateFile), SpaceportVersion);
 			UpdateRunner.UpdateFound += (o, e) => WaitingUpdate = e.UpdateInfo;
 			
-			var localUpdateDir = PathHelper.DataDir + localUpdateRelative;
+			var localUpdateDir = Path.Combine (PathHelper.DataDir, localUpdateRelative);
 			UpdateDownloader = new UpdateDownloader (remoteUpdateDir, localUpdateDir);
 			UpdateExtractor = new UpdateExtractor (localUpdateDir);
 		}
@@ -164,7 +164,8 @@ namespace SpaceportUpdaterPlugin
 		private void startInstaller()
 		{
 			// [0] = Version, [1] = FlashDevelop root
-			string arguments = string.Format ("\"{0}\" \"{1}\"", WaitingUpdate.Version, new Uri (Assembly.GetEntryAssembly().CodeBase).AbsolutePath);
+			string arguments = string.Format ("\"{0}\" \"{1}\" \"{2}\"", string.Empty, WaitingUpdate.Version,
+				new Uri (Assembly.GetEntryAssembly().CodeBase).AbsolutePath);
 			string installerPath = Path.Combine (PathHelper.DataDir, localInstallerRelative);
 
 			ProcessHelper.StartAsync (installerPath, arguments);

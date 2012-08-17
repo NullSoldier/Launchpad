@@ -22,21 +22,24 @@ namespace PluginInstaller
 			InitializeComponent();
 
 			Icon = Icon.FromHandle (Resources.icon.GetHicon ());
+			progressForm = new frmPerformAction();
 
-			// Do this before frmMain_Load to hide it properly
-			if (Program.WaitForFlashDevelopClose)
-				Hide();
+			CreateHandle();
+			loadForm();
 		}
 
 		private string flashDevelopRoot;
 		private string updateCacheDir;
 		private string updateZipPath;
 		private string filesDirectory;
+		private frmPerformAction progressForm;
 
-		private void frmMain_Load(object sender, EventArgs e)
+		private void loadForm ()
 		{
 			if (Program.WaitForFlashDevelopClose)
 			{
+
+				MessageBox.Show ("Starting wait runner");
 				flashDevelopRoot = Program.FlashDevelopRoot;
 				updateCacheDir = Path.Combine (flashDevelopRoot, @"Data\Spaceport\updatecache\");
 				updateZipPath = Path.Combine (updateCacheDir, Program.VersionToInstall + ".zip");
@@ -76,19 +79,19 @@ namespace PluginInstaller
 
 		private void RunInstaller()
 		{
-			frmPerformAction form = new frmPerformAction();
-			form.Show(this);
-			form.SetInstruction ("Extracting files files from " + Program.VersionToInstall + ".zip");
+			MessageBox.Show ("Running installer");
+			progressForm.SetInstruction ("Extracting files files from " + Program.VersionToInstall + ".zip");
+			progressForm.Show(this);
 			
 			UpdateExtractor extractor = new UpdateExtractor (updateCacheDir);
 			extractor.ProgressChanged += (s, e) =>
 			{
 				if (e.TotalBytesToTransfer != 0)
-					form.SetProgress (e.BytesTransferred / e.TotalBytesToTransfer);
+					progressForm.SetProgress ((e.BytesTransferred / e.TotalBytesToTransfer) * 100);
 			};
 			extractor.Finished += (s, e) => 
 			{
-				form.SetInstruction ("Installing files from " + filesDirectory + " to " + flashDevelopRoot);
+				progressForm.SetInstruction ("Installing files from " + filesDirectory + " to " + flashDevelopRoot);
 
 				Installer installer = new Installer();
 				installer.FileInstalled += (o, ev) => LogMessage ("File installed: " + ev.FileInstalled.FullName);
@@ -100,11 +103,14 @@ namespace PluginInstaller
 
 		private void installer_FinishedInstalling()
 		{
+			progressForm.SetProgress (100);
+			progressForm.SetInstruction ("Finished installing.");
 			LogMessage ("Files finished installing.");
 			btnFinish.Enabled = true;
 			
 			MessageBox.Show ("Update finished installing, starting FlashDevelop.");
 			Process.Start (Program.FlashDevelopAssembly);
+			Application.Exit ();
 		}
 
 		private void LogMessage (string message)

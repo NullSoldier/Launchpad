@@ -27,9 +27,12 @@ namespace PluginInstaller
 				FlashDevelopRoot = new FileInfo (FlashDevelopAssembly).Directory.FullName;
 			}
 
+
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new frmMain());
+
+			frmMain installerForm = new frmMain();
+			Application.Run();
 		}
 	}
 }

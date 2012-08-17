@@ -47,7 +47,7 @@
 			// 
 			this.lblInstruction.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.lblInstruction.AutoSize = true;
-			this.lblInstruction.Location = new System.Drawing.Point(295, 62);
+			this.lblInstruction.Location = new System.Drawing.Point(13, 60);
 			this.lblInstruction.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.lblInstruction.Name = "lblInstruction";
 			this.lblInstruction.Size = new System.Drawing.Size(146, 20);

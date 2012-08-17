@@ -58,17 +58,16 @@ namespace InstallerCore
 		private readonly string remoteUpdateDir;
 		private readonly string updateCacheDir;
 
-		private bool doesUpdateCacheExist ()
-		{
-			return Directory.Exists (updateCacheDir);
-		}
-
 		private void downloadUpdate (string remotePatchURL, string localDestination)
 		{
 			using (var downloadClient = new WebClient ())
 			{
 				try
 				{
+					string destDir = new FileInfo (localDestination).Directory.FullName;
+					if (!Directory.Exists (destDir))
+						Directory.CreateDirectory (destDir);
+
 					downloadClient.DownloadFileCompleted += onFileDownloaded;
 					downloadClient.DownloadProgressChanged += onProgressChanged;
 					downloadClient.DownloadFileAsync (new Uri (remotePatchURL), localDestination);

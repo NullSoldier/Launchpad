@@ -85,7 +85,7 @@
 			this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.Name = "frmMain";
 			this.Text = "Spaceport Plugin Installer";
-			this.Load += new System.EventHandler(this.frmMain_Load);
+			this.Visible = false;
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
