@@ -81,7 +81,11 @@ namespace PluginInstaller
 			form.SetInstruction ("Extracting files files from " + Program.VersionToInstall + ".zip");
 			
 			UpdateExtractor extractor = new UpdateExtractor (updateCacheDir);
-			extractor.ProgressChanged += (s, e) => form.SetProgress (e.BytesTransferred / e.TotalBytesToTransfer);
+			extractor.ProgressChanged += (s, e) =>
+			{
+				if (e.TotalBytesToTransfer != 0)
+					form.SetProgress (e.BytesTransferred / e.TotalBytesToTransfer);
+			};
 			extractor.Finished += (s, e) => 
 			{
 				form.SetInstruction ("Installing files from " + filesDirectory + " to " + flashDevelopRoot);
@@ -100,7 +104,7 @@ namespace PluginInstaller
 			btnFinish.Enabled = true;
 			
 			MessageBox.Show ("Update finished installing, starting FlashDevelop.");
-			Process.Start (Program.FlashDevelopRoot);
+			Process.Start (Program.FlashDevelopAssembly);
 		}
 
 		private void LogMessage (string message)
