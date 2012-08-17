@@ -16,9 +16,10 @@ namespace SpaceportUpdaterPlugin
 {
 	public class UpdaterController : IDisposable
 	{
-		private const string updateURL = "http://entitygames.net/games/updates/update";
-		private const string updateRootURL = "http://entitygames.net/games/updates/";
-		private const string localUpdateRelative = "/Spaceport/updatecache";
+		private const string remoteUpdateDir = "http://entitygames.net/games/updates/";
+		private const string remoteUpdateFile = "http://entitygames.net/games/updates/update";
+		private const string localUpdateRelative = "Spaceport\\updatecache\\";
+		private const string localInstallerRelative = "Spaceport\\tools\\PluginInstaller.exe";
 
 		public UpdaterController (SpaceportPlugin spaceportPlugin)
 		{
@@ -152,14 +153,11 @@ namespace SpaceportUpdaterPlugin
 
 		private void init()
 		{
-			var remotePatchDir = new Uri (updateURL);
-			var remoteRootDir = new Uri (updateRootURL);
-			var localUpdateDir = new Uri (PathHelper.DataDir + @"\Spaceport\updatecache\");
-
-			UpdateRunner = new UpdateRunner (remotePatchDir, SpaceportVersion);
+			UpdateRunner = new UpdateRunner (new Uri (remoteUpdateFile), SpaceportVersion);
 			UpdateRunner.UpdateFound += (o, e) => WaitingUpdate = e.UpdateInfo;
-
-			UpdateDownloader = new UpdateDownloader (remoteRootDir, localUpdateDir);
+			
+			var localUpdateDir = PathHelper.DataDir + localUpdateRelative;
+			UpdateDownloader = new UpdateDownloader (remoteUpdateDir, localUpdateDir);
 			UpdateExtractor = new UpdateExtractor (localUpdateDir);
 		}
 
@@ -167,7 +165,7 @@ namespace SpaceportUpdaterPlugin
 		{
 			// [0] = Version, [1] = FlashDevelop root
 			string arguments = string.Format ("\"{0}\" \"{1}\"", WaitingUpdate.Version, new Uri (Assembly.GetEntryAssembly().CodeBase).AbsolutePath);
-			string installerPath = Path.Combine (PathHelper.DataDir, @"Spaceport\tools\PluginInstaller.exe");
+			string installerPath = Path.Combine (PathHelper.DataDir, localInstallerRelative);
 
 			ProcessHelper.StartAsync (installerPath, arguments);
 		}
