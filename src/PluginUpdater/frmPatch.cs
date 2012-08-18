@@ -17,17 +17,17 @@ namespace SpaceportUpdaterPlugin
 			this.controller = controller;
 			InitializeComponent ();
 
-			if (controller.WaitingUpdate != null)
-				loadUpdateInformation (controller.WaitingUpdate);
-			else
+			if (controller.FoundUpdate == null)
 			{
 				controller.UpdateRunner.UpdateFound += (s, e) => loadUpdateInformation (e.UpdateInfo);
-				controller.UpdateDownloader.Started += (s, e) => SetDownloadingMode ();
-				controller.UpdateDownloader.ProgressChanged += (s, e) => SetDownloadProgress (e.ProgressPercentage);
-				controller.UpdateDownloader.Finished += (s, e) => OnDownloadFinished();
-
 				SetWaitingMode();
 			}
+			else
+				loadUpdateInformation (controller.FoundUpdate);
+			
+			controller.UpdateDownloader.Started += (s, e) => SetDownloadingMode ();
+			controller.UpdateDownloader.ProgressChanged += (s, e) => SetDownloadProgress (e.ProgressPercentage);
+			controller.UpdateDownloader.Finished += (s, e) => OnDownloadFinished();
 		}
 
 		private UpdaterController controller;
@@ -139,7 +139,7 @@ namespace SpaceportUpdaterPlugin
 		{
 			btnInstall.Enabled = false;
 
-			if (!controller.DownloadUpdate(controller.WaitingUpdate.Version))
+			if (!controller.DownloadUpdate (controller.FoundUpdate.Version))
 				OnDownloadFinished();
 		}
 	}

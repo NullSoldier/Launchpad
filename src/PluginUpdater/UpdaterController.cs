@@ -59,6 +59,12 @@ namespace SpaceportUpdaterPlugin
 			private set;
 		}
 
+		public UpdateInformation FoundUpdate
+		{
+			get;
+			private set;
+		}
+
 		public UpdateInformation WaitingUpdate
 		{
 			get;
@@ -133,7 +139,7 @@ namespace SpaceportUpdaterPlugin
 		public void GetUpdateInformation()
 		{
 			// We already have update information
-			if (WaitingUpdate != null)
+			if (FoundUpdate != null)
 				return;
 
 			StopUpdateRunner();
@@ -154,11 +160,13 @@ namespace SpaceportUpdaterPlugin
 		private void init()
 		{
 			UpdateRunner = new UpdateRunner (new Uri (remoteUpdateFile), SpaceportVersion);
-			UpdateRunner.UpdateFound += (o, e) => WaitingUpdate = e.UpdateInfo;
+			UpdateRunner.UpdateFound += (o, e) => FoundUpdate = e.UpdateInfo;
 			
 			var localUpdateDir = Path.Combine (PathHelper.DataDir, localUpdateRelative);
-			UpdateDownloader = new UpdateDownloader (remoteUpdateDir, localUpdateDir);
 			UpdateExtractor = new UpdateExtractor (localUpdateDir);
+			
+			UpdateDownloader = new UpdateDownloader (remoteUpdateDir, localUpdateDir);
+			UpdateDownloader.Finished += (o, e) => WaitingUpdate = FoundUpdate;
 		}
 
 		private void startInstaller()
