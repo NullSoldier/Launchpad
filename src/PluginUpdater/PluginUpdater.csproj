@@ -102,7 +102,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"C:\windows\system32\xcopy" "$(TargetPath)" "$(SolutionDir)src\PluginInstaller\bin\Debug\files\Plugins\" /Y /Q
+    <PostBuildEvent>"C:\windows\system32\xcopy" "$(TargetPath)" "$(SolutionDir)src\Installer\bin\Debug\files\Plugins\" /Y /Q
 "C:\windows\system32\xcopy" "$(TargetPath)" "$(SolutionDir)\src\lib\FlashDevelop\FlashDevelop\Bin\Debug\Plugins" /Y /Q</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
