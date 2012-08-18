@@ -22,6 +22,7 @@ namespace PluginInstaller
 			InitializeComponent();
 
 			Icon = Icon.FromHandle (Resources.icon.GetHicon ());
+			inLicense.Rtf = Resources.LICENSE;
 			progressForm = new frmPerformAction();
 
 			CreateHandle();
@@ -55,22 +56,21 @@ namespace PluginInstaller
 				Application.Exit (); return;
 			}
 
-			flashDevelopRoot = @"C:\Program Files\FlashDevelop"; //TODO: autodetect this
+			flashDevelopRoot = @"C:\Program Files (x86)\FlashDevelop"; //TODO: autodetect this
 			updateCacheDir = Environment.CurrentDirectory;
 			filesDirectory = Path.Combine (updateCacheDir, "files");
 			updateZipPath = Path.Combine (updateCacheDir, firstZip);
+
+			Program.VersionToInstall = new Version (Path.GetFileNameWithoutExtension (updateZipPath));
+			Program.FlashDevelopRoot = flashDevelopRoot;
+			Program.FlashDevelopAssembly = Path.Combine (flashDevelopRoot, "FlashDevelop.exe");
 
 			LogMessage ("Spaceport installer " + Assembly.GetExecutingAssembly().GetName().Version + " loaded.");
 			Show();
 		}
 
-		
-
 		private void RunInstaller()
 		{
-			progressForm.SetInstruction ("Extracting files files from " + Program.VersionToInstall + ".zip");
-			progressForm.Show(this);
-			
 			UpdateExtractor extractor = new UpdateExtractor (updateCacheDir);
 			extractor.ProgressChanged += (s, e) =>
 			{
@@ -90,6 +90,9 @@ namespace PluginInstaller
 				installer.Start (updateCacheDir, flashDevelopRoot);
 			};
 			extractor.Unzip (Program.VersionToInstall);
+
+			progressForm.SetInstruction ("Extracting files files from " + Program.VersionToInstall + ".zip");
+			progressForm.ShowDialog (this);
 		}
 
 		private void installer_FinishedInstalling()
@@ -100,8 +103,8 @@ namespace PluginInstaller
 			btnFinish.Enabled = true;
 			
 			MessageBox.Show ("Update finished installing, starting FlashDevelop.");
-			//Process.Start (Program.FlashDevelopAssembly);
-			//Application.Exit ();
+			Process.Start (Program.FlashDevelopAssembly);
+			Application.Exit();
 		}
 
 		private void LogMessage (string message)
@@ -129,11 +132,8 @@ namespace PluginInstaller
 				string processAssemblyPath;
 				try{ processAssemblyPath = process.MainModule.FileName; }
 				catch (Win32Exception) { continue; }
-				
-				//TODO: find a better way to do this than just comparing full names
-				//if (processAssemblyPath.Contains ("Flash"))
-					//Debugger.Launch();
 
+				//TODO: find a better way to do this than just comparing full names
 				var assembly = new FileInfo (processAssemblyPath);
 				if (assembly.FullName.ToLower() == knownAssembly.FullName.ToLower())
 				{
@@ -147,6 +147,10 @@ namespace PluginInstaller
 		{
 			btnInstall.Enabled = false;
 			btnAgree.Enabled = false;
+			inLicense.Visible = false;
+			btnAgree.Visible = false;
+			inConsole.Visible = true;
+
 			RunInstaller();
 		}
 

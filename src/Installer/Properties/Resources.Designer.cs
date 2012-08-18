@@ -66,5 +66,19 @@ namespace PluginInstaller.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to spaceport.io Inc.
+        ///Spaceport Developer License Agreement
+        ///
+        ///Revised October 11, 2011
+        ///
+        ///IMPORTANT - PLEASE READ THE TERMS OF THIS DEVELOPER LICENSE AGREEMENT (THIS &quot;AGREEMENT&quot;) CAREFULLY. BY SELECTING THE &quot;I HAVE READ AND AGREE TO THE TERMS OF SERVICE&quot; BOX, (1) YOU ACKNOWLEDGE THAT YOU HAVE READ, UNDERSTAND, AND AGREE TO BE BOUND BY THIS AGREEMENT, (2) YOU REPRESENT THAT YOU HAVE THE AUTHORITY TO ENTER INTO THIS AGREEMENT, PERSONALLY OR ON BEHALF OF THE COMPANY YOU HAVE NAMED AS THE DEVELOPER (THE &quot;DEVELOPE [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string LICENSE {
+            get {
+                return ResourceManager.GetString("LICENSE", resourceCulture);
+            }
+        }
     }
 }

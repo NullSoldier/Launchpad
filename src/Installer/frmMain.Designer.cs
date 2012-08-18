@@ -28,12 +28,11 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
 			this.inConsole = new System.Windows.Forms.TextBox();
 			this.btnInstall = new System.Windows.Forms.Button();
 			this.btnFinish = new System.Windows.Forms.Button();
 			this.btnAgree = new System.Windows.Forms.CheckBox();
-			this.inLicense = new System.Windows.Forms.TextBox();
+			this.inLicense = new System.Windows.Forms.RichTextBox();
 			this.SuspendLayout();
 			// 
 			// inConsole
@@ -46,8 +45,9 @@
 			this.inConsole.Multiline = true;
 			this.inConsole.Name = "inConsole";
 			this.inConsole.ReadOnly = true;
-			this.inConsole.Size = new System.Drawing.Size(817, 322);
+			this.inConsole.Size = new System.Drawing.Size(817, 355);
 			this.inConsole.TabIndex = 0;
+			this.inConsole.Visible = false;
 			// 
 			// btnInstall
 			// 
@@ -61,7 +61,6 @@
 			this.btnInstall.TabIndex = 1;
 			this.btnInstall.Text = "Install";
 			this.btnInstall.UseVisualStyleBackColor = true;
-			this.btnInstall.Visible = false;
 			this.btnInstall.Click += new System.EventHandler(this.btnInstall_Click);
 			// 
 			// btnFinish
@@ -76,10 +75,12 @@
 			this.btnFinish.TabIndex = 2;
 			this.btnFinish.Text = "Finish";
 			this.btnFinish.UseVisualStyleBackColor = true;
+			this.btnFinish.Visible = false;
 			this.btnFinish.Click += new System.EventHandler(this.btnFinish_Click);
 			// 
 			// btnAgree
 			// 
+			this.btnAgree.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnAgree.AutoSize = true;
 			this.btnAgree.Location = new System.Drawing.Point(733, 344);
 			this.btnAgree.Name = "btnAgree";
@@ -94,15 +95,11 @@
 			this.inLicense.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.inLicense.Location = new System.Drawing.Point(18, 14);
-			this.inLicense.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-			this.inLicense.Multiline = true;
+			this.inLicense.Location = new System.Drawing.Point(20, 14);
 			this.inLicense.Name = "inLicense";
-			this.inLicense.ReadOnly = true;
-			this.inLicense.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.inLicense.Size = new System.Drawing.Size(817, 322);
-			this.inLicense.TabIndex = 4;
-			this.inLicense.Text = resources.GetString("inLicense.Text");
+			this.inLicense.Size = new System.Drawing.Size(817, 324);
+			this.inLicense.TabIndex = 5;
+			this.inLicense.Text = "My penis is small.";
 			// 
 			// frmMain
 			// 
@@ -117,6 +114,7 @@
 			this.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.Name = "frmMain";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Spaceport Plugin Installer";
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -129,7 +127,7 @@
 		private System.Windows.Forms.Button btnInstall;
 		private System.Windows.Forms.Button btnFinish;
 		private System.Windows.Forms.CheckBox btnAgree;
-		private System.Windows.Forms.TextBox inLicense;
+		private System.Windows.Forms.RichTextBox inLicense;
 	}
 }
 
