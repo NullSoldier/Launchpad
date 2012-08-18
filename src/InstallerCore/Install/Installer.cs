@@ -20,20 +20,14 @@ namespace InstallerCore
 		/// </summary>
 		public void Start (string updateCacheDirectory, string flashDevelopRoot)
 		{
-			installThread = new Thread (installThreadRunner);
+			installThread = new Thread (() => installFiles (updateCacheDirectory, flashDevelopRoot));
 			installThread.Name = "Install Files Thread";
-			installThread.Start(new [] {updateCacheDirectory, flashDevelopRoot});
+			installThread.Start();
 		}
 
 		private Thread installThread;
 
-		private void installThreadRunner(object arg)
-		{
-			string[] args = (string[])arg;
-			startInstallProcess (args[0], args[1]);
-		}
-
-		private void startInstallProcess (string updateCacheDirectory, string flashDevelopRoot)
+		private void installFiles (string updateCacheDirectory, string flashDevelopRoot)
 		{
 			string filesDirectory = Path.Combine (updateCacheDirectory, "files");
 			var installList = new InstallFileList (filesDirectory);
@@ -56,6 +50,7 @@ namespace InstallerCore
 			onFinished ();
 		}
 
+		#region Event Handlers
 		private void onFinished()
 		{
 			var handler = FinishedInstalling;
@@ -71,5 +66,6 @@ namespace InstallerCore
 			if (handler != null)
 				handler (this, new InstallerEventArgs (installedInfo));
 		}
+		#endregion
 	}
 }

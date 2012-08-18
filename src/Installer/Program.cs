@@ -17,10 +17,13 @@ namespace PluginInstaller
 		[STAThread]
 		static void Main()
 		{
-			MessageBox.Show ("Shadow copy started!");
-			return;
-
 			string[] args = Environment.GetCommandLineArgs();
+
+			MessageBox.Show (args.Length.ToString());
+			if (args.Length >= 1)
+				MessageBox.Show (String.Format ("{0}", args[0]));
+			
+
 			if (args.Length >= 2)
 			{
 				WaitForFlashDevelopClose = true;
