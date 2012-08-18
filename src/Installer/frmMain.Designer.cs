@@ -97,6 +97,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.inLicense.Location = new System.Drawing.Point(20, 14);
 			this.inLicense.Name = "inLicense";
+			this.inLicense.ReadOnly = true;
 			this.inLicense.Size = new System.Drawing.Size(817, 324);
 			this.inLicense.TabIndex = 5;
 			this.inLicense.Text = "My penis is small.";

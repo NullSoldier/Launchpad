@@ -57,6 +57,7 @@ namespace PluginInstaller
 			}
 
 			flashDevelopRoot = @"C:\Program Files (x86)\FlashDevelop"; //TODO: autodetect this
+			flashDevelopRoot = @"C:\Users\NullSoldier\Documents\Code Work Area\Projects\SpaceportPlugin\src\lib\FlashDevelop\FlashDevelop\Bin\Debug";
 			updateCacheDir = Environment.CurrentDirectory;
 			filesDirectory = Path.Combine (updateCacheDir, "files");
 			updateZipPath = Path.Combine (updateCacheDir, firstZip);
