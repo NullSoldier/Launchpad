@@ -72,6 +72,9 @@ namespace PluginInstaller
 
 		private void RunInstaller()
 		{
+			if (!VerifyLocalUpdateExists ())
+				return;
+
 			UpdateExtractor extractor = new UpdateExtractor (updateCacheDir);
 			extractor.ProgressChanged += (s, e) =>
 			{
@@ -122,6 +125,19 @@ namespace PluginInstaller
 				process.WaitForExit();
 
 			Invoke (new MethodInvoker (RunInstaller));
+		}
+
+		private bool VerifyLocalUpdateExists()
+		{
+			if (File.Exists (updateZipPath))
+				return true;
+
+			MessageBox.Show ("Update package did not download properly, missing at" + Environment.NewLine + Environment.NewLine +
+				updateZipPath, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+			Close();
+			Application.Exit ();
+			return false;
 		}
 
 		private IEnumerable<Process> GetFlashDevelopProcesses()

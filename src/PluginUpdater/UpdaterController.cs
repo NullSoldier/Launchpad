@@ -177,7 +177,6 @@ namespace SpaceportUpdaterPlugin
 				new Uri (Assembly.GetEntryAssembly().CodeBase).AbsolutePath);
 			string installerPath = Path.Combine (PathHelper.DataDir, localInstallerRelative);
 
-			TraceManager.Add (arguments);
 			ProcessHelper.StartAsync (installerPath, arguments);
 		}
 	}

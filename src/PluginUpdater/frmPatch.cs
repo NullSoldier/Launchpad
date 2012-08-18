@@ -107,6 +107,8 @@ namespace SpaceportUpdaterPlugin
 		private void OnDownloadFinished()
 		{
 			SetUnzippingMode();
+
+			//TODO: do verification that it downloaded successfully here
 			var dialogResult = MessageBox.Show ("Restart now to finish installing?", "Restart", MessageBoxButtons.YesNo,
 				MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
 
