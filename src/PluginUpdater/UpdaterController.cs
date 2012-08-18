@@ -172,9 +172,11 @@ namespace SpaceportUpdaterPlugin
 
 		private void startInstaller()
 		{
+			var flashAssemblyUri = new Uri (Assembly.GetEntryAssembly ().CodeBase);
+
 			// [0] = Version, [1] = FlashDevelop root
 			string arguments = string.Format ("\"{0}\" \"{1}\"", WaitingUpdate.Version,
-				new Uri (Assembly.GetEntryAssembly().CodeBase).AbsolutePath);
+				flashAssemblyUri.LocalPath);
 			string installerPath = Path.Combine (PathHelper.DataDir, localInstallerRelative);
 
 			ProcessHelper.StartAsync (installerPath, arguments);
