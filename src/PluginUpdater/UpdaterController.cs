@@ -120,6 +120,7 @@ namespace SpaceportUpdaterPlugin
 				return true;
 			}
 
+			WaitingUpdate = FoundUpdate;
 			return false;
 		}
 
@@ -133,7 +134,7 @@ namespace SpaceportUpdaterPlugin
 		}
 
 		/// <summary>
-		/// Downloads the latest update information to WaitingUpdate,
+		/// Downloads the latest update information to FoundUpdate,
 		/// but only if WaitingUpdate hasn't been set yet
 		/// </summary>
 		public void GetUpdateInformation()
@@ -146,8 +147,8 @@ namespace SpaceportUpdaterPlugin
 
 			// don't do anything with the result because anything that
 			// needs it will be listening to UpdateRunner events
-			UpdateInformation waitingUpdate;
-			UpdateRunner.TryCheckOnceForUpdate (out waitingUpdate);
+			UpdateInformation foundUpdate;
+			UpdateRunner.TryCheckOnceForUpdate (out foundUpdate);
 		}
 
 		public void Dispose()
@@ -176,6 +177,7 @@ namespace SpaceportUpdaterPlugin
 				new Uri (Assembly.GetEntryAssembly().CodeBase).AbsolutePath);
 			string installerPath = Path.Combine (PathHelper.DataDir, localInstallerRelative);
 
+			TraceManager.Add (arguments);
 			ProcessHelper.StartAsync (installerPath, arguments);
 		}
 	}
