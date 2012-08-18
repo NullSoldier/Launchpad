@@ -43,37 +43,28 @@ namespace PluginInstaller
 				updateZipPath = Path.Combine (updateCacheDir, Program.VersionToInstall + ".zip");
 				filesDirectory = Path.Combine (updateCacheDir, "files");
 
-				var waitRunner = new Thread ((o) => StartWaitRunner(GetFlashDevelopProcesses()));
+				var waitRunner = new Thread (o => StartWaitRunner (GetFlashDevelopProcesses()));
 				waitRunner.Name = "Waiting for Flash Developer Close Thread";
 				waitRunner.Start();
 				return;
 			}
 
+			var firstZip = InstallerHelper.GetLatestWaitingUpdate (Environment.CurrentDirectory);
+			if (firstZip == null) {
+				MessageBox.Show ("Update .zip package missing in root directory, exiting");
+				Application.Exit (); return;
+			}
+
 			flashDevelopRoot = @"C:\Program Files\FlashDevelop"; //TODO: autodetect this
 			updateCacheDir = Environment.CurrentDirectory;
-			updateZipPath = Path.Combine (updateCacheDir, Directory.GetFiles (this.updateCacheDir, "*.zip").First());
 			filesDirectory = Path.Combine (updateCacheDir, "files");
+			updateZipPath = Path.Combine (updateCacheDir, firstZip);
 
 			LogMessage ("Spaceport installer " + Assembly.GetExecutingAssembly().GetName().Version + " loaded.");
 			Show();
-			ListInstallFiles();
 		}
 
-		private void ListInstallFiles()
-		{
-			var installList = new InstallFileList (filesDirectory);
-
-			LogMessage ("Preparing to install: " + installList.Count + " files.");
-
-			foreach (InstallerFile installerFile in installList.Files)
-			{
-				var file = installerFile.File;
-				var filesDirIndex = file.FullName.IndexOf ("files") + 5;
-				var filesRelativePath = file.FullName.Substring (filesDirIndex);
-
-				LogMessage (string.Format ("* {0} ({1})", filesRelativePath, installerFile.Version));
-			}
-		}
+		
 
 		private void RunInstaller()
 		{
@@ -155,12 +146,18 @@ namespace PluginInstaller
 		private void btnInstall_Click(object sender, EventArgs e)
 		{
 			btnInstall.Enabled = false;
+			btnAgree.Enabled = false;
 			RunInstaller();
 		}
 
 		private void btnFinish_Click(object sender, EventArgs e)
 		{
 			Close();
+		}
+
+		private void btnAgree_CheckedChanged(object sender, EventArgs e)
+		{
+			btnInstall.Enabled = true;
 		}
 	}
 }

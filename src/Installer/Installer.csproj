@@ -65,6 +65,7 @@
     <Compile Include="frmPerformAction.Designer.cs">
       <DependentUpon>frmPerformAction.cs</DependentUpon>
     </Compile>
+    <Compile Include="InstallerHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="frmMain.resx">
@@ -101,6 +102,9 @@
       <Project>{4FBB9DDC-6E2F-4092-A679-E4B6574E7697}</Project>
       <Name>InstallerCore</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="LICENSE" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
