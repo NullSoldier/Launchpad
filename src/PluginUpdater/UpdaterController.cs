@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Security.Policy;
 using System.Text;
 using InstallerCore;
 using InstallerCore.Update;
@@ -173,13 +174,18 @@ namespace SpaceportUpdaterPlugin
 		private void startInstaller()
 		{
 			var flashAssemblyUri = new Uri (Assembly.GetEntryAssembly ().CodeBase);
-
 			// [0] = Version, [1] = FlashDevelop root
 			string arguments = string.Format ("\"{0}\" \"{1}\"", WaitingUpdate.Version,
 				flashAssemblyUri.LocalPath);
 			string installerPath = Path.Combine (PathHelper.DataDir, localInstallerRelative);
 
-			ProcessHelper.StartAsync (installerPath, arguments);
+			var domainSetup = new AppDomainSetup();
+			domainSetup.ShadowCopyFiles = "true";
+
+			AppDomain domain = AppDomain.CreateDomain ("SpaceportInstallerDomain", null, domainSetup);
+			domain.Load (AssemblyName.GetAssemblyName (installerPath));
+
+			//ProcessHelper.StartAsync (installerPath, arguments);
 		}
 	}
 }

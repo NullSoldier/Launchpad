@@ -5,7 +5,6 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -90,7 +89,7 @@ namespace PluginInstaller
 
 				Installer installer = new Installer();
 				installer.FileInstalled += (o, ev) => LogMessage ("File installed: " + ev.FileInstalled.FullName);
-				installer.FinishedInstalling += (o, ev) => Invoke ((Action)installer_FinishedInstalling);
+				installer.FinishedInstalling += (o, ev) => Invoke (new MethodInvoker (installer_FinishedInstalling));
 				installer.Start (updateCacheDir, flashDevelopRoot);
 			};
 			extractor.Unzip (Program.VersionToInstall);
@@ -114,7 +113,7 @@ namespace PluginInstaller
 		private void LogMessage (string message)
 		{
 			if (InvokeRequired)
-				base.Invoke ((Action)delegate { LogMessage (message); });
+				base.Invoke (new MethodInvoker (delegate { LogMessage (message); }));
 			else
 				inConsole.Text += string.Format ("{0}{1}", message, Environment.NewLine);
 		}

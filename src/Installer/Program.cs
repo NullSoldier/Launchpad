@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -18,6 +17,9 @@ namespace PluginInstaller
 		[STAThread]
 		static void Main()
 		{
+			MessageBox.Show ("Shadow copy started!");
+			return;
+
 			string[] args = Environment.GetCommandLineArgs();
 			if (args.Length >= 2)
 			{

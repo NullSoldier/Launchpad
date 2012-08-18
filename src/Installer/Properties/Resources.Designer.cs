@@ -68,12 +68,14 @@ namespace PluginInstaller.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to spaceport.io Inc.
-        ///Spaceport Developer License Agreement
-        ///
-        ///Revised October 11, 2011
-        ///
-        ///IMPORTANT - PLEASE READ THE TERMS OF THIS DEVELOPER LICENSE AGREEMENT (THIS &quot;AGREEMENT&quot;) CAREFULLY. BY SELECTING THE &quot;I HAVE READ AND AGREE TO THE TERMS OF SERVICE&quot; BOX, (1) YOU ACKNOWLEDGE THAT YOU HAVE READ, UNDERSTAND, AND AGREE TO BE BOUND BY THIS AGREEMENT, (2) YOU REPRESENT THAT YOU HAVE THE AUTHORITY TO ENTER INTO THIS AGREEMENT, PERSONALLY OR ON BEHALF OF THE COMPANY YOU HAVE NAMED AS THE DEVELOPER (THE &quot;DEVELOPE [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to {\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil Consolas;}{\f1\fnil\fcharset0 Consolas;}{\f2\fnil\fcharset0 Calibri;}}
+        ///{\colortbl ;\red0\green0\blue255;}
+        ///{\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\sa200\sl276\slmult1\lang9\b\f0\fs25 spaceport.io Inc.\par
+        ///Spaceport Developer License Agreement\b0\par
+        ///\par
+        ///\b Revised October 11, 2011\par
+        ///\b0\par
+        ///IMPORTANT - PLEASE READ THE TERMS OF THIS DEVELOPER LICENSE AGREEMENT (THIS &quot;AGREEMENT&quot;) CAREFULLY. BY SELECTING THE &quot;I HAVE READ AND  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string LICENSE {
             get {
