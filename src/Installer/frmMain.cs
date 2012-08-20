@@ -22,32 +22,25 @@ namespace PluginInstaller
 
 			this.Icon = Icon.FromHandle (Resources.icon.GetHicon ());
 			this.inLicense.Rtf = Resources.LICENSE;
+			this.inAssemblyPath.Text = flashDevelopAssemblyPath;
 			this.progressForm = new frmPerformAction();
 
 			this.flashDevelopAssemblyPath = flashDevelopAssemblyPath;
 			this.updateCacheDir = updateCacheDir;
 			this.versionToInstall = versionToInstall;
 
-			this.flashDevelopDir = new FileInfo (flashDevelopAssemblyPath).DirectoryName;
-			this.filesDir = Path.Combine (updateCacheDir, "files");
-			this.updateZipPath = Path.Combine (updateCacheDir, versionToInstall + ".zip");
-
+			CalculateMetaDirectories();
 			CreateHandle();
 			LogMessage ("Spaceport installer " + Assembly.GetExecutingAssembly().GetName().Version + " loaded.");
 		}
 
-		private string flashDevelopAssemblyPath;
-		private string flashDevelopDir;
-		private string updateCacheDir;
-		private string filesDir;
-		private string updateZipPath;
-		private Version versionToInstall;
-		private frmPerformAction progressForm;
-
-		private void RunInstaller()
+		public void RunInstaller()
 		{
 			if (!VerifyLocalUpdateExists ())
+			{
+				Application.Exit();
 				return;
+			}
 
 			UpdateExtractor extractor = new UpdateExtractor (updateCacheDir);
 			extractor.ProgressChanged += (s, e) =>
@@ -58,11 +51,11 @@ namespace PluginInstaller
 					progressForm.SetInstruction ("Unzipping " + e.CurrentEntry.FileName);
 				}
 			};
-			extractor.Finished += (s, e) => 
+			extractor.Finished += (s, e) =>
 			{
 				progressForm.SetInstruction ("Installing files from " + filesDir + " to " + flashDevelopDir);
 
-				Installer installer = new Installer();
+				Installer installer = new Installer ();
 				installer.FileInstalled += (o, ev) => LogMessage ("File installed: " + ev.FileInstalled.FullName);
 				installer.FinishedInstalling += (o, ev) => Invoke (new MethodInvoker (FinishedInstalling));
 				installer.Start (updateCacheDir, flashDevelopDir);
@@ -71,6 +64,21 @@ namespace PluginInstaller
 
 			progressForm.SetInstruction ("Extracting files files from " + versionToInstall + ".zip");
 			progressForm.ShowDialog (this);
+		}
+
+		private string flashDevelopAssemblyPath;
+		private string flashDevelopDir;
+		private string updateCacheDir;
+		private string filesDir;
+		private string updateZipPath;
+		private Version versionToInstall;
+		private frmPerformAction progressForm;
+
+		private void CalculateMetaDirectories()
+		{
+			this.flashDevelopDir = new FileInfo (flashDevelopAssemblyPath).DirectoryName;
+			this.filesDir = Path.Combine (updateCacheDir, "files");
+			this.updateZipPath = Path.Combine (updateCacheDir, versionToInstall + ".zip");
 		}
 
 		private void FinishedInstalling()
@@ -110,9 +118,11 @@ namespace PluginInstaller
 		{
 			btnInstall.Enabled = false;
 			btnAgree.Enabled = false;
+			btnBrowse.Enabled = false;
 			inLicense.Visible = false;
 			btnAgree.Visible = false;
 			inConsole.Visible = true;
+			inAssemblyPath.Enabled = false;
 
 			RunInstaller();
 		}
@@ -125,6 +135,22 @@ namespace PluginInstaller
 		private void btnAgree_CheckedChanged(object sender, EventArgs e)
 		{
 			btnInstall.Enabled = true;
+		}
+
+		private void btnBrowse_Click(object sender, EventArgs e)
+		{
+			OpenFileDialog dialog = new OpenFileDialog();
+			if (dialog.ShowDialog (this) == DialogResult.OK)
+			{
+				inAssemblyPath.Text = dialog.FileName;
+				flashDevelopAssemblyPath = dialog.FileName;
+				CalculateMetaDirectories();
+			}
+		}
+
+		private void frmMain_FormClosed(object sender, FormClosedEventArgs e)
+		{
+			Application.Exit();
 		}
 	}
 }

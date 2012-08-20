@@ -20,10 +20,22 @@ namespace PluginUpdater
 	{
 		public void Initialize()
 		{
-			spaceportPlugin = PluginHelper.CheckPluginLoaded<SpaceportPlugin> (Resources.SpaceportPluginGuid);
-			controller = new UpdaterController (spaceportPlugin);
+			MessageBox.Show ("test");
+			var test = PluginBase.MainForm.FindPlugin (Resources.SpaceportPluginGuid);
+			MessageBox.Show ("test3 " + test.GetType().FullName);
+			try
+			{
+				var newType = typeof (SpaceportPlugin);
+				MessageBox.Show ("test4 " + newType.FullName);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show ("Exception: " + ex.Message);
+			}
+			//spaceportPlugin = PluginHelper.CheckPluginLoaded<SpaceportPlugin> (Resources.SpaceportPluginGuid);
+			//controller = new UpdaterController (spaceportPlugin);
 			
-			ThreadPool.QueueUserWorkItem (a => WaitForSpaceportPlugin());
+			//ThreadPool.QueueUserWorkItem (a => WaitForSpaceportPlugin());
 		}
 
 		private Control mainForm;

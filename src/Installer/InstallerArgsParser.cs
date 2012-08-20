@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace PluginInstaller
@@ -43,10 +42,22 @@ namespace PluginInstaller
 				callbackSet.StartInvalidMode ();
 		}
 
+		//TODO: get from registry?
+		private static string[] possibleFlashDevelopPaths = new string[] 
+		{
+			//@"C:\Program Files\FlashDevelop\FlashDevelop.exe",
+			//@"C:\Program Files (x86)\FlashDevelop\FlashDevelop.exe",
+			@"C:\Users\NullSoldier\Documents\Code Work Area\Projects\SpaceportPlugin\lib\FlashDevelop\FlashDevelop\Bin\Debug\FlashDevelop.exe"
+		};
 
 		private static string getFlashDevelopPath()
 		{
-			return @"C:\Users\NullSoldier\Documents\Code Work Area\Projects\SpaceportPlugin\src\lib\FlashDevelop\FlashDevelop\Bin\Debug\FlashDevelop.exe";
+			foreach (var path in possibleFlashDevelopPaths) {
+				if (File.Exists (path))
+					return path;
+			}
+
+			return possibleFlashDevelopPaths[2];
 		}
 	}
 }

@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using InstallerCore;
 
 namespace PluginInstaller
 {
 	public static class AssemblyCloseDelayer
 	{
-		public static void WaitForAssembliesAsync (string[] assemblyPaths, Action processesClosed)
+		public static void WaitForAssembliesAsync (IEnumerableHelper.Action processesClosed, params string[] assemblyPaths)
 		{
 			var thread = new Thread(() =>
 			{

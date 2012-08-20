@@ -180,20 +180,8 @@ namespace SpaceportUpdaterPlugin
 			var flashAssemblyUri = new Uri (Assembly.GetEntryAssembly ().CodeBase);
 			string installerPath = Path.Combine (PathHelper.DataDir, localInstallerRelative);
 
-			// [0] = Version, [1] = FlashDevelop root
-			string[] args = new[] { WaitingUpdate.Version.ToString(), flashAssemblyUri.LocalPath };
-
-			Thread test = new Thread (o =>
-			{
-				object[] threadArgs = (object[])o;
-				string installPath = (string)threadArgs[0];
-				string[] installArgs = (string[])threadArgs[1];
-
-				throw new NotImplementedException();
-			});
-			test.IsBackground = true;
-			test.Name = "Installer thread";
-			test.Start (new object[] { installerPath, args });
+			string args = string.Format ("\"{0}\" \"{1}\"", WaitingUpdate.Version, flashAssemblyUri.LocalPath);
+			Process.Start (installerPath, args);
 		}
 	}
 }

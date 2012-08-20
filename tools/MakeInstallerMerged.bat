@@ -1,1 +1,1 @@
-ILMerge /target:winexe /out:PluginInstaller.exe ../Installer/bin/Debug/PluginInstaller.exe ../Installer/bin/Debug/InstallerCore.dll ../Installer/bin/Debug/Ionic.Zip.dll
+ILMerge /target:winexe /out:PluginInstaller.exe ../src/Installer/bin/Debug/PluginInstaller.exe ../src/Installer/bin/Debug/InstallerCore.dll ../src/Installer/bin/Debug/Ionic.Zip.dll

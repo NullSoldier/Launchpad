@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
@@ -40,16 +39,29 @@ namespace PluginInstaller
 			string versionStr = Path.GetFileNameWithoutExtension (new FileInfo (waitingPackage).Name);
 			Version waitingVersion = new Version (versionStr);
 
-			Application.EnableVisualStyles ();
-			Application.SetCompatibleTextRenderingDefault (false);
-			frmMain installerForm = new frmMain (waitingVersion, flashDevelopAssemblyPath.FullName, updateCacheDir.FullName);
-			installerForm.Show();
-			Application.Run ();
+			startForm (waitingVersion, flashDevelopAssemblyPath, updateCacheDir, false);
 		}
 
-		public void StartInstallerMode(Version version, FileInfo flashAssemblyPath, FileInfo oldUpdateAssemblyPath)
+		public void StartInstallerMode (Version version, FileInfo flashAssemblyPath, FileInfo oldUpdateAssemblyPath)
 		{
-			
+			var oldUpdateCacheDir = new DirectoryInfo (Path.Combine (flashAssemblyPath.DirectoryName, "Data\\Spaceport\\updatecache"));
+
+			AssemblyCloseDelayer.WaitForAssembliesAsync (() => startForm (version, flashAssemblyPath, oldUpdateCacheDir, true),
+				flashAssemblyPath.FullName, oldUpdateAssemblyPath.FullName);
+		}
+
+		private void startForm (Version versionToInstall, FileInfo flashDevelopAssembly, DirectoryInfo updateCacheDir, bool installerMode)
+		{
+			Application.EnableVisualStyles ();
+			Application.SetCompatibleTextRenderingDefault (false);
+			frmMain installerForm = new frmMain (versionToInstall, flashDevelopAssembly.FullName, updateCacheDir.FullName);
+
+			if (installerMode)
+				installerForm.RunInstaller();
+			else
+				installerForm.Show ();
+
+			Application.Run ();
 		}
 	}
 }

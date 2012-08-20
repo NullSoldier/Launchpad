@@ -29,6 +29,9 @@ namespace PluginInstaller
 			return latestPath;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public static void LogInstallFiles (string filesDirectory, Action<string> LogMessage)
 		{
 			var installList = new InstallFileList (filesDirectory);
