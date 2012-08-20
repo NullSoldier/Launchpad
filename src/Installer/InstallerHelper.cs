@@ -11,7 +11,7 @@ namespace PluginInstaller
 		/// <summary>
 		/// Gets the path to zip of the latest update package in the updateCacheDir folder
 		/// </summary>
-		public static string GetLatestWaitingUpdate(string updateCacheDir)
+		public static string GetLatestWaitingUpdate (string updateCacheDir)
 		{
 			string latestPath = null;
 			Version latestVersion = null;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using PluginCore.Helpers;
 
 namespace InstallerCore
 {
@@ -18,5 +19,17 @@ namespace InstallerCore
 		{
 			EnsureFileDirExists (new FileInfo (filePath));
 		}
+
+		public static string FlashDevelopDataDir
+		{
+			get
+			{
+				if (cachedAppDir == null)
+					cachedAppDir = Path.Combine (PathHelper.AppDir, "Data");
+				return cachedAppDir;
+			}
+		}
+
+		private static string cachedAppDir = null;
 	}
 }

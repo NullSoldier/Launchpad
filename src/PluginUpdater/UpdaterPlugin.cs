@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Mime;
 using System.Reflection;
 using System.Text;
@@ -20,22 +21,10 @@ namespace PluginUpdater
 	{
 		public void Initialize()
 		{
-			MessageBox.Show ("test");
-			var test = PluginBase.MainForm.FindPlugin (Resources.SpaceportPluginGuid);
-			MessageBox.Show ("test3 " + test.GetType().FullName);
-			try
-			{
-				var newType = typeof (SpaceportPlugin);
-				MessageBox.Show ("test4 " + newType.FullName);
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show ("Exception: " + ex.Message);
-			}
-			//spaceportPlugin = PluginHelper.CheckPluginLoaded<SpaceportPlugin> (Resources.SpaceportPluginGuid);
-			//controller = new UpdaterController (spaceportPlugin);
-			
-			//ThreadPool.QueueUserWorkItem (a => WaitForSpaceportPlugin());
+			spaceportPlugin = PluginHelper.CheckPluginLoaded<SpaceportPlugin> (Resources.SpaceportPluginGuid);
+			controller = new UpdaterController (spaceportPlugin);
+
+			ThreadPool.QueueUserWorkItem (a => WaitForSpaceportPlugin());
 		}
 
 		private Control mainForm;

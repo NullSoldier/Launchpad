@@ -7,11 +7,13 @@ using System.Reflection.Emit;
 using System.Security.Policy;
 using System.Text;
 using System.Threading;
+using System.Windows.Forms;
 using InstallerCore;
 using InstallerCore.Update;
 using PluginCore;
 using PluginCore.Helpers;
 using PluginCore.Managers;
+using PluginInstaller;
 using PluginSpaceport;
 using PluginUpdater;
 
@@ -87,8 +89,8 @@ namespace SpaceportUpdaterPlugin
 		public void RestartForUpdate()
 		{
 			installOnClose = true;
-			startInstaller();
-			PluginBase.MainForm.CallCommand ("Exit", String.Empty);
+			if (startInstaller())
+				PluginBase.MainForm.CallCommand ("Exit", String.Empty);
 		}
 
 		/// <summary>
@@ -167,21 +169,32 @@ namespace SpaceportUpdaterPlugin
 			UpdateRunner = new UpdateRunner (new Uri (remoteUpdateFile), SpaceportVersion);
 			UpdateRunner.UpdateFound += (o, e) => FoundUpdate = e.UpdateInfo;
 			
-			var localUpdateDir = Path.Combine (PathHelper.DataDir, localUpdateRelative);
+			var dataDir = InstallerCore.FileHelper.FlashDevelopDataDir;
+			var localUpdateDir = Path.Combine (dataDir, localUpdateRelative);
 			UpdateExtractor = new UpdateExtractor (localUpdateDir);
 			
 			UpdateDownloader = new UpdateDownloader (remoteUpdateDir, localUpdateDir);
 			UpdateDownloader.Finished += (o, e) => WaitingUpdate = FoundUpdate;
 		}
 
-		private void startInstaller()
+		private bool startInstaller()
 		{
 			// Use URI to avoid file name formatting differences
 			var flashAssemblyUri = new Uri (Assembly.GetEntryAssembly ().CodeBase);
-			string installerPath = Path.Combine (PathHelper.DataDir, localInstallerRelative);
+			string dataDir = InstallerCore.FileHelper.FlashDevelopDataDir;
+			string installerPath = Path.Combine (dataDir, localInstallerRelative);
 
 			string args = string.Format ("\"{0}\" \"{1}\"", WaitingUpdate.Version, flashAssemblyUri.LocalPath);
+
+			if (!File.Exists (installerPath))
+			{
+				MessageBox.Show ("Updater failed to start, updater is missing."
+					+ Environment.NewLine + installerPath);
+				return false;
+			}
+
 			Process.Start (installerPath, args);
+			return true;
 		}
 	}
 }

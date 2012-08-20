@@ -11,7 +11,7 @@ namespace PluginCommon
 		public static T CheckPluginLoaded<T> (string guid)
 			where T : class, IPlugin
 		{
-			T plugin = PluginBase.MainForm.FindPlugin (guid) as T;
+			T plugin = (T)PluginBase.MainForm.FindPlugin (guid);
 			if (plugin == null)
 				throw new InvalidOperationException ("The primary spaceport plugin was not loaded.");
 

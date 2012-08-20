@@ -45,8 +45,8 @@ namespace PluginInstaller
 		//TODO: get from registry?
 		private static string[] possibleFlashDevelopPaths = new string[] 
 		{
-			//@"C:\Program Files\FlashDevelop\FlashDevelop.exe",
-			//@"C:\Program Files (x86)\FlashDevelop\FlashDevelop.exe",
+			@"C:\Program Files\FlashDevelop\FlashDevelop.exe",
+			@"C:\Program Files (x86)\FlashDevelop\FlashDevelop.exe",
 			@"C:\Users\NullSoldier\Documents\Code Work Area\Projects\SpaceportPlugin\lib\FlashDevelop\FlashDevelop\Bin\Debug\FlashDevelop.exe"
 		};
 
