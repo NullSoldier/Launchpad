@@ -62,6 +62,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InstallerLauncher.cs" />
+    <Compile Include="AssemblyLoader.cs" />
     <Compile Include="frmPatch.cs">
       <SubType>Form</SubType>
     </Compile>

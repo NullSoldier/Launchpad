@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Reflection.Emit;
 using System.Security.Policy;
 using System.Text;
 using System.Threading;
@@ -16,6 +17,7 @@ using PluginUpdater;
 
 namespace SpaceportUpdaterPlugin
 {
+	[Serializable]
 	public class UpdaterController : IDisposable
 	{
 		private const string remoteUpdateDir = "http://entitygames.net/games/updates/";
@@ -174,21 +176,25 @@ namespace SpaceportUpdaterPlugin
 
 		private void startInstaller()
 		{
+			// Use URI to avoid file name formatting differences
 			var flashAssemblyUri = new Uri (Assembly.GetEntryAssembly ().CodeBase);
 			string installerPath = Path.Combine (PathHelper.DataDir, localInstallerRelative);
 
 			// [0] = Version, [1] = FlashDevelop root
 			string[] args = new[] { WaitingUpdate.Version.ToString(), flashAssemblyUri.LocalPath };
 
-			Thread thread = new Thread (() =>
+			Thread test = new Thread (o =>
 			{
-				var domainSetup = AppDomain.CurrentDomain.SetupInformation;
-				domainSetup.ShadowCopyFiles = "true";
+				object[] threadArgs = (object[])o;
+				string installPath = (string)threadArgs[0];
+				string[] installArgs = (string[])threadArgs[1];
 
-				var domain = AppDomain.CreateDomain ("SpaceportInstallerDomain", null, domainSetup);
-				domain.ExecuteAssembly (installerPath, null, args);
+				var installerLauncher = new InstallerLauncher ();
+				installerLauncher.Launch (installPath, installArgs);
 			});
-			thread.Start();
+			test.IsBackground = true;
+			test.Name = "Installer thread";
+			test.Start (new object[] { installerPath, args });
 		}
 	}
 }

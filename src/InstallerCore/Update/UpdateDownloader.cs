@@ -9,9 +9,10 @@ namespace InstallerCore
 {
 	public class UpdateDownloader
 	{
-		/// <summary>
-		/// 
-		/// </summary>
+		/// <param name="remoteUpdateDir">The directory on the web where the "update" file will be
+		/// Ex: http://entitygames.net/games/updates </param>
+		/// <param name="updateCacheDir">The local updatecache where to download the updatepackage
+		/// Ex: FlashDevelop/Data/Spaceport/updatecache </param>
 		public UpdateDownloader (string remoteUpdateDir, string updateCacheDir)
 		{
 			this.remoteUpdateDir = remoteUpdateDir;
