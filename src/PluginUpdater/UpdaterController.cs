@@ -189,8 +189,7 @@ namespace SpaceportUpdaterPlugin
 				string installPath = (string)threadArgs[0];
 				string[] installArgs = (string[])threadArgs[1];
 
-				var installerLauncher = new InstallerLauncher ();
-				installerLauncher.Launch (installPath, installArgs);
+				throw new NotImplementedException();
 			});
 			test.IsBackground = true;
 			test.Name = "Installer thread";

@@ -5,4 +5,4 @@ obj/
 _*
 *.Cache
 *.cachefile
-src/lib/FlashDevelop/
+lib/FlashDevelop/
