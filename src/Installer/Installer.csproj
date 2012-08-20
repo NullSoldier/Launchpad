@@ -64,8 +64,8 @@
     </Compile>
     <Compile Include="IInstallerModeCallbackSet.cs" />
     <Compile Include="InstallerEntry.cs" />
-    <Compile Include="InstallerHelper.cs" />
     <Compile Include="InstallerArgsParser.cs" />
+    <Compile Include="InstallerHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="frmMain.resx">
