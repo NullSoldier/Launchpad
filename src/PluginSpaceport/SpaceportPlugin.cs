@@ -17,6 +17,8 @@ namespace PluginSpaceport
 {
 	public class SpaceportPlugin : IPlugin
 	{
+		private const string localHoodViewerRelative = "Spaceport\\tools\\SpaceportHoodViewer.exe";
+
 		public SpaceportMenu SpaceportMenu
 		{
 			get { return spaceportMenu; }
@@ -73,8 +75,20 @@ namespace PluginSpaceport
 
 		private void MakeAwesomeItem_Click (object sender, EventArgs e)
 		{
-			mainPanel.Show();
+			if (hoodViewerProcess != null && !hoodViewerProcess.HasExited)
+				return;
+
+			string dataDir = Path.Combine (PathHelper.AppDir, "Data");
+			string hoodViewerPath = Path.Combine (dataDir, localHoodViewerRelative);
+
+			if (!File.Exists (hoodViewerPath)) {
+				MessageBox.Show ("Hood viewer failed to start, hood missing." + Environment.NewLine + hoodViewerPath); return;
+			}
+
+			hoodViewerProcess = Process.Start (hoodViewerPath);
 		}
+
+		private Process hoodViewerProcess;
 
 		private void About_Click (object sender, EventArgs e)
 		{
