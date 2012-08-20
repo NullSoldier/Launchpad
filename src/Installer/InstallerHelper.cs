@@ -44,5 +44,10 @@ namespace PluginInstaller
 				LogMessage (string.Format ("* {0} ({1})", filesRelativePath, installerFile.Version));
 			}
 		}
+
+		public static string GetFileDirectory(string filePath)
+		{
+			return new FileInfo (filePath).DirectoryName;
+		}
 	}
 }

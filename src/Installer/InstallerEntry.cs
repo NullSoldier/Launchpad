@@ -21,6 +21,10 @@ namespace PluginInstaller
 			string appDataDir = Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData);
 			string copyDestination = Path.Combine (appDataDir, "Spaceport\\" + updaterAssemblyPath.Name);
 
+			string parentDirectory = InstallerHelper.GetFileDirectory (copyDestination);
+			if (!Directory.Exists (parentDirectory))
+				Directory.CreateDirectory (parentDirectory);
+
 			updaterAssemblyPath.CopyTo (copyDestination, true);
 
 			string args = string.Format ("\"{0}\" \"{1}\" \"{2}\"", version, flashAssemblyPath, updaterAssemblyPath);
