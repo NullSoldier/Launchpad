@@ -14,7 +14,6 @@ using PluginCore;
 using PluginCore.Helpers;
 using PluginCore.Managers;
 using PluginInstaller;
-using PluginSpaceport;
 using PluginUpdater;
 
 namespace SpaceportUpdaterPlugin
@@ -27,10 +26,9 @@ namespace SpaceportUpdaterPlugin
 		private const string localUpdateRelative = "Spaceport\\updatecache\\";
 		private const string localInstallerRelative = "Spaceport\\tools\\PluginInstaller.exe";
 
-		public UpdaterController (SpaceportPlugin spaceportPlugin)
+		public UpdaterController()
 		{
 			UpdaterVersion = Assembly.GetExecutingAssembly().GetName().Version;
-			SpaceportVersion = spaceportPlugin.Version;
 
 			init();
 		}
@@ -96,9 +94,9 @@ namespace SpaceportUpdaterPlugin
 		/// <summary>
 		/// Start the update runner that checks for updates
 		/// </summary>
-		public void StartUpdateRunner()
+		public void StartUpdateRunner (Version baseVersion)
 		{
-			UpdateRunner.Start();
+			UpdateRunner.Start (baseVersion);
 		}
 
 		/// <summary>
@@ -162,7 +160,7 @@ namespace SpaceportUpdaterPlugin
 
 		private void init()
 		{
-			UpdateRunner = new UpdateRunner (new Uri (remoteUpdateFile), SpaceportVersion);
+			UpdateRunner = new UpdateRunner (new Uri (remoteUpdateFile));
 			UpdateRunner.UpdateFound += (o, e) => FoundUpdate = e.UpdateInfo;
 			
 			var dataDir = InstallerCore.FileHelper.FlashDevelopDataDir;

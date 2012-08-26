@@ -11,10 +11,9 @@ namespace InstallerCore
 	{
 		/// <param name="updateLocation">The location to a .update file. Ex: http://domain.com/updates/update </param>
 		/// <param name="currentVersion">Look for updates later than this version</param>
-		public UpdateRunner (Uri updateLocation, Version currentVersion)
+		public UpdateRunner (Uri updateLocation)
 		{
 			this.updateLocation = updateLocation;
-			this.currentVersion = currentVersion;
 		}
 
 		public event EventHandler CheckUpdateStarted;
@@ -22,8 +21,9 @@ namespace InstallerCore
 		public event EventHandler<UpdateCheckerEventArgs> UpdateFound;
 		public event EventHandler<UpdateCheckerEventArgs> CheckUpdateFailed;
 
-		public void Start()
+		public void Start (Version baseVersion)
 		{
+			currentVersion = baseVersion;
 			isCheckingUpdates = true;
 
 			updateThread = new Thread (updateCheckRunner);
@@ -42,13 +42,9 @@ namespace InstallerCore
 		}
 
 		private readonly Uri updateLocation;
-
-		private readonly Version currentVersion;
-
+		private Version currentVersion;
 		private Thread updateThread;
-
 		private bool isCheckingUpdates;
-
 		private const int checkSleepTime = 60000;
 
 		private void updateCheckRunner()

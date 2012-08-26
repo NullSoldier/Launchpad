@@ -24,7 +24,7 @@ namespace PluginUpdater
 			if (!PluginHelper.TryGetLoadedPlugin (Resources.SpaceportPluginGuid, out spaceportPlugin))
 				throw new InvalidOperationException("Primary spaceport plugin was not loaded.");
 
-			controller = new UpdaterController (spaceportPlugin);
+			controller = new UpdaterController ();
 
 			ThreadPool.QueueUserWorkItem (a => WaitForSpaceportPlugin());
 		}
@@ -48,7 +48,7 @@ namespace PluginUpdater
 			controller.UpdateRunner.UpdateFound += UpdateFound;
 
 			if (updateMenu.CheckUpdatesItem.Checked)
-				controller.StartUpdateRunner();
+				controller.StartUpdateRunner (spaceportPlugin.Version);
 		}
 
 		private void UpdaterRunnerStarted(Object sender, EventArgs e)
@@ -95,7 +95,7 @@ namespace PluginUpdater
 		private void CheckUpdates_CheckChanged (object sender, EventArgs e)
 		{
 			if (updateMenu.CheckUpdatesItem.Checked)
-				controller.StartUpdateRunner();
+				controller.StartUpdateRunner (spaceportPlugin.Version);
 			else
 				controller.StopUpdateRunner();
 		}
