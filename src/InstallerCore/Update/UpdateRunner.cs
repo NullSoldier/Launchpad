@@ -41,27 +41,14 @@ namespace InstallerCore
 			onStopCheckUpdate();
 		}
 
-		public bool TryCheckOnceForUpdate (out UpdateInformation updateInfo)
-		{
-			updateInfo = null;
-
-			Version versionFound;
-			string patchNotes;
-
-			if (!TryFetchUpdate (out versionFound, out patchNotes))
-				return false;
-
-			updateInfo = new UpdateInformation (versionFound, patchNotes,
-				GetUpdatePackageUri (updateLocation, versionFound));
-
-			onUpdateFound (versionFound, patchNotes);
-			return true;
-		}
-
 		private readonly Uri updateLocation;
+
 		private readonly Version currentVersion;
+
 		private Thread updateThread;
+
 		private bool isCheckingUpdates;
+
 		private const int checkSleepTime = 60000;
 
 		private void updateCheckRunner()
@@ -76,6 +63,18 @@ namespace InstallerCore
 
 				Thread.Sleep (checkSleepTime);
 			}
+		}
+
+		public bool TryCheckOnceForUpdate()
+		{
+			Version versionFound;
+			string patchNotes;
+
+			if (!TryFetchUpdate (out versionFound, out patchNotes))
+				return false;
+
+			onUpdateFound (versionFound, patchNotes);
+			return true;
 		}
 
 		private bool TryFetchUpdate (out Version versionFound, out string patchNotes)

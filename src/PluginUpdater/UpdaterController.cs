@@ -150,11 +150,7 @@ namespace SpaceportUpdaterPlugin
 				return;
 
 			StopUpdateRunner();
-
-			// don't do anything with the result because anything that
-			// needs it will be listening to UpdateRunner events
-			UpdateInformation foundUpdate;
-			UpdateRunner.TryCheckOnceForUpdate (out foundUpdate);
+			UpdateRunner.TryCheckOnceForUpdate ();
 		}
 
 		public void Dispose()
