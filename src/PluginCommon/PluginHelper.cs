@@ -8,14 +8,11 @@ namespace PluginCommon
 {
 	public static class PluginHelper
 	{
-		public static T CheckPluginLoaded<T> (string guid)
+		public static bool TryGetLoadedPlugin<T> (string guid, out T loadedPlugin)
 			where T : class, IPlugin
 		{
-			T plugin = (T)PluginBase.MainForm.FindPlugin (guid);
-			if (plugin == null)
-				throw new InvalidOperationException ("The primary spaceport plugin was not loaded.");
-
-			return plugin;
+			loadedPlugin = PluginBase.MainForm.FindPlugin (guid) as T;
+			return loadedPlugin != null;
 		}
 	}
 }

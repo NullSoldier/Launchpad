@@ -17,82 +17,81 @@ namespace PluginSpaceport
 {
 	public class SpaceportPlugin : IPlugin
 	{
-		private const string localHoodViewerRelative = "Spaceport\\tools\\SpaceportHoodViewer.exe";
+		private const string localHoodViewerRelative = @"Spaceport\tools\SpaceportHoodViewer.exe";
 
 		public SpaceportMenu SpaceportMenu
 		{
-			get { return spaceportMenu; }
+			get;
+			private set;
 		}
 
 		public Version Version
 		{
-			get { return currentVersion; }
+			get;
+			private set;
 		}
 
 		public bool IsInitialized
 		{
-			get { return isInitialized; }
+			get;
+			private set;
 		}
 
 		public void Initialize()
 		{
 			icon = Image.FromHbitmap (Resources.spaceportIcon.GetHbitmap());
-			mainPanel = PluginBase.MainForm.CreateDockablePanel (new MainUI(), Guid, icon, DockState.Hidden);
-			currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
+			PluginBase.MainForm.CreateDockablePanel (new MainUI(), Guid, icon, DockState.Hidden);
 
 			HookIntoMenu();
-
-			//TraceManager.AddAsync ("Starting Spaceport Plugin v" + currentVersion);
-			EventManager.AddEventHandler (this, EventType.FileSave);
-
-			isInitialized = true;
+			IsInitialized = true;
 		}
 
 		public void HandleEvent(object sender, NotifyEvent e, HandlingPriority priority)
 		{
-			if (e.Type == EventType.FileSave)
-				TraceManager.AddAsync ("Spaceport Plugin detected file saved " + e);
 		}
 
 		public void Dispose()
 		{
+			icon.Dispose();
 		}
 
 		private Image icon;
-		private DockContent mainPanel;
-		private SpaceportMenu spaceportMenu;
-		private Version currentVersion;
-		private object settingsObject = null;
-		private bool isInitialized;
+		private Process hoodViewerProcess;
 
 		private void HookIntoMenu()
 		{
-			spaceportMenu = new SpaceportMenu (PluginBase.MainForm.MenuStrip);
-			
-			spaceportMenu.AboutItem.Click += About_Click;
-			spaceportMenu.MakeAwesomeItem.Click += MakeAwesomeItem_Click;
+			SpaceportMenu = new SpaceportMenu (PluginBase.MainForm.MenuStrip);
+
+			SpaceportMenu.MakeAwesomeItem.Click += MakeAwesomeItem_Click;
+			SpaceportMenu.AboutItem.Click += About_Click;
 		}
 
 		private void MakeAwesomeItem_Click (object sender, EventArgs e)
 		{
-			if (hoodViewerProcess != null && !hoodViewerProcess.HasExited)
+			if (IsHoodRunning())
 				return;
 
-			string dataDir = Path.Combine (PathHelper.AppDir, "Data");
-			string hoodViewerPath = Path.Combine (dataDir, localHoodViewerRelative);
+			try
+			{
+				string dataDir = Path.Combine (PathHelper.AppDir, "Data");
+				string hoodViewerPath = Path.Combine (dataDir, localHoodViewerRelative);
 
-			if (!File.Exists (hoodViewerPath)) {
-				MessageBox.Show ("Hood viewer failed to start, hood missing." + Environment.NewLine + hoodViewerPath); return;
+				hoodViewerProcess = Process.Start (hoodViewerPath);
 			}
-
-			hoodViewerProcess = Process.Start (hoodViewerPath);
+			catch (FileNotFoundException ex)
+			{
+				MessageBox.Show ("Hood viewer failed to start, hood missing." + Environment.NewLine + ex.FileName);
+			}
 		}
 
-		private Process hoodViewerProcess;
-
-		private void About_Click (object sender, EventArgs e)
+		private void About_Click(object sender, EventArgs e)
 		{
 			Process.Start ("http://spaceport.io");
+		}
+
+		private bool IsHoodRunning()
+		{
+			return hoodViewerProcess != null && !hoodViewerProcess.HasExited;
 		}
 
 		#region Required Properties
@@ -128,7 +127,7 @@ namespace PluginSpaceport
 
 		public object Settings
 		{
-			get { return settingsObject; }
+			get { return null; }
 		}
 		#endregion
 	}

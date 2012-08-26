@@ -10,7 +10,7 @@ namespace PluginCommon
 	{
 		public SpaceportMenu (MenuStrip menuStripContainer)
 		{
-			SpaceportItem = new ToolStripMenuItem ("Spaceport");
+			this.SpaceportItem = new ToolStripMenuItem ("Spaceport");
 			this.MakeAwesomeItem = new ToolStripMenuItem ("Make Spaceport Awesome");
 			this.AboutItem = new ToolStripMenuItem ("About");
 

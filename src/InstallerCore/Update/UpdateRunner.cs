@@ -9,6 +9,8 @@ namespace InstallerCore
 {
 	public class UpdateRunner
 	{
+		/// <param name="updateLocation">The location to a .update file. Ex: http://domain.com/updates/update </param>
+		/// <param name="currentVersion">Look for updates later than this version</param>
 		public UpdateRunner (Uri updateLocation, Version currentVersion)
 		{
 			this.updateLocation = updateLocation;
@@ -43,37 +45,24 @@ namespace InstallerCore
 		{
 			updateInfo = null;
 
-			Exception ex;
 			Version versionFound;
 			string patchNotes;
 
-			if (!TryDownloadVersion (out versionFound, out ex))
-			{
-				onCheckUpdateFailed (ex);
+			if (!TryFetchUpdate (out versionFound, out patchNotes))
 				return false;
-			}
-
-			// No need to go further, this is not a new version
-			if (versionFound <= currentVersion)
-				return false;
-
-			// Grab patch notes too
-			Uri patchNotesURI = new Uri (updateLocation, versionFound + ".patchnotes");
-			if (!UpdateHelper.TryDownloadString (patchNotesURI, out patchNotes, out ex))
-				patchNotes = "No patch notes available.";
 
 			updateInfo = new UpdateInformation (versionFound, patchNotes,
-				new Uri(updateLocation, versionFound + ".zip"));
+				GetUpdatePackageUri (updateLocation, versionFound));
 
 			onUpdateFound (versionFound, patchNotes);
 			return true;
 		}
 
-		private const int checkSleepTime = 60000;
 		private readonly Uri updateLocation;
 		private readonly Version currentVersion;
 		private Thread updateThread;
 		private bool isCheckingUpdates;
+		private const int checkSleepTime = 60000;
 
 		private void updateCheckRunner()
 		{
@@ -81,40 +70,42 @@ namespace InstallerCore
 			{
 				Version versionFound;
 				string patchNotes;
-				Exception ex;
 
-				if (!TryDownloadVersion (out versionFound, out ex))
-				{
-					onCheckUpdateFailed (ex);
-					Thread.Sleep (checkSleepTime);
-					continue;
-				}
+				if (TryFetchUpdate (out versionFound, out patchNotes))
+					onUpdateFound (versionFound, patchNotes);
 
-				if (versionFound <= currentVersion)
-				{
-					Thread.Sleep (checkSleepTime);
-					continue;
-				}
-
-				Uri patchNotesURI = new Uri (updateLocation, versionFound + ".patchnotes");
-				if (!UpdateHelper.TryDownloadString (patchNotesURI, out patchNotes, out ex))
-					patchNotes = "No patch notes available.";
-
-				Stop();
-				onUpdateFound (versionFound, patchNotes);
-				return;
+				Thread.Sleep (checkSleepTime);
 			}
+		}
+
+		private bool TryFetchUpdate (out Version versionFound, out string patchNotes)
+		{
+			Exception ex;
+			patchNotes = null;
+
+			if (!TryDownloadVersion (out versionFound, out ex))
+			{
+				onCheckUpdateFailed (ex);
+				return false;
+			}
+
+			if (versionFound <= currentVersion)
+				return false;
+
+			Uri patchNotesURI = GetPatchNotesUri (updateLocation, versionFound);
+			if (!UpdateHelper.TryDownloadString (patchNotesURI, out patchNotes, out ex))
+				patchNotes = "No patch notes available.";
+
+			return true;
 		}
 
 		private bool TryDownloadVersion (out Version versionFound, out Exception ex)
 		{
+			versionFound = null;
 			string version;
 
-			if (!UpdateHelper.TryDownloadString (this.updateLocation, out version, out ex))
-			{
-				versionFound = null;
+			if (!UpdateHelper.TryDownloadString (updateLocation, out version, out ex))
 				return false;
-			}
 
 			//TODO: reduce point of failure at version string formatting
 			versionFound = new Version (version);
@@ -122,13 +113,14 @@ namespace InstallerCore
 		}
 
 		#region Event Handlers
+
 		private void onStartCheckUpdate()
 		{
 			var handler = CheckUpdateStarted;
 			if (handler != null)
 				handler (this, EventArgs.Empty);
 		}
-	
+
 		private void onStopCheckUpdate()
 		{
 			var handler = CheckUpdateStopped;
@@ -154,6 +146,17 @@ namespace InstallerCore
 			if (handler != null)
 				handler (this, new UpdateCheckerEventArgs (updateLocation, ex));
 		}
+
 		#endregion
+
+		private static Uri GetUpdatePackageUri (Uri updateLocation, Version versionFound)
+		{
+			return new Uri (updateLocation, versionFound + ".zip");
+		}
+
+		private static Uri GetPatchNotesUri (Uri updateLocation, Version versionFound)
+		{
+			return new Uri (updateLocation, versionFound + ".patchnotes");
+		}
 	}
 }

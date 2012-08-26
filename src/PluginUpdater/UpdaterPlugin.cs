@@ -21,7 +21,9 @@ namespace PluginUpdater
 	{
 		public void Initialize()
 		{
-			spaceportPlugin = PluginHelper.CheckPluginLoaded<SpaceportPlugin> (Resources.SpaceportPluginGuid);
+			if (!PluginHelper.TryGetLoadedPlugin (Resources.SpaceportPluginGuid, out spaceportPlugin))
+				throw new InvalidOperationException("Primary spaceport plugin was not loaded.");
+
 			controller = new UpdaterController (spaceportPlugin);
 
 			ThreadPool.QueueUserWorkItem (a => WaitForSpaceportPlugin());
@@ -35,7 +37,6 @@ namespace PluginUpdater
 
 		private void Load()
 		{
-			//TraceManager.AddAsync ("Starting Spaceport Update Plugin v" + controller.SpaceportVersion);
 			spaceportMenu = spaceportPlugin.SpaceportMenu;
 			mainForm = PluginBase.MainForm.MenuStrip.Parent.Parent; //TODO: convert to Find Parent Form
 			
