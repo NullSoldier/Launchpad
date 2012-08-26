@@ -1,1 +1,1 @@
-echo F|"C:\windows\system32\xcopy" "C:\Users\Null-Laptop\Desktop\Projects\SpaceportPlugin\src\Installer\bin\Debug\PluginInstallerMerged.exe" "C:\Users\Null-Laptop\Desktop\Projects\SpaceportPlugin\lib\FlashDevelop\FlashDevelop\Bin\Debug\Data\Spaceport\tools\PluginInstaller.exe" /Y /Q
+echo F|"C:\windows\system32\xcopy" %1"\src\Installer\bin\Debug\PluginInstallerMerged.exe" %1"\lib\FlashDevelop\FlashDevelop\Bin\Debug\Data\Spaceport\tools\PluginInstaller.exe" /Y /Q
