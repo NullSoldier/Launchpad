@@ -114,9 +114,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"$(TargetDir)\ILMerge" /target:winexe /out:PluginInstallerMerged.exe  PluginInstaller.exe Ionic.Zip.dll InstallerCore.dll
-
-call "$(SolutionDir)\tools\CopyIlMerged.bat" "$(SolutionDir)"</PostBuildEvent>
+    <PostBuildEvent>call "$(SolutionDir)\tools\CreateMergedInstaller.bat" "$(SolutionDir)\tools"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
