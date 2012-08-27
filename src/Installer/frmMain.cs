@@ -11,6 +11,7 @@ using System.Threading;
 using System.Windows.Forms;
 using InstallerCore;
 using PluginInstaller.Properties;
+using log4net;
 
 namespace PluginInstaller
 {
@@ -73,7 +74,8 @@ namespace PluginInstaller
 		private string updateZipPath;
 		private Version versionToInstall;
 		private frmPerformAction progressForm;
-
+		private readonly ILog logger = LogManager.GetLogger (typeof (InstallerEntry));
+		
 		private void CalculateMetaDirectories()
 		{
 			this.flashDevelopDir = new FileInfo (flashDevelopAssemblyPath).DirectoryName;
@@ -98,7 +100,10 @@ namespace PluginInstaller
 			if (InvokeRequired)
 				base.Invoke (new MethodInvoker (delegate { LogMessage (message); }));
 			else
+			{
+				logger.Debug (message);
 				inConsole.Text += string.Format ("{0}{1}", message, Environment.NewLine);
+			}
 		}
 
 		private bool VerifyLocalUpdateExists()
@@ -106,6 +111,7 @@ namespace PluginInstaller
 			if (File.Exists (updateZipPath))
 				return true;
 
+			logger.InfoFormat ("Update package did not download properly, expected at {0}{0}{1}", Environment.NewLine, updateZipPath);
 			MessageBox.Show ("Update package did not download properly, missing at" + Environment.NewLine + Environment.NewLine +
 				updateZipPath, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 

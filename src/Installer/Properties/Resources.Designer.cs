@@ -82,5 +82,28 @@ namespace PluginInstaller.Properties {
                 return ResourceManager.GetString("LICENSE", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;configuration&gt;
+        ///  &lt;configSections&gt;
+        ///    &lt;section name=&quot;log4net&quot; type=&quot;log4net.Config.Log4NetConfigurationSectionHandler, log4net&quot; /&gt;
+        ///  &lt;/configSections&gt;
+        ///
+        ///  &lt;log4net&gt;
+        ///
+        ///    &lt;appender name=&quot;FileAppender&quot; type=&quot;log4net.Appender.FileAppender&quot;&gt;
+        ///      &lt;file value=&quot;log-file.txt&quot; /&gt;
+        ///      &lt;threshold value=&quot;DEBUG&quot; /&gt;
+        ///      &lt;appendToFile value=&quot;true&quot; /&gt;
+        ///      &lt;layout type=&quot;log4net.Layout.PatternLayout&quot;&gt;
+        ///        &lt;conversionPattern value=&quot;%date [%-5level] - %message%newline&quot; /&gt;
+        ///      &lt;/layout&gt;
+        ///    &lt;/appende [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string log4net {
+            get {
+                return ResourceManager.GetString("log4net", resourceCulture);
+            }
+        }
     }
 }

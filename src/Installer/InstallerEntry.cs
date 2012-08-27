@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using log4net;
 
 namespace PluginInstaller
 {
@@ -24,9 +25,17 @@ namespace PluginInstaller
 			if (!Directory.Exists (parentDirectory))
 				Directory.CreateDirectory (parentDirectory);
 
-			updaterAssemblyPath.CopyTo (copyDestination, true);
+			logger.Debug ("Copying updater to ghost updater at " + copyDestination);
+			try {
+				updaterAssemblyPath.CopyTo (copyDestination, true);
+			}
+			catch (Exception ex) {
+				failToStart ("Copying updater to ghost updater failed", ex);
+				return;
+			}
 
 			string args = string.Format ("\"{0}\" \"{1}\" \"{2}\"", version, flashAssemblyPath, updaterAssemblyPath);
+			logger.DebugFormat ("Starting ghost updater with arguments {0}", args);
 			Process.Start (copyDestination, args);
 		}
 
@@ -34,7 +43,8 @@ namespace PluginInstaller
 		{
 			var waitingPackage = InstallerHelper.GetLatestWaitingUpdate (updateCacheDir.FullName);
 			if (waitingPackage == null) {
-				MessageBox.Show ("Update .zip package missing in root directory, exiting"); return;
+				failToStart ("Update .zip package missing from " + updateCacheDir.FullName);
+				return;
 			}
 			string versionStr = Path.GetFileNameWithoutExtension (new FileInfo (waitingPackage).Name);
 			Version waitingVersion = new Version (versionStr);
@@ -50,6 +60,8 @@ namespace PluginInstaller
 				flashAssemblyPath.FullName, oldUpdateAssemblyPath.FullName);
 		}
 
+		private readonly ILog logger = LogManager.GetLogger (typeof (InstallerEntry));
+
 		private void startForm (Version versionToInstall, FileInfo flashDevelopAssembly, DirectoryInfo updateCacheDir, bool installerMode)
 		{
 			Application.EnableVisualStyles ();
@@ -62,6 +74,13 @@ namespace PluginInstaller
 				installerForm.Show ();
 
 			Application.Run ();
+		}
+
+		private void failToStart (string reason, Exception ex=null)
+		{
+			logger.Error (reason, ex);
+			MessageBox.Show (reason, "Update Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			Application.Exit();
 		}
 	}
 }

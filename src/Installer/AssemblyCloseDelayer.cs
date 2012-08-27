@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using InstallerCore;
+using log4net;
 
 namespace PluginInstaller
 {
@@ -19,13 +20,18 @@ namespace PluginInstaller
 				var processesToWaitFor = GetProcessesByNameAssemblyNames (assemblyPaths);
 
 				foreach (var process in processesToWaitFor)
+				{
+					logger.Debug ("Waiting for process to close " + process.ProcessName);
 					process.WaitForExit();
+				}
 
 				processesClosed();
 			});
 			thread.Name = "Waiting on processes thread";
 			thread.Start();
 		}
+
+		private static readonly ILog logger = LogManager.GetLogger (typeof (AssemblyCloseDelayer));
 
 		private static IEnumerable<Process> GetProcessesByNameAssemblyNames (string[] assemblyNames)
 		{
