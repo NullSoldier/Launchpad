@@ -1,0 +1,13 @@
+The FlashDevelop plugin for Spaceport has all the functionality to build and test games using the Spaceport platform.
+
+Steps to test the updater process
+* Add the merged Installer to the update package EX: 0.0.3.0.zip
+* Upload the ZIP to the update directory
+* Delete the plugins form the FlashDevelop/Plugins folder
+ - InstallerCore.dll
+ - SpaceportPlugin.dll
+ - SpaceportUpdaterPlugin.dll
+ - PluginCommon.dll
+* Delete the Spaceport folder from  FlashDevelop/Data
+* Run the installer in GUI mode with the latest update package
+* Once installed successfully, run through the update process completely
