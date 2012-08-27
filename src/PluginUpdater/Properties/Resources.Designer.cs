@@ -61,6 +61,31 @@ namespace SpaceportUpdaterPlugin.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;log4net&gt;
+        ///
+        ///  &lt;appender name=&quot;FileAppender&quot; type=&quot;log4net.Appender.FileAppender&quot;&gt;
+        ///    &lt;file value=&quot;spaceport-updater-log.txt&quot; /&gt;
+        ///    &lt;threshold value=&quot;DEBUG&quot; /&gt;
+        ///    &lt;appendToFile value=&quot;true&quot; /&gt;
+        ///    &lt;layout type=&quot;log4net.Layout.PatternLayout&quot;&gt;
+        ///      &lt;conversionPattern value=&quot;%utcdate{yyyy-MM-dd HH:mm:ss} [%level] - %message%newline&quot; /&gt;
+        ///    &lt;/layout&gt;
+        ///  &lt;/appender&gt;
+        ///
+        ///  &lt;root&gt;
+        ///    &lt;level value=&quot;ALL&quot;/&gt;
+        ///    &lt;appender-ref ref=&quot;FileAppender&quot;/&gt;
+        ///  &lt;/root&gt;
+        ///
+        ///&lt;/log4net&gt;.
+        /// </summary>
+        internal static string log4net {
+            get {
+                return ResourceManager.GetString("log4net", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Jason (Null) Spafford.
         /// </summary>
         internal static string PluginAuthor {
