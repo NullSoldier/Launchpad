@@ -8,6 +8,7 @@ SET spaceportPluginPath="..\src\PluginSpaceport\bin\x86\%releaseMode%\SpaceportP
 SET pluginCommonPath="..\src\PluginCommon\bin\x86\%releaseMode%\PluginCommon.dll"
 SET installerCorePath="..\src\InstallerCore\bin\x86\%releaseMode%\InstallerCore.dll"
 SET ionicPath="..\lib\Ionic.Zip.dll"
+SET log4net="..\lib\log4net.dll"
 
 ECHO "Copying all assemblies to FlashDevelop plugins folder in %releaseMode% mode, at %FlashDevelopPluginDir%"
 ECHO.
@@ -17,6 +18,7 @@ ECHO.
 "C:\windows\system32\xcopy" "%pluginCommonPath%" "%FlashDevelopPluginDir%" /Y /Q
 "C:\windows\system32\xcopy" "%installerCorePath%" "%FlashDevelopPluginDir%" /Y /Q
 "C:\windows\system32\xcopy" "%ionicPath%" "%FlashDevelopPluginDir%" /Y /Q
+"C:\windows\system32\xcopy" "%log4net%" "%FlashDevelopPluginDir%" /Y /Q
 
 ECHO.
 ECHO Copying successfull!
