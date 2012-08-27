@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Net;
 using System.Text;
+using log4net;
 
 namespace InstallerCore
 {
@@ -46,18 +47,20 @@ namespace InstallerCore
 			foreach (string waitingPatch in waitingZips)
 			{
 				string versionStr = Path.GetFileNameWithoutExtension (waitingPatch);
-				Version version = new Version(versionStr);
+				Version version = new Version (versionStr);
 
 				if (latestVersionFound == null || version > latestVersionFound)
 					latestVersionFound = version;
 			}
 
+			logger.Info ("Waiting patch on disk found with version v" + latestVersionFound);
 			versionWaiting = latestVersionFound;
 			return latestVersionFound != null;
 		}
 
 		private readonly string remoteUpdateDir;
 		private readonly string updateCacheDir;
+		private readonly ILog logger = LogManager.GetLogger (typeof(UpdateDownloader));
 
 		private void downloadUpdate (string remotePatchURL, string localDestination)
 		{
@@ -66,16 +69,18 @@ namespace InstallerCore
 				try
 				{
 					FileHelper.EnsureFileDirExists (localDestination);
-
+					logger.DebugFormat ("Downloading file from {0} to {1}", remotePatchURL, localDestination);
+					
 					downloadClient.DownloadFileCompleted += onFileDownloaded;
 					downloadClient.DownloadProgressChanged += onProgressChanged;
 					downloadClient.DownloadFileAsync (new Uri (remotePatchURL), localDestination);
 
-					onFileStarted();
+					onDownloadStarted();
 				}
 				catch (Exception ex)
 				{
 					//TODO: reroute to Download failed
+					logger.Fatal ("Downloading update failed", ex);
 					throw ex;
 				}
 			}
@@ -89,7 +94,7 @@ namespace InstallerCore
 				handler (this, ev);
 		}
 
-		private void onFileStarted ()
+		private void onDownloadStarted()
 		{
 			var handler = Started;
 			if (handler != null)

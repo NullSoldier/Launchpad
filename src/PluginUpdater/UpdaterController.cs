@@ -15,6 +15,7 @@ using PluginCore.Helpers;
 using PluginCore.Managers;
 using PluginInstaller;
 using PluginUpdater;
+using log4net;
 
 namespace SpaceportUpdaterPlugin
 {
@@ -157,6 +158,7 @@ namespace SpaceportUpdaterPlugin
 		}
 
 		private bool installOnClose;
+		private ILog logger = LogManager.GetLogger (typeof (UpdaterController));
 
 		private void init()
 		{
@@ -182,11 +184,12 @@ namespace SpaceportUpdaterPlugin
 
 			if (!File.Exists (installerPath))
 			{
-				MessageBox.Show ("Updater failed to start, updater is missing."
-					+ Environment.NewLine + installerPath);
+				logger.Error ("Updater failed to start at " + installerPath);
+				MessageBox.Show ("Updater failed to start, updater is missing." + Environment.NewLine + installerPath);
 				return false;
 			}
 
+			logger.DebugFormat ("Starting installer at {0} with arguments {1}", installerPath, args);
 			Process.Start (installerPath, args);
 			return true;
 		}

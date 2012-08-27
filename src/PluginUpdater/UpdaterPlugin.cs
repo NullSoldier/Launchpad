@@ -5,6 +5,7 @@ using System.Net.Mime;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using System.Xml;
 using InstallerCore;
 using PluginCommon;
 using PluginCore;
@@ -14,6 +15,8 @@ using SpaceportUpdaterPlugin;
 using SpaceportUpdaterPlugin.Properties;
 using WeifenLuo.WinFormsUI.Docking;
 using System.Windows.Forms;
+using log4net;
+using log4net.Config;
 
 namespace PluginUpdater
 {
@@ -21,12 +24,25 @@ namespace PluginUpdater
 	{
 		public void Initialize()
 		{
-			if (!PluginHelper.TryGetLoadedPlugin (Resources.SpaceportPluginGuid, out spaceportPlugin))
-				throw new InvalidOperationException("Primary spaceport plugin was not loaded.");
+			InitializeLogger();
+			AppDomain.CurrentDomain.UnhandledException += onUnhandledException;
 
-			controller = new UpdaterController ();
+			if (!PluginHelper.TryGetLoadedPlugin (Resources.SpaceportPluginGuid, out spaceportPlugin))
+			{
+				logger.Error ("Primary spaceport plugin was not loaded, exiting");
+				return;
+			}
+
+			controller = new UpdaterController();
 
 			ThreadPool.QueueUserWorkItem (a => WaitForSpaceportPlugin());
+		}
+
+		private void InitializeLogger()
+		{
+			var xmlDocument = new XmlDocument();
+			xmlDocument.LoadXml (Resources.log4net);
+			XmlConfigurator.Configure (xmlDocument.DocumentElement);
 		}
 
 		private Control mainForm;
@@ -34,6 +50,7 @@ namespace PluginUpdater
 		private SpaceportMenu spaceportMenu;
 		private UpdateMenu updateMenu;
 		private UpdaterController controller;
+		private ILog logger = LogManager.GetLogger (typeof(UpdaterPlugin));
 
 		private void Load()
 		{
@@ -53,22 +70,22 @@ namespace PluginUpdater
 
 		private void UpdaterRunnerStarted(Object sender, EventArgs e)
 		{
-			TraceManager.AddAsync ("Spaceport updater runner started");
+			logger.Info ("Spaceport updater runner started");
 		}
 
 		private void UpdaterRunnerStopped(Object sender, EventArgs e)
 		{
-			TraceManager.AddAsync ("Spaceport updater runner stopped");
+			logger.Info ("Spaceport updater runner stopped");
 		}
 
 		private void UpdateRunnerFailed(Object sender, UpdateCheckerEventArgs e)
 		{
-			TraceManager.AddAsync (String.Format ("Spaceport failed to get update from {0}: {1}",
-				e.CheckLocation, e.Exception.Message));
+			logger.Error ("Failed to get update from " + e.CheckLocation, e.Exception);
 		}
 
 		private void UpdateFound(object sender, UpdateCheckerEventArgs e)
 		{
+			logger.Info ("Update found with version v" + e.Version);
 			TraceManager.AddAsync ("Update found with version v" + e.Version);
 			mainForm.Invoke ((MethodInvoker)(() => updateMenu.SetUpdateEnabled (true)));
 		}
@@ -82,7 +99,7 @@ namespace PluginUpdater
 
 			updateMenu.UpdateItem.Click += UpdateSpaceport_Click;
 			updateMenu.CheckUpdatesItem.CheckedChanged += CheckUpdates_CheckChanged;
-			TraceManager.Add ("Spaceport updater plugin inserted into primary menu.");
+			logger.Info("Spaceport updater plugin inserted into primary menu.");
 		}
 
 		private void UpdateSpaceport_Click (object sender, EventArgs e)
@@ -100,17 +117,24 @@ namespace PluginUpdater
 				controller.StopUpdateRunner();
 		}
 
-		#region IPlugin Methods
-		private void WaitForSpaceportPlugin ()
+		private void WaitForSpaceportPlugin()
 		{
 			mainForm = PluginBase.MainForm.MenuStrip.Parent.Parent;
 
-			//TraceManager.AddAsync ("Waiting for Spaceport plugin to start.");
-			while (!spaceportPlugin.IsInitialized || !mainForm.IsHandleCreated )
+			logger.Info ("Waiting for Spaceport Plugin toload.");
+			while (!spaceportPlugin.IsInitialized || !mainForm.IsHandleCreated)
 				Thread.Sleep (1);
 
-			mainForm.Invoke (new MethodInvoker (Load));
+			mainForm.Invoke ((IEnumerableHelper.Action)Load);
 		}
+
+		private void onUnhandledException(object sender, UnhandledExceptionEventArgs ev)
+		{
+			Exception ex = (Exception)ev.ExceptionObject;
+			LogManager.GetLogger (sender.GetType ()).Fatal (ex.Message, ex);
+		}
+
+		#region IPlugin Methods
 
 		public void Dispose()
 		{
