@@ -56,9 +56,7 @@ namespace PluginInstaller
 
 		public void RunInstaller()
 		{
-			if (!VerifyLocalUpdateExists ())
-			{
-				Application.Exit();
+			if (!VerifyLocalUpdateExists ()) {
 				return;
 			}
 
@@ -73,6 +71,7 @@ namespace PluginInstaller
 			};
 			extractor.Finished += (s, e) =>
 			{
+				logger.DebugFormat ("Finished extracting {0} files to {1}", e.EntriesTotal, filesDir);
 				progressForm.SetInstruction ("Installing files from " + filesDir + " to " + flashDevelopDir);
 
 				Installer installer = new Installer ();
@@ -108,7 +107,8 @@ namespace PluginInstaller
 			progressForm.SetInstruction ("Finished installing.");
 			LogMessage ("Files finished installing.");
 			btnFinish.Enabled = true;
-			
+
+			LogMessage ("Finished installing files, launching FlashDevelop at path " + flashDevelopAssemblyPath);
 			MessageBox.Show ("Update finished installing, starting FlashDevelop.");
 			Process.Start (flashDevelopAssemblyPath);
 			Application.Exit();
