@@ -10,14 +10,16 @@ SET sourceDir=..\src\Installer\bin\Debug\
 SET mergeFile1="%sourceDir%PluginInstaller.exe"
 SET mergeFile2="%sourceDir%Ionic.Zip.dll"
 SET mergeFile3="%sourceDir%InstallerCore.dll"
+SET mergeFile4="%sourceDir%log4net.dll"
 
 ECHO Producing merged file from..
 ECHO %mergeFile1%
 ECHO %mergeFile2%
 ECHO %mergeFile3%
+ECHO %mergeFile4%
 
 SET outputPath="..\src\Installer\bin\Debug\PluginInstallerMerged.exe"
-ILMerge /target:winexe /out:%outputPath%  %mergeFile1% %mergeFile2% %mergeFile3%
+ILMerge /target:winexe /out:%outputPath%  %mergeFile1% %mergeFile2% %mergeFile3% %mergeFile4%
 
 SET copyDestination=..\lib\FlashDevelop\FlashDevelop\Bin\Debug\Data\Spaceport\tools\PluginInstaller.exe
 

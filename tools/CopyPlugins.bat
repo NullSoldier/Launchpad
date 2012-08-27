@@ -20,4 +20,4 @@ ECHO.
 
 ECHO.
 ECHO Copying successfull!
-pause;
+PAUSE;
