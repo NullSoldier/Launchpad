@@ -71,7 +71,7 @@ namespace PluginInstaller
 			if (installerMode)
 				installerForm.RunInstaller();
 			else
-				installerForm.Show ();
+				installerForm.RunGUIMode();
 
 			Application.Run ();
 		}

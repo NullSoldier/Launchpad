@@ -35,6 +35,25 @@ namespace PluginInstaller
 			LogMessage ("Spaceport installer " + Assembly.GetExecutingAssembly().GetName().Version + " loaded.");
 		}
 
+		public void RunGUIMode()
+		{
+			inLicense.Visible = false;
+			btnAgree.Visible = false;
+			inConsole.Visible = true;
+			LogMessage ("Waiting for FlashDevelop to close...");
+
+			AssemblyCloseDelayer.WaitForAssembliesAsync (() =>
+				Invoke ((IEnumerableHelper.Action)(() => {
+					inLicense.Visible = true;
+					btnAgree.Visible = true;
+					inConsole.Visible = false;
+					LogMessage ("Flash develop closed, starting setup.");
+				}))
+			, flashDevelopAssemblyPath);
+
+			Show();
+		}
+
 		public void RunInstaller()
 		{
 			if (!VerifyLocalUpdateExists ())
