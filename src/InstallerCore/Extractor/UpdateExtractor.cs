@@ -18,7 +18,7 @@ namespace InstallerCore
 			this.updateCacheDir = updateCacheDir;
 		}
 
-		public event EventHandler Finished;
+		public event EventHandler<ExtractProgressEventArgs> Finished;
 		public event EventHandler<UnhandledExceptionEventArgs> Failed;
 		public event EventHandler<ExtractProgressEventArgs> ProgressChanged;
 
@@ -51,17 +51,17 @@ namespace InstallerCore
 		private readonly string updateCacheDir;
 		private bool isFinished;
 
-		private void onFinished ()
+		private void onFinished (ExtractProgressEventArgs ev)
 		{
 			var handler = Finished;
 			if (handler != null)
-				handler (this, EventArgs.Empty);
+				handler (this, ev);
 		}
 
 		private void onProgressChanged (object sender, ExtractProgressEventArgs ev)
 		{
 			if (ev.EventType == ZipProgressEventType.Extracting_AfterExtractAll)
-				onFinished();
+				onFinished (ev);
 
 			var handler = ProgressChanged;
 			if (handler != null)
