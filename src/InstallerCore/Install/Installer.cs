@@ -34,8 +34,8 @@ namespace InstallerCore
 		{
 			string filesDirectory = Path.Combine (updateCacheDirectory, "files");
 			var installList = new InstallFileList (filesDirectory);
-
 			var transaction = new RevertableTransaction();
+			transaction.RolledBack += onRollingBackFinished;
 
 			foreach (InstallerFile installFile in installList.Files)
 			{
@@ -44,27 +44,27 @@ namespace InstallerCore
 				string relativeInstallPath = installFile.File.FullName.Substring (filesDirectory.Length + 1);
 				string destinationPath = Path.Combine (flashDevelopRoot, relativeInstallPath);
 
-				var fileCopyAction = new RevertableFileCopy (installFile.File.FullName, destinationPath, ensureDirectoryExists:true);
+				var fileCopyAction = new RevertableFileCopy (installFile.File.FullName,
+					destinationPath, ensureDirectoryExists:true);
 				fileCopyAction.FileCopied += (o, ev) => onFileInstalled (ev.FullPath);
-				
+
 				transaction.Do (fileCopyAction);
 			}
 
-			transaction.ActionFailed += (s, ev) => transaction.Rollback();
-			transaction.Commit();
+			try {
+				transaction.Commit();
+			}
+			catch (Exception ex) {
+				OnInstallFailed (ex);
+				transaction.Rollback();
+				// Tell the user
+				// Start rollback
+			}
 
 			onFinished ();
 		}
 
 		#region Event Handlers
-
-		public void onRollingBackFinished (EventArgs e)
-		{
-			EventHandler handler = RollingBackFinished;
-			if (handler != null)
-				handler (this, e);
-		}
-
 		private void onFinished()
 		{
 			var handler = FinishedInstalling;
@@ -81,11 +81,19 @@ namespace InstallerCore
 				handler (this, new InstallerEventArgs (installedInfo));
 		}
 
-		private void onFailedRollingBack ()
+		public void OnInstallFailed (Exception ex)
 		{
-			
+			var handler = InstallFailed;
+			if (handler != null)
+				handler (this, new UnhandledExceptionEventArgs (ex, false));
 		}
 
+		public void onRollingBackFinished (object sender, EventArgs e)
+		{
+			var handler = RollingBackFinished;
+			if (handler != null)
+				handler (this, e);
+		}
 		#endregion
 	}
 }

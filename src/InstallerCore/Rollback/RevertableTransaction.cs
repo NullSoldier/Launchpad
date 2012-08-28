@@ -61,14 +61,14 @@ namespace InstallerCore.Rollback
 			return true;
 		}
 
-		private bool onFinished()
+		private void onFinished()
 		{
 			var handler = Finished;
 			if (handler != null)
 				handler (this, EventArgs.Empty);
 		}
 
-		private bool onRolledBack()
+		private void onRolledBack()
 		{
 			var handler = RolledBack;
 			if (handler != null)

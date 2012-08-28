@@ -27,9 +27,8 @@ namespace InstallerCore.Rollback
 		{
 			try
 			{
-				var destDirectory = new FileInfo (destination).Directory;
-				if (!destDirectory.Exists)
-					destDirectory.Create();
+				if (ensureDirectoryExists)
+					FileHelper.EnsureFileDirExists(destination);
 
 				if (File.Exists (destination))
 				{
@@ -40,8 +39,8 @@ namespace InstallerCore.Rollback
 				//Could be modified inbetween checking if it exists, and copying the file
 				File.Copy (source, destination, overwrite:true);
 			}
-			catch (Exception) {
-				return false;
+			catch (Exception ex) {
+				throw;
 			}
 
 			IsFinished = true;
