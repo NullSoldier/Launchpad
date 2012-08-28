@@ -12,6 +12,8 @@ namespace InstallerCore
 	{
 		public event EventHandler FinishedInstalling;
 		public event EventHandler<InstallerEventArgs> FileInstalled;
+		public event EventHandler InstallFailed;
+		public event EventHandler RollingBackFinished;
 
 		/// <summary>
 		/// Takes the update zip directory and assumes it was extracted to zipdirectory/files
@@ -40,13 +42,9 @@ namespace InstallerCore
 				// Take the original path and chop off the install root,
 				// then append it to the flash develop folder
 				string relativeInstallPath = installFile.File.FullName.Substring (filesDirectory.Length + 1);
-				string destPath = Path.Combine (flashDevelopRoot, relativeInstallPath);
-			
-				var destDirectory = new FileInfo (destPath).Directory;
-				if (!destDirectory.Exists)
-					destDirectory.Create();
+				string destinationPath = Path.Combine (flashDevelopRoot, relativeInstallPath);
 
-				var fileCopyAction = new RevertableFileCopy (installFile.File.FullName, destPath);
+				var fileCopyAction = new RevertableFileCopy (installFile.File.FullName, destinationPath, ensureDirectoryExists:true);
 				fileCopyAction.FileCopied += (o, ev) => onFileInstalled (ev.FullPath);
 				
 				transaction.Do (fileCopyAction);
@@ -59,6 +57,14 @@ namespace InstallerCore
 		}
 
 		#region Event Handlers
+
+		public void onRollingBackFinished (EventArgs e)
+		{
+			EventHandler handler = RollingBackFinished;
+			if (handler != null)
+				handler (this, e);
+		}
+
 		private void onFinished()
 		{
 			var handler = FinishedInstalling;
@@ -79,6 +85,7 @@ namespace InstallerCore
 		{
 			
 		}
+
 		#endregion
 	}
 }

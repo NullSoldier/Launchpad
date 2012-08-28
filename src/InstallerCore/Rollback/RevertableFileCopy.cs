@@ -8,10 +8,11 @@ namespace InstallerCore.Rollback
 	public class RevertableFileCopy
 		: IRevertableAction
 	{
-		public RevertableFileCopy (string source, string destination)
+		public RevertableFileCopy (string source, string destination, bool ensureDirectoryExists)
 		{
 			this.source = source;
 			this.destination = destination;
+			this.ensureDirectoryExists = ensureDirectoryExists;
 		}
 
 		public event EventHandler<FileSystemEventArgs> FileCopied;
@@ -21,17 +22,23 @@ namespace InstallerCore.Rollback
 			get;
 			private set;
 		}
-
+		
 		public bool Do()
 		{
 			try
 			{
+				var destDirectory = new FileInfo (destination).Directory;
+				if (!destDirectory.Exists)
+					destDirectory.Create();
+
 				if (File.Exists (destination))
 				{
 					backupPath = Path.GetTempFileName();
-					File.Copy (destination, backupPath, true);
+					File.Copy (destination, backupPath);
 				}
-				File.Copy (source, destination, true);
+				//BUG: Could potentially fail or not have expected result.
+				//Could be modified inbetween checking if it exists, and copying the file
+				File.Copy (source, destination, overwrite:true);
 			}
 			catch (Exception) {
 				return false;
@@ -47,7 +54,7 @@ namespace InstallerCore.Rollback
 			if (IsFinished)
 			{
 				try { File.Copy (backupPath, destination, true); }
-				catch (Exception) { return false;] }
+				catch (Exception) { return false; }
 			}
 
 			return true;
@@ -55,6 +62,7 @@ namespace InstallerCore.Rollback
 
 		private readonly string source;
 		private readonly string destination;
+		private readonly bool ensureDirectoryExists;
 		private string backupPath;
 
 		private void onFileCopied (string fileCopiedPath)
