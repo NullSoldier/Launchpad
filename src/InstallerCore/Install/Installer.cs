@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
+using InstallerCore.Rollback;
 using PluginInstaller;
 
 namespace InstallerCore
@@ -32,6 +33,8 @@ namespace InstallerCore
 			string filesDirectory = Path.Combine (updateCacheDirectory, "files");
 			var installList = new InstallFileList (filesDirectory);
 
+			var transaction = new RevertableTransaction();
+
 			foreach (InstallerFile installFile in installList.Files)
 			{
 				// Take the original path and chop off the install root,
@@ -43,9 +46,14 @@ namespace InstallerCore
 				if (!destDirectory.Exists)
 					destDirectory.Create();
 
-				installFile.File.CopyTo (destPath, true);
-				onFileInstalled (destPath);
+				var fileCopyAction = new RevertableFileCopy (installFile.File.FullName, destPath);
+				fileCopyAction.FileCopied += (o, ev) => onFileInstalled (ev.FullPath);
+				
+				transaction.Do (fileCopyAction);
 			}
+
+			transaction.ActionFailed += (s, ev) => transaction.Rollback();
+			transaction.Commit();
 
 			onFinished ();
 		}
@@ -65,6 +73,11 @@ namespace InstallerCore
 			var handler = FileInstalled;
 			if (handler != null)
 				handler (this, new InstallerEventArgs (installedInfo));
+		}
+
+		private void onFailedRollingBack ()
+		{
+			
 		}
 		#endregion
 	}

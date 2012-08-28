@@ -75,6 +75,9 @@
     <Compile Include="Install\InstallerFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Extractor\UpdateExtractor.cs" />
+    <Compile Include="Rollback\IRevertableAction.cs" />
+    <Compile Include="Rollback\RevertableFileCopy.cs" />
+    <Compile Include="Rollback\RevertableTransaction.cs" />
     <Compile Include="Update\UpdateCheckerEventArgs.cs" />
     <Compile Include="Update\UpdateDownloader.cs" />
     <Compile Include="Update\UpdateHelper.cs" />
