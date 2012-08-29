@@ -6,9 +6,19 @@ namespace InstallerCore.Rollback
 {
 	public class RevertableTransaction
 	{
+		public RevertableTransaction()
+		{
+			actions = new List<IRevertableAction>();
+		}
+
 		public event EventHandler Finished;
 		public event EventHandler ActionFailed;
 		public event EventHandler RolledBack;
+
+		public int CompletedCount
+		{
+			get { return completedCount; }
+		}
 
 		public void Do (IRevertableAction action)
 		{
@@ -24,13 +34,16 @@ namespace InstallerCore.Rollback
 		{
 			foreach (IRevertableAction action in actions)
 			{
-				// Let the user have a chance to cancel automatic
-				// rollback and do it themself
-				if (!action.Do() && onActionFailed (action)) {
-					Rollback();
-					return;
+				try {
+					action.Do();
+					completedCount++;
+				}
+				catch (Exception ex) {
+					onActionFailed (action);
+					throw new RevertableActionFailedException (action, ex);
 				}
 			}
+
 			finished = true;
 			onFinished();
 		}
@@ -49,6 +62,7 @@ namespace InstallerCore.Rollback
 		private bool canceled;
 		private bool finished;
 		private List<IRevertableAction> actions;
+		private int completedCount;
 
 		#region Event Handlers
 		private bool onActionFailed (IRevertableAction action)

@@ -8,7 +8,7 @@ namespace InstallerCore.Rollback
 	public interface IRevertableAction
 	{
 		bool IsFinished { get; }
-		bool Do();
+		void Do();
 		bool Undo();
 	}
 }

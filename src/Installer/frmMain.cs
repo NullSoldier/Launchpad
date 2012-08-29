@@ -77,6 +77,8 @@ namespace PluginInstaller
 				Installer installer = new Installer ();
 				installer.FileInstalled += (o, ev) => LogMessage ("File installed: " + ev.FileInstalled.FullName);
 				installer.FinishedInstalling += (o, ev) => Invoke (new MethodInvoker (FinishedInstalling));
+				installer.InstallFailed += (o, ev) => MessageBox.Show ("Install failed, rolling back...");
+				installer.RollingBackFinished += (o, ev) => { MessageBox.Show ("Finished rolling back, exiting."); Application.Exit (); };
 				installer.Start (updateCacheDir, flashDevelopDir);
 			};
 			extractor.Unzip (versionToInstall);

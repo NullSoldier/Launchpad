@@ -15,7 +15,7 @@ namespace InstallerCore.Rollback
 			this.ensureDirectoryExists = ensureDirectoryExists;
 		}
 
-		public event EventHandler<FileSystemEventArgs> FileCopied;
+		public event EventHandler<GenericEventArgs<String>> FileCopied;
 
 		public bool IsFinished
 		{
@@ -23,29 +23,23 @@ namespace InstallerCore.Rollback
 			private set;
 		}
 		
-		public bool Do()
+		public void Do()
 		{
-			try
+			if (ensureDirectoryExists)
+				FileHelper.EnsureFileDirExists(destination);
+
+			if (File.Exists (destination))
 			{
-				if (ensureDirectoryExists)
-					FileHelper.EnsureFileDirExists(destination);
-
-				if (File.Exists (destination))
-				{
-					backupPath = Path.GetTempFileName();
-					File.Copy (destination, backupPath);
-				}
-				//BUG: Could potentially fail or not have expected result.
-				//Could be modified inbetween checking if it exists, and copying the file
-				File.Copy (source, destination, overwrite:true);
+				backupPath = Path.GetTempFileName();
+				File.Copy (destination, backupPath, overwrite:true);
 			}
-			catch (Exception ex) {
-				throw;
-			}
+			//BUG: Could potentially fail or not have expected result.
+			//Could be modified inbetween checking if it exists, and copying the file
+			File.Copy (source, destination, overwrite:true);
 
+			// Not reached unless no exception is thrown
 			IsFinished = true;
 			onFileCopied (destination);
-			return true;
 		}
 
 		public bool Undo()
@@ -67,12 +61,8 @@ namespace InstallerCore.Rollback
 		private void onFileCopied (string fileCopiedPath)
 		{
 			var handler = FileCopied;
-			if (handler != null) {
-				var eventArgs = new FileSystemEventArgs (WatcherChangeTypes.Created,
-					string.Empty, fileCopiedPath);
-
-				handler (this, eventArgs);
-			}
+			if (handler != null)
+				handler (this, new GenericEventArgs<String> (fileCopiedPath));
 		}
 	}
 }

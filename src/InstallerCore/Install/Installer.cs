@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading;
 using InstallerCore.Rollback;
 using PluginInstaller;
+using log4net;
+using log4net.Core;
 
 namespace InstallerCore
 {
@@ -29,6 +31,7 @@ namespace InstallerCore
 		}
 
 		private Thread installThread;
+		private ILog logger = LogManager.GetLogger (typeof (Installer));
 
 		private void installFiles (string updateCacheDirectory, string flashDevelopRoot)
 		{
@@ -46,7 +49,7 @@ namespace InstallerCore
 
 				var fileCopyAction = new RevertableFileCopy (installFile.File.FullName,
 					destinationPath, ensureDirectoryExists:true);
-				fileCopyAction.FileCopied += (o, ev) => onFileInstalled (ev.FullPath);
+				fileCopyAction.FileCopied += (o, ev) => onFileInstalled (ev.Value);
 
 				transaction.Do (fileCopyAction);
 			}
@@ -54,14 +57,15 @@ namespace InstallerCore
 			try {
 				transaction.Commit();
 			}
-			catch (Exception ex) {
+			catch (RevertableActionFailedException ex) {
+				logger.Warn ("Installer failed on action " + ex.FailedAction, ex.Exception);
+				logger.DebugFormat ("Starting rollback of {0} items." + transaction.CompletedCount);
 				OnInstallFailed (ex);
 				transaction.Rollback();
-				// Tell the user
-				// Start rollback
+				return;
 			}
 
-			onFinished ();
+			onFinished();
 		}
 
 		#region Event Handlers
