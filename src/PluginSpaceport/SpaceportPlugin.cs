@@ -1,97 +1,77 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Reflection;
-using System.Text;
 using System.Windows.Forms;
+using System.Xml;
+using InstallerCore;
 using PluginCommon;
 using PluginCore;
 using PluginCore.Helpers;
 using PluginCore.Managers;
+using PluginCore.Utilities;
+using PluginSpaceport.Helpers;
 using PluginSpaceport.Properties;
+using SpaceportUpdaterPlugin;
 using WeifenLuo.WinFormsUI.Docking;
+using log4net;
+using log4net.Config;
 
 namespace PluginSpaceport
 {
 	public class SpaceportPlugin : IPlugin
 	{
-		private const string localHoodViewerRelative = @"Spaceport\tools\SpaceportHoodViewer.exe";
-
-		public SpaceportMenu SpaceportMenu
-		{
-			get;
-			private set;
-		}
-
-		public Version Version
-		{
-			get;
-			private set;
-		}
-
-		public bool IsInitialized
-		{
-			get;
-			private set;
-		}
-
 		public void Initialize()
 		{
-			icon = Image.FromHbitmap (Resources.spaceportIcon.GetHbitmap());
-			PluginBase.MainForm.CreateDockablePanel (new MainUI(), Guid, icon, DockState.Hidden);
+			Log4NetHelper.ConfigureFromXML (Resources.log4net);
+			LoadSettings ();
 
-			HookIntoMenu();
-			IsInitialized = true;
+			logger = LogManager.GetLogger (typeof (SpaceportPlugin));
+			spc = new SpaceportController (settings, VERSION);
+
+			AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
+			{
+				Exception ex = (Exception)args.ExceptionObject;
+				logger.Fatal (ex.Message, ex);
+			};
 		}
 
-		public void HandleEvent(object sender, NotifyEvent e, HandlingPriority priority)
+		public void HandleEvent(object sender,
+			NotifyEvent e,HandlingPriority priority)
 		{
+			 //TODO: Hook to test event
 		}
 
 		public void Dispose()
 		{
-			icon.Dispose();
+			spc.Dispose();
+			SaveSettings ();
 		}
 
-		private Image icon;
-		private Process hoodViewerProcess;
+		private SpaceportController spc;
+		private ILog logger;
+		private Settings settings;
 
-		private void HookIntoMenu()
+		private readonly Version VERSION = new Version (0, 1);
+		private readonly string SETTINGS_PATH = @"Spaceport\Settings.fdb";
+
+		private void LoadSettings()
 		{
-			SpaceportMenu = new SpaceportMenu (PluginBase.MainForm.MenuStrip);
+			settings = new Settings();
+			var path = Path.Combine (PathHelper.DataDir, SETTINGS_PATH);
 
-			SpaceportMenu.MakeAwesomeItem.Click += MakeAwesomeItem_Click;
-			SpaceportMenu.AboutItem.Click += About_Click;
-		}
-
-		private void MakeAwesomeItem_Click (object sender, EventArgs e)
-		{
-			if (IsHoodRunning())
-				return;
-
-			try
-			{
-				string dataDir = Path.Combine (PathHelper.AppDir, "Data");
-				string hoodViewerPath = Path.Combine (dataDir, localHoodViewerRelative);
-
-				hoodViewerProcess = Process.Start (hoodViewerPath);
-			}
-			catch (FileNotFoundException ex)
-			{
-				MessageBox.Show ("Hood viewer failed to start, hood missing." + Environment.NewLine + ex.FileName);
+			if (!File.Exists (path)) {
+				SaveSettings();
+			} else {
+				settings = (Settings) ObjectSerializer
+					.Deserialize (path, settings);
 			}
 		}
 
-		private void About_Click(object sender, EventArgs e)
+		private void SaveSettings()
 		{
-			Process.Start ("http://spaceport.io");
-		}
-
-		private bool IsHoodRunning()
-		{
-			return hoodViewerProcess != null && !hoodViewerProcess.HasExited;
+			var path = Path.Combine (PathHelper.DataDir, SETTINGS_PATH);
+			ObjectSerializer.Serialize (path, settings);
 		}
 
 		#region Required Properties
@@ -127,7 +107,7 @@ namespace PluginSpaceport
 
 		public object Settings
 		{
-			get { return null; }
+			get { return settings; }
 		}
 		#endregion
 	}

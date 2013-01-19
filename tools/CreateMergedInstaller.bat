@@ -1,12 +1,14 @@
 @ECHO OFF
 
-set workingDirectory=%1
+SET workingDirectory=%1
 IF NOT "%~1"=="" (
 	ECHO Switching working directory to %workingDirectory%
 	CD "%workingDirectory%"
 )
 
 SET sourceDir=..\src\Installer\bin\Debug\
+SET outputDir="..\src\Installer\bin\Debug\PluginInstallerMerged.exe"
+SET finalOutputDir=..\lib\FlashDevelop\FlashDevelop\Bin\Debug\Data\Spaceport\tools\PluginInstaller.exe
 SET mergeFile1="%sourceDir%PluginInstaller.exe"
 SET mergeFile2="%sourceDir%Ionic.Zip.dll"
 SET mergeFile3="%sourceDir%InstallerCore.dll"
@@ -18,14 +20,12 @@ ECHO %mergeFile2%
 ECHO %mergeFile3%
 ECHO %mergeFile4%
 
-SET outputPath="..\src\Installer\bin\Debug\PluginInstallerMerged.exe"
 ILMerge /target:winexe /out:%outputPath%  %mergeFile1% %mergeFile2% %mergeFile3% %mergeFile4%
 
-SET copyDestination=..\lib\FlashDevelop\FlashDevelop\Bin\Debug\Data\Spaceport\tools\PluginInstaller.exe
-
 ECHO.
-ECHO Preparing to copy merged output from %outputPath% to %copyDestination%
-ECHO F|"C:\windows\system32\xcopy" %outputPath% %copyDestination%  /Y /Q
+ECHO Preparing to copy merged output from %outputDir% to %finalOutputDir%
+ECHO F|"C:\windows\system32\xcopy" %outputDir% %finalOutputDir%  /Y /Q
 
 ECHO.
 ECHO Copying successfull!
+PAUSE;
