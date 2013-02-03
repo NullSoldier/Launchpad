@@ -49,9 +49,23 @@ namespace PluginSpaceport
 
 		private void TestProject (DataEvent e)
 		{
-			watcher.Active
-				.Intersect (settings.DeviceTargets)
-				.ForEach (t => sp.PushTo (t, TraceManager.AddAsync));
+			// If flash is not included, e.Handled = true
+
+			var s = watcher.Active.Intersect (settings.DeviceTargets);
+			var flashFound = false;
+
+			foreach (var t in s)
+			{
+				if (t.Platform == DevicePlatform.FlashPlayer) {
+					flashFound = true;
+					continue;
+				}
+				sp.RunOnTarget (t, TraceManager.AddAsync);
+			}
+
+			if (!flashFound) {
+				e.Handled = true;
+			}
 		}
 
 		private Settings settings;

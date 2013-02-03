@@ -32,6 +32,11 @@ namespace PluginSpaceport
 		public readonly string ID;
 		public readonly DevicePlatform Platform;
 
+		public override string ToString()
+		{
+			return Name;
+		}
+
 		#region Equality
 		protected bool Equals(Target other)
 		{

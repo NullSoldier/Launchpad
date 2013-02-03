@@ -13,18 +13,45 @@ namespace PluginSpaceport
 	{
 		public SPWrapper (string path)
 		{
-			this.push = new FileInfo (path);
+			push = new FileInfo (path);
+			
 			// Assume support is in the same directory as spaceport-push
-			this.supportPath = Path.Combine (push.Directory.FullName,
+			supportPath = Path.Combine (push.Directory.FullName,
 				Resources.SupportName);
 		}
 
-		public string ProjectDirectory { get; set; }
+		public string ProjectDirectory { private get; set; }
 
-		public Process PushTo (Target target, Action<string> output)
+		public Process Sim (Action<string> output)
 		{
-			return RunOnTarget (target, output);
+			TraceManager.AddAsync ("Running on simulator");
+
+			var process = CreatePushProcess ("sim", /*args*/string.Empty);
+			process.OutputDataReceived += (s, ev) => output (ev.Data);
+			process.Start ();
+			process.BeginOutputReadLine ();
+			return process;
 		}
+
+		public Process Push (Target t, Action<string> output)
+		{
+			if (t.Platform != DevicePlatform.Android
+				|| t.Platform != DevicePlatform.iOS)
+			{
+				throw new ArgumentOutOfRangeException ("t",
+					"PushToDevice only supports devices on wifi");
+			}
+
+			TraceManager.AddAsync (string.Format ("Running on device {0} ({1})",
+				t.Name, t.Platform.GetString ()));
+
+			var process = CreatePushProcess ("push", t.ID);
+			process.OutputDataReceived += (s, ev) => output (ev.Data);
+			process.Start ();
+			process.BeginOutputReadLine ();
+			return process;
+		}
+
 
 		public void GetDevicesNames (Action<IEnumerable<Target>> complete)
 		{
@@ -44,31 +71,17 @@ namespace PluginSpaceport
 		private FileInfo push;
 		private string supportPath;
 
-		private Process RunOnTarget(Target target, Action<string> output)
+		private Process CreatePushProcess(string cmd, string args)
 		{
-			TraceManager.AddAsync (string.Format ("Running on target {0} ({1})",
-				target.ID,
-				target.Platform.GetString()));
-
-			var process = CreatePushProcess (target, string.Empty);
-			process.OutputDataReceived += (s, ev) => output (ev.Data);
-			process.Start ();
-			process.BeginOutputReadLine ();
-
-			return process;
-		}
-
-		private Process CreatePushProcess(Target target, string extraArgs)
-		{
-			var args = (target!=null?target.ID+" ":"")
-			    + extraArgs + " "
+			var fullArgs = cmd + " "
+				+ args + " "
 			    + "--support-path=\"" + supportPath + "\"";
 
 			var start = new ProcessStartInfo
 			{
 				FileName = push.FullName,
 				WorkingDirectory = ProjectDirectory,
-				Arguments = args,
+				Arguments = fullArgs,
 				CreateNoWindow = true,
 				UseShellExecute = false,
 				RedirectStandardOutput = true
