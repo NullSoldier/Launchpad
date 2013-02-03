@@ -32,7 +32,7 @@ namespace PluginSpaceport
 		public Process Push (Target t, Action<string> output)
 		{
 			if (t.Platform != DevicePlatform.Android
-				|| t.Platform != DevicePlatform.iOS)
+				&& t.Platform != DevicePlatform.iOS)
 			{
 				throw new ArgumentOutOfRangeException ("t",
 					"PushToDevice only supports devices on wifi");
