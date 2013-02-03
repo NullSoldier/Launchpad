@@ -11,14 +11,14 @@ namespace PluginSpaceport
 	public class SPDeviceWatcher
 		: IObservable<Target>
 	{
-		public SPDeviceWatcher (PushWrapper push)
+		public SPDeviceWatcher (SPWrapper sp)
 		{
-			this.push = push;
+			this.sp = sp;
 
 			timer = new Timer (2000);
 			timer.AutoReset = true;
 			timer.Elapsed += (s, ev) =>
-				push.GetDevicesNames (ProcessDevices);
+				sp.GetDevicesNames (ProcessDevices);
 		}
 
 		public readonly List<Target> Active = new List<Target> ();
@@ -43,7 +43,7 @@ namespace PluginSpaceport
 		}
 
 		private readonly Timer timer;
-		private readonly PushWrapper push;
+		private readonly SPWrapper sp;
 		private readonly List<IObserver<Target>> subs = new List<IObserver<Target>>();
 
 		//TODO: use hashet and implement hash on target by using the name

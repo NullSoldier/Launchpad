@@ -62,7 +62,7 @@ namespace PluginSpaceport
 					t.Name,
 					t.Platform.GetString()
 				});
-				i.Name = t.Name;
+				i.Name = t.ID;
 				i.Tag = t;
 				i.Checked = settings.DeviceTargets.Contains (t);
 				i.ImageKey = t.Platform.GetString();
@@ -74,7 +74,7 @@ namespace PluginSpaceport
 		public void NotifyRemoved (Target target)
 		{
 			Invoke ((MethodInvoker) (() => {
-				listTargets.Items.RemoveByKey (target.Name);
+				listTargets.Items.RemoveByKey (target.ID);
 			}));
 		}
 

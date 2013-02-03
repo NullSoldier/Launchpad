@@ -35,9 +35,9 @@ namespace PluginSpaceport
 			var pushPath = Path.Combine (settings.SpaceportInstallDir,
 				Resources.SpaceportPushName);
 
-			push = new PushWrapper (pushPath);
+			sp = new SPWrapper (pushPath);
 			logger = LogManager.GetLogger (typeof (SpaceportPlugin));
-			spc = new SpaceportController (this, push, settings, VERSION);
+			spc = new SpaceportController (this, sp, settings, VERSION);
 
 			AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
 			{
@@ -46,7 +46,7 @@ namespace PluginSpaceport
 			};
 
 			//TODO: remove this, for testing
-			push.ProjectDirectory = @"C:\Users\Jason\Desktop\Projects\sample_games\city_game";
+			sp.ProjectDirectory = @"C:\Users\Jason\Desktop\Projects\sample_games\city_game";
 		}
 
 		public void Dispose()
@@ -55,7 +55,7 @@ namespace PluginSpaceport
 			SaveSettings ();
 		}
 
-		private PushWrapper push;
+		private SPWrapper sp;
 		private SpaceportController spc;
 		private ILog logger;
 		private Settings settings;

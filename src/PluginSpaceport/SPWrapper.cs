@@ -9,9 +9,9 @@ using PluginSpaceport.Properties;
 
 namespace PluginSpaceport
 {
-	public class PushWrapper
+	public class SPWrapper
 	{
-		public PushWrapper (string path)
+		public SPWrapper (string path)
 		{
 			this.push = new FileInfo (path);
 			// Assume support is in the same directory as spaceport-push
@@ -29,9 +29,9 @@ namespace PluginSpaceport
 		public void GetDevicesNames (Action<IEnumerable<Target>> complete)
 		{
 			var targets = new List<Target> {
-				new Target ("sim", DevicePlatform.Sim),
-				new Target ("Flash Player", DevicePlatform.FlashPlayer),
-				new Target ("Some Sample Phone", DevicePlatform.iOS)
+				new Target (/*name*/"Simulator", /*id*/"sim", DevicePlatform.Sim),
+				new Target (/*name*/"Flash Player", /*id*/"flash", DevicePlatform.FlashPlayer),
+				new Target (/*id*/"Some_Sample_Phone", DevicePlatform.iOS)
 			};
 			var process = CreatePushProcess (/*target*/null, /*args*/"");
 			process.Start();
@@ -47,7 +47,7 @@ namespace PluginSpaceport
 		private Process RunOnTarget(Target target, Action<string> output)
 		{
 			TraceManager.AddAsync (string.Format ("Running on target {0} ({1})",
-				target.Name,
+				target.ID,
 				target.Platform.GetString()));
 
 			var process = CreatePushProcess (target, string.Empty);
@@ -60,7 +60,7 @@ namespace PluginSpaceport
 
 		private Process CreatePushProcess(Target target, string extraArgs)
 		{
-			var args = (target!=null?target.Name+" ":"")
+			var args = (target!=null?target.ID+" ":"")
 			    + extraArgs + " "
 			    + "--support-path=\"" + supportPath + "\"";
 

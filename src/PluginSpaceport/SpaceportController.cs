@@ -20,10 +20,10 @@ namespace PluginSpaceport
 		: IDisposable
 	{
 		public SpaceportController (
-			EventRouter events, PushWrapper push,
+			EventRouter events, SPWrapper sp,
 			Settings settings, Version version)
 		{
-			this.push = push;
+			this.sp = sp;
 			this.settings = settings;
 			this.version = version;
 			this.updater = new UpdaterHook();
@@ -39,23 +39,23 @@ namespace PluginSpaceport
 			watcher.Stop();
 		}
 
-		private void OpenedProject(DataEvent e)
+		private void OpenedProject (DataEvent e)
 		{
 			//TODO: remove. disable plugin when non AS3 project opened
 			if (e.Data == null) { return; }
 
-			push.ProjectDirectory = ((Project)e.Data).Directory;
+			sp.ProjectDirectory = ((Project)e.Data).Directory;
 		}
 
-		private void TestProject(DataEvent e)
+		private void TestProject (DataEvent e)
 		{
 			watcher.Active
 				.Intersect (settings.DeviceTargets)
-				.ForEach (t => push.PushTo (t, TraceManager.AddAsync));
+				.ForEach (t => sp.PushTo (t, TraceManager.AddAsync));
 		}
 
 		private Settings settings;
-		private PushWrapper push; 
+		private SPWrapper sp; 
 		private SpaceportMenu menu;
 		private SPDeviceWatcher watcher;
 		private Image icon;
@@ -82,7 +82,7 @@ namespace PluginSpaceport
 			menu.UpdateNow.Click += UpdateSpaceport_Clicked;
 			menu.CheckUpdates.CheckedChanged += CheckUpdates_CheckChanged;
 
-			watcher = new SPDeviceWatcher (push);
+			watcher = new SPDeviceWatcher (sp);
 			watcher.Start();
 
 			// Add updater hooks

@@ -11,19 +11,31 @@ namespace PluginSpaceport
 		{
 		}
 
-		public Target (string name, DevicePlatform platform)
+		public Target (string id, DevicePlatform platform)
+			: this (string.Empty, id, platform)
 		{
-			this.Name = name;
-			this.Platform = platform;
 		}
 
-		public string Name;
-		public DevicePlatform Platform;
+		public Target(string name, string id, DevicePlatform platform)
+		{
+			this.Name = name;
+			this.ID = id;
+			this.Platform = platform;
+
+			// We want the name to be friendly
+			if (Name == String.Empty) {
+				Name = ID.Replace ('_', ' ');
+			}
+		}
+
+		public readonly string Name;
+		public readonly string ID;
+		public readonly DevicePlatform Platform;
 
 		#region Equality
 		protected bool Equals(Target other)
 		{
-			return string.Equals (Name, other.Name) && Platform == other.Platform;
+			return string.Equals (ID, other.ID) && Platform == other.Platform;
 		}
 
 		public override bool Equals(object obj)
@@ -43,7 +55,7 @@ namespace PluginSpaceport
 		public override int GetHashCode()
 		{
 			unchecked {
-				int n = Name != null ? Name.GetHashCode() : 0;
+				int n = ID != null ? ID.GetHashCode() : 0;
 				return ((n)*397) ^ (int) Platform;
 			}
 		}

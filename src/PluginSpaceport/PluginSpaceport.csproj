@@ -50,7 +50,7 @@
     <Compile Include="Observable\IObservable.cs" />
     <Compile Include="Observable\IObserver.cs" />
     <Compile Include="Observable\Unsubscriber.cs" />
-    <Compile Include="PushWrapper.cs" />
+    <Compile Include="SPWrapper.cs" />
     <Compile Include="SPDeviceWatcher.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Forms\frmTargets.cs">
