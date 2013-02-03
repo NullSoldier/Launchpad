@@ -12,7 +12,7 @@ namespace PluginSpaceport
 {
 	public class EventRouter : IEventHandler
 	{
-		public void SubscribeDataEvent (string action, Action<DataEvent> callback)
+		public void SubDataEvent (string action, Action<DataEvent> callback)
 		{
 			if (!deSubs.ContainsKey (action)) {
 				deSubs.Add (action, new List<Action<DataEvent>> ());

@@ -30,8 +30,8 @@ namespace PluginSpaceport
 
 			Initialize();
 
-			events.SubscribeDataEvent (ProjectCommand, OpenedProject);
-			events.SubscribeDataEvent (TestCommand, TestProject);
+			events.SubDataEvent (ProjectCommand, OpenedProject);
+			events.SubDataEvent (TestCommand, TestProject);
 		}
 
 		public void Dispose()
