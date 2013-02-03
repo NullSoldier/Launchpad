@@ -87,5 +87,10 @@ namespace PluginSpaceport
 		{
 			throw new NotImplementedException ();
 		}
+
+		private void btnOk_Click(object sender, EventArgs e)
+		{
+			Close();
+		}
 	}
 }

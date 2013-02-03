@@ -33,7 +33,6 @@
 			this.colOS = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.label1 = new System.Windows.Forms.Label();
 			this.btnOk = new System.Windows.Forms.Button();
-			this.btnCancel = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// listTargets
@@ -80,31 +79,20 @@
 			this.btnOk.TabIndex = 2;
 			this.btnOk.Text = "Ok";
 			this.btnOk.UseVisualStyleBackColor = true;
+			this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
 			// 
-			// btnCancel
-			// 
-			this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Location = new System.Drawing.Point(302, 337);
-			this.btnCancel.Name = "btnCancel";
-			this.btnCancel.Size = new System.Drawing.Size(75, 23);
-			this.btnCancel.TabIndex = 3;
-			this.btnCancel.Text = "Cancel";
-			this.btnCancel.UseVisualStyleBackColor = true;
-			// 
-			// frmDeployTargets
+			// frmTargets
 			// 
 			this.AcceptButton = this.btnOk;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(473, 372);
-			this.Controls.Add(this.btnCancel);
 			this.Controls.Add(this.btnOk);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.listTargets);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.Name = "frmDeployTargets";
+			this.Name = "frmTargets";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Select devices to run on";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ClosingForm);
 			this.Load += new System.EventHandler(this.LoadingForm);
@@ -120,6 +108,5 @@
 		private System.Windows.Forms.ColumnHeader colOS;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Button btnOk;
-		private System.Windows.Forms.Button btnCancel;
 	}
 }

@@ -108,7 +108,7 @@ namespace PluginSpaceport
 		private void SelectTargets_Clicked (object s, EventArgs ev)
 		{
 			var f = new frmTargets (watcher, settings);
-			f.Show();
+			f.Show (form);
 		}
 
 		private void UpdateSpaceport_Clicked (object s, EventArgs e)
