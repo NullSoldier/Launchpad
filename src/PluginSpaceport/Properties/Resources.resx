@@ -145,4 +145,16 @@
   <data name="SupportName" xml:space="preserve">
     <value>support</value>
   </data>
+  <data name="androidIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\androidIcon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="appleIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\appleIcon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="flashIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\page_white_flash.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="simIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\computer.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

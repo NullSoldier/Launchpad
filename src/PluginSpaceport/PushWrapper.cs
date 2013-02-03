@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using PluginCore.Managers;
+using PluginSpaceport.Helpers;
 using PluginSpaceport.Properties;
 
 namespace PluginSpaceport
@@ -12,54 +14,60 @@ namespace PluginSpaceport
 		public PushWrapper (string path)
 		{
 			this.push = new FileInfo (path);
-			this.supportPath = Path.Combine (push.Directory.FullName, Resources.SupportName);
 			// Assume support is in the same directory as spaceport-push
+			this.supportPath = Path.Combine (push.Directory.FullName,
+				Resources.SupportName);
 		}
 
-		public void PushToDevice(string name, Action<string> output)
+		public string ProjectDirectory { get; set; }
+
+		public Process PushTo (Target target, Action<string> output)
 		{
-			RunOnTarget (name, output);
+			return RunOnTarget (target, output);
 		}
 
-		public Process PushToSim(Action<string> output)
+		public void GetDevicesNames (Action<IEnumerable<Target>> complete)
 		{
-			return RunOnTarget ("sim", output);
-		}
-
-		public void GetDevicesNames (Action<IEnumerable<Target>> recievedDevices)
-		{
-			var targets = new List<Target>();
-			var process = CreatePushProcess ("", "");
+			var targets = new List<Target> {
+				new Target ("sim", DevicePlatform.Sim),
+				new Target ("Flash Player", DevicePlatform.FlashPlayer),
+				new Target ("Some Sample Phone", DevicePlatform.iOS)
+			};
+			var process = CreatePushProcess (/*target*/null, /*args*/"");
 			process.Start();
 
 			string data = process.StandardOutput.ReadToEnd();
-			targets.Add (new Target ("SampleDevice", DevicePlatform.Unknown));
 
-			recievedDevices (targets);
+			complete (targets);
 		}
 
 		private FileInfo push;
 		private string supportPath;
 
-		private Process RunOnTarget(string name, Action<string> output)
+		private Process RunOnTarget(Target target, Action<string> output)
 		{
-			var process = CreatePushProcess (name, string.Empty);
-			process.OutputDataReceived += (s, ev) => {
-				output (ev.Data);
-			};
+			TraceManager.AddAsync (string.Format ("Running on target {0} ({1})",
+				target.Name,
+				target.Platform.GetString()));
+
+			var process = CreatePushProcess (target, string.Empty);
+			process.OutputDataReceived += (s, ev) => output (ev.Data);
 			process.Start ();
+			process.BeginOutputReadLine ();
+
 			return process;
 		}
 
-		private Process CreatePushProcess(string target, string extraArgs)
+		private Process CreatePushProcess(Target target, string extraArgs)
 		{
-			var args = target + " "
+			var args = (target!=null?target.Name+" ":"")
 			    + extraArgs + " "
-			    + "-support-path=\"" + supportPath + "\"";
+			    + "--support-path=\"" + supportPath + "\"";
 
 			var start = new ProcessStartInfo
 			{
 				FileName = push.FullName,
+				WorkingDirectory = ProjectDirectory,
 				Arguments = args,
 				CreateNoWindow = true,
 				UseShellExecute = false,

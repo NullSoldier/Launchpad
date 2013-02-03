@@ -8,7 +8,9 @@ using System.Windows.Forms;
 using PluginCommon;
 using PluginCore;
 using PluginCore.Managers;
+using PluginSpaceport.Helpers;
 using PluginSpaceport.Properties;
+using ProjectManager.Projects;
 using SpaceportUpdaterPlugin;
 using log4net;
 
@@ -17,12 +19,19 @@ namespace PluginSpaceport
 	public class SpaceportController
 		: IDisposable
 	{
-		public SpaceportController (Settings settings, Version version)
+		public SpaceportController (
+			EventRouter events, PushWrapper push,
+			Settings settings, Version version)
 		{
+			this.push = push;
 			this.settings = settings;
 			this.version = version;
 			this.updater = new UpdaterHook();
+
 			Initialize();
+
+			events.SubscribeDataEvent (ProjectCommand, OpenedProject);
+			events.SubscribeDataEvent (TestCommand, TestProject);
 		}
 
 		public void Dispose()
@@ -30,7 +39,23 @@ namespace PluginSpaceport
 			watcher.Stop();
 		}
 
+		private void OpenedProject(DataEvent e)
+		{
+			//TODO: remove. disable plugin when non AS3 project opened
+			if (e.Data == null) { return; }
+
+			push.ProjectDirectory = ((Project)e.Data).Directory;
+		}
+
+		private void TestProject(DataEvent e)
+		{
+			watcher.Active
+				.Intersect (settings.DeviceTargets)
+				.ForEach (t => push.PushTo (t, TraceManager.AddAsync));
+		}
+
 		private Settings settings;
+		private PushWrapper push; 
 		private SpaceportMenu menu;
 		private SPDeviceWatcher watcher;
 		private Image icon;
@@ -39,6 +64,8 @@ namespace PluginSpaceport
 
 		private readonly UpdaterHook updater = new UpdaterHook();
 		private readonly Version version;
+		private const string TestCommand = "ProjectManager.TestingProject";
+		private const string ProjectCommand = "ProjectManager.Project";
 
 		private void Initialize()
 		{
@@ -55,10 +82,7 @@ namespace PluginSpaceport
 			menu.UpdateNow.Click += UpdateSpaceport_Clicked;
 			menu.CheckUpdates.CheckedChanged += CheckUpdates_CheckChanged;
 
-			var pushPath = Path.Combine (settings.SpaceportInstallDir,
-				Resources.SpaceportPushName);
-
-			watcher = new SPDeviceWatcher (new PushWrapper (pushPath));
+			watcher = new SPDeviceWatcher (push);
 			watcher.Start();
 
 			// Add updater hooks
@@ -83,7 +107,7 @@ namespace PluginSpaceport
 
 		private void SelectTargets_Clicked (object s, EventArgs ev)
 		{
-			var f = new frmDeployTargets (watcher, settings);
+			var f = new frmTargets (watcher, settings);
 			f.Show();
 		}
 

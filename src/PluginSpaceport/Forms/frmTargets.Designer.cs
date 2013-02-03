@@ -1,6 +1,6 @@
 ﻿namespace PluginSpaceport
 {
-	partial class frmDeployTargets
+	partial class frmTargets
 	{
 		/// <summary>
 		/// Required designer variable.

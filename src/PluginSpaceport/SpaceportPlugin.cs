@@ -19,35 +19,43 @@ using log4net.Config;
 
 namespace PluginSpaceport
 {
-	public class SpaceportPlugin : IPlugin
+	public class SpaceportPlugin : EventRouter, IPlugin
 	{
 		public void Initialize()
 		{
+			EventManager.AddEventHandler (this, EventType.Command);
 			Log4NetHelper.ConfigureFromXML (Resources.log4net);
 			LoadSettings ();
 
+			//TODO: figure out what to do when this fails
+			if (String.IsNullOrEmpty (settings.SpaceportInstallDir))
+				settings.SpaceportInstallDir = @"C:\Program Files (x86)\Spaceport";
+
+			//TODO: check this exists, and lock it until close
+			var pushPath = Path.Combine (settings.SpaceportInstallDir,
+				Resources.SpaceportPushName);
+
+			push = new PushWrapper (pushPath);
 			logger = LogManager.GetLogger (typeof (SpaceportPlugin));
-			spc = new SpaceportController (settings, VERSION);
+			spc = new SpaceportController (this, push, settings, VERSION);
 
 			AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
 			{
 				Exception ex = (Exception)args.ExceptionObject;
 				logger.Fatal (ex.Message, ex);
 			};
-		}
 
-		public void HandleEvent(object sender,
-			NotifyEvent e,HandlingPriority priority)
-		{
-			 //TODO: Hook to test event
+			//TODO: remove this, for testing
+			push.ProjectDirectory = @"C:\Users\Jason\Desktop\Projects\sample_games\city_game";
 		}
 
 		public void Dispose()
 		{
-			spc.Dispose();
+			spc.Dispose ();
 			SaveSettings ();
 		}
 
+		private PushWrapper push;
 		private SpaceportController spc;
 		private ILog logger;
 		private Settings settings;

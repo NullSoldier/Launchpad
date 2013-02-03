@@ -21,13 +21,14 @@ namespace PluginSpaceport
 				push.GetDevicesNames (ProcessDevices);
 		}
 
+		public readonly List<Target> Active = new List<Target> ();
+
 		public IDisposable Subscribe (IObserver<Target> o)
 		{
 			subs.Add (o);
-			foreach (var t in active) {
+			foreach (var t in Active) {
 				o.NotifyAdded (t);
 			}
-
 			return new Unsubscriber<Target> (subs, o);
 		}
 
@@ -43,19 +44,18 @@ namespace PluginSpaceport
 
 		private readonly Timer timer;
 		private readonly PushWrapper push;
-		private readonly List<Target> active = new List<Target>();
-		private readonly List<IObserver<Target>> subs = new List<IObserver<Target>> ();
+		private readonly List<IObserver<Target>> subs = new List<IObserver<Target>>();
 
 		//TODO: use hashet and implement hash on target by using the name
 		private void ProcessDevices(IEnumerable<Target> devices)
 		{
-			var current = new List<Target> (active);
+			var current = new List<Target> (Active);
 
 			foreach (var d in devices) {
-				// A new device was found
 				if (!current.Contains (d))
 				{
-					active.Add (d);
+					// We don't know about the device, a new device was found
+					Active.Add (d);
 					subs.ForEach (s => s.NotifyAdded (d));
 				}
 				current.Remove (d);
@@ -63,7 +63,7 @@ namespace PluginSpaceport
 
 			// Only items left are things that were removed
 			foreach (var d in current) {
-				active.Remove (d);
+				Active.Remove (d);
 				subs.ForEach (s => s.NotifyRemoved (d));
 			}
 		}

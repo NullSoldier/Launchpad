@@ -12,16 +12,21 @@ namespace PluginSpaceport
 		[DisplayName("Spaceport Installation Directory")]
 		[LocalizedDescription("StartPage.Description.CustomStartPage")]
 		[LocalizedCategory("StartPage.Category.Custom")]
-		[DefaultValue("teeset")]
-		public string SpaceportInstallDir { get; set; }
+		[DefaultValue("")]
+		public string SpaceportInstallDir
+		{
+			get { return installDir; }
+			set { installDir = value; }
+		}
 
 		[DisplayName("Selected Deploy Targets")]
-		public List<String> DeviceTargets
+		public List<Target> DeviceTargets
 		{
 			get { return targets; }
 			set { targets = value; }
 		}
 
-		private List<string> targets = new List<string>();
+		private List<Target> targets = new List<Target>();
+		private string installDir = "";
 	}
 }

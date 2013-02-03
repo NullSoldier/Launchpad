@@ -61,6 +61,36 @@ namespace PluginSpaceport.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap androidIcon {
+            get {
+                object obj = ResourceManager.GetObject("androidIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap appleIcon {
+            get {
+                object obj = ResourceManager.GetObject("appleIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap flashIcon {
+            get {
+                object obj = ResourceManager.GetObject("flashIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;log4net&gt;
         ///
         ///  &lt;appender name=&quot;FileAppender&quot; type=&quot;log4net.Appender.FileAppender&quot;&gt;
@@ -127,6 +157,16 @@ namespace PluginSpaceport.Properties {
         internal static string PluginName {
             get {
                 return ResourceManager.GetString("PluginName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap simIcon {
+            get {
+                object obj = ResourceManager.GetObject("simIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

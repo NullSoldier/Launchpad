@@ -33,6 +33,9 @@
     <Reference Include="PluginCore">
       <HintPath>..\..\lib\PluginCore.dll</HintPath>
     </Reference>
+    <Reference Include="ProjectManager">
+      <HintPath>..\..\lib\ProjectManager.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -41,12 +44,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EventRouter.cs" />
+    <Compile Include="Helpers\EnumerableHelper.cs" />
+    <Compile Include="Helpers\TargetHelper.cs" />
     <Compile Include="Observable\IObservable.cs" />
     <Compile Include="Observable\IObserver.cs" />
     <Compile Include="Observable\Unsubscriber.cs" />
     <Compile Include="PushWrapper.cs" />
     <Compile Include="SPDeviceWatcher.cs" />
-    <Compile Include="FileHelper.cs" />
+    <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Forms\frmTargets.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -117,6 +123,21 @@
       <Project>{4fbb9ddc-6e2f-4092-a679-e4b6574e7697}</Project>
       <Name>InstallerCore</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\androidIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\appleIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flashIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\computer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\page_white_flash.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

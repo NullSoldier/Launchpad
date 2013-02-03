@@ -5,13 +5,15 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using PluginSpaceport.Helpers;
 using PluginSpaceport.Observable;
+using PluginSpaceport.Properties;
 
 namespace PluginSpaceport
 {
-	public partial class frmDeployTargets : Form, IObserver<Target>
+	public partial class frmTargets : Form, IObserver<Target>
 	{
-		public frmDeployTargets (SPDeviceWatcher watcher, Settings settings)
+		public frmTargets (SPDeviceWatcher watcher, Settings settings)
 		{
 			InitializeComponent();
 
@@ -25,9 +27,14 @@ namespace PluginSpaceport
 
 		private void LoadingForm (object s, EventArgs e)
 		{
-			NotifyAdded (new Target ("My Simulator", DevicePlatform.Sim));
+			var images = new ImageList ();
+			images.Images.Add (DevicePlatform.Sim,			Resources.simIcon);
+			images.Images.Add (DevicePlatform.FlashPlayer,	Resources.flashIcon);
+			images.Images.Add (DevicePlatform.iOS,			Resources.appleIcon);
+			images.Images.Add (DevicePlatform.Android,		Resources.androidIcon);
+			listTargets.SmallImageList = images;
+			
 			unsub = watcher.Subscribe (this);
-
 			listTargets.ItemChecked += DeviceChecked;
 		}
 
@@ -38,10 +45,11 @@ namespace PluginSpaceport
 
 		private void DeviceChecked (object sender, ItemCheckedEventArgs e)
 		{
+			var t = (Target) e.Item.Tag;
 			if (e.Item.Checked) {
-				settings.DeviceTargets.Add (e.Item.Text);
+				settings.DeviceTargets.Add (t);
 			} else {
-				settings.DeviceTargets.Remove (e.Item.Text);
+				settings.DeviceTargets.Remove (t);
 			}
 		}
 
@@ -52,10 +60,12 @@ namespace PluginSpaceport
 				var i = new ListViewItem (new[]
 				{
 					t.Name,
-					t.PlatformName
+					t.Platform.GetString()
 				});
 				i.Name = t.Name;
-				i.Checked = settings.DeviceTargets.Contains (t.Name);
+				i.Tag = t;
+				i.Checked = settings.DeviceTargets.Contains (t);
+				i.ImageKey = t.Platform.GetString();
 
 				listTargets.Items.Add (i);
 			}));
