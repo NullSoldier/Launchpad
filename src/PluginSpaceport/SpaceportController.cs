@@ -49,8 +49,6 @@ namespace PluginSpaceport
 
 		private void TestProject (DataEvent e)
 		{
-			// If flash is not included, e.Handled = true
-
 			var s = watcher.Active.Intersect (settings.DeviceTargets);
 			var flashFound = false;
 

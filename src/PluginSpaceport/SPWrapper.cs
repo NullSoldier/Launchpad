@@ -22,7 +22,7 @@ namespace PluginSpaceport
 		{
 			TraceManager.AddAsync ("Running on simulator");
 
-			var process = CreatePushProcess ("sim", /*args*/string.Empty);
+			var process = CreateProcess (/*cmd*/"sim", /*args*/string.Empty);
 			process.OutputDataReceived += (s, ev) => output (ev.Data);
 			process.Start ();
 			process.BeginOutputReadLine ();
@@ -41,13 +41,12 @@ namespace PluginSpaceport
 			TraceManager.AddAsync (string.Format ("Running on device {0} ({1})",
 				t.Name, t.Platform.GetString ()));
 
-			var process = CreatePushProcess ("push", t.ID);
+			var process = CreateProcess ("push", t.ID);
 			process.OutputDataReceived += (s, ev) => output (ev.Data);
 			process.Start ();
 			process.BeginOutputReadLine ();
 			return process;
 		}
-
 
 		public void GetDevicesNames (Action<IEnumerable<Target>> complete)
 		{
@@ -56,7 +55,7 @@ namespace PluginSpaceport
 				new Target (/*name*/"Flash Player", /*id*/"flash", DevicePlatform.FlashPlayer),
 				new Target (/*id*/"Some_Sample_Phone", DevicePlatform.iOS)
 			};
-			var process = CreatePushProcess (/*target*/null, /*args*/"");
+			var process = CreateProcess (/*cmd*/"push", /*args*/"");
 			process.Start();
 
 			string data = process.StandardOutput.ReadToEnd();
@@ -66,7 +65,7 @@ namespace PluginSpaceport
 
 		private readonly FileInfo sp;
 
-		private Process CreatePushProcess(string cmd, string args)
+		private Process CreateProcess(string cmd, string args)
 		{
 			var fullArgs = cmd + " "
 				+ args + " ";
@@ -75,10 +74,10 @@ namespace PluginSpaceport
 			{
 				FileName = sp.FullName,
 				WorkingDirectory = ProjectDirectory,
-				Arguments = fullArgs,
 				CreateNoWindow = true,
 				UseShellExecute = false,
-				RedirectStandardOutput = true
+				RedirectStandardOutput = true,
+				Arguments = fullArgs
 			};
 			
 			var process = new Process {StartInfo = start};
