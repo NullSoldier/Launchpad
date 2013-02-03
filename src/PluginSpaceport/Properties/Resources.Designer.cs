@@ -188,14 +188,5 @@ namespace PluginSpaceport.Properties {
                 return ResourceManager.GetString("SpaceportPushName", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to support.
-        /// </summary>
-        internal static string SupportName {
-            get {
-                return ResourceManager.GetString("SupportName", resourceCulture);
-            }
-        }
     }
 }

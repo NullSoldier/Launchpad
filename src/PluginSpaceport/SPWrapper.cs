@@ -13,11 +13,7 @@ namespace PluginSpaceport
 	{
 		public SPWrapper (string path)
 		{
-			push = new FileInfo (path);
-			
-			// Assume support is in the same directory as spaceport-push
-			supportPath = Path.Combine (push.Directory.FullName,
-				Resources.SupportName);
+			sp = new FileInfo (path);
 		}
 
 		public string ProjectDirectory { private get; set; }
@@ -68,18 +64,16 @@ namespace PluginSpaceport
 			complete (targets);
 		}
 
-		private FileInfo push;
-		private string supportPath;
+		private readonly FileInfo sp;
 
 		private Process CreatePushProcess(string cmd, string args)
 		{
 			var fullArgs = cmd + " "
-				+ args + " "
-			    + "--support-path=\"" + supportPath + "\"";
+				+ args + " ";
 
 			var start = new ProcessStartInfo
 			{
-				FileName = push.FullName,
+				FileName = sp.FullName,
 				WorkingDirectory = ProjectDirectory,
 				Arguments = fullArgs,
 				CreateNoWindow = true,
