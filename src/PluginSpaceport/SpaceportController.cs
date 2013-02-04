@@ -69,16 +69,13 @@ namespace PluginSpaceport
 			watcher = new SPDeviceWatcher (sp);
 			watcher.Start();
 
-			// Add updater hooks
-			updater.UpdateRunner.CheckUpdateStarted += (s, ev) => {
+			// Subscribe to updater hooks for the UI
+			updater.UpdateRunner.CheckUpdateStarted += (s, ev) =>
 				logger.Info ("Spaceport updater runner started");
-			};
-			updater.UpdateRunner.CheckUpdateStopped += (s, ev) => {
+			updater.UpdateRunner.CheckUpdateStopped += (s, ev) =>
 				logger.Info ("Spaceport updater runner stopped");
-			};
-			updater.UpdateRunner.CheckUpdateFailed += (s, ev) => {
+			updater.UpdateRunner.CheckUpdateFailed += (s, ev) =>
 				logger.Error ("Failed to get update from " + ev.CheckLocation, ev.Exception);
-			};
 			updater.UpdateRunner.UpdateFound += (s, ev) => {
 				logger.Info ("Update found with version v" + ev.Version);
 				TraceManager.AddAsync ("Update found with version v" + ev.Version);

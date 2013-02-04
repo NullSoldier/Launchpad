@@ -68,7 +68,6 @@ namespace PluginSpaceport
 				i.Tag = t;
 				i.Checked = settings.DeviceTargets.Contains (t);
 				i.ImageKey = t.Platform.GetString();
-
 				listTargets.Items.Add (i);
 			}));
 		}
