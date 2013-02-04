@@ -44,9 +44,6 @@ namespace PluginSpaceport
 				Exception ex = (Exception)args.ExceptionObject;
 				logger.Fatal (ex.Message, ex);
 			};
-
-			//TODO: remove this, for testing
-			sp.ProjectDirectory = @"C:\Users\Jason\Desktop\Projects\sample_games\city_game";
 		}
 
 		public void Dispose()

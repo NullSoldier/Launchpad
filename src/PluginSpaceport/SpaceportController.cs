@@ -44,6 +44,7 @@ namespace PluginSpaceport
 			//TODO: remove. disable plugin when non AS3 project opened
 			if (e.Data == null) { return; }
 
+			TraceManager.AddAsync ("Spaceport switching to new project at " + ((Project)e.Data).Directory);
 			sp.ProjectDirectory = ((Project)e.Data).Directory;
 		}
 

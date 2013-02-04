@@ -85,5 +85,4 @@ namespace PluginSpaceport
 		Android,
 		FlashPlayer
 	}
-
 }
