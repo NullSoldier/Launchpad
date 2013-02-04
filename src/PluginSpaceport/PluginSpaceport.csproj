@@ -21,6 +21,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <PlatformTarget>x86</PlatformTarget>
     <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <PlatformTarget>x86</PlatformTarget>
@@ -45,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventRouter.cs" />
+    <Compile Include="Helpers\Check.cs" />
     <Compile Include="Helpers\EnumerableHelper.cs" />
     <Compile Include="Helpers\SPHelper.cs" />
     <Compile Include="Helpers\TargetHelper.cs" />

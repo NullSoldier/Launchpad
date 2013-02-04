@@ -46,6 +46,8 @@ namespace PluginSpaceport
 		private void DeviceChecked (object sender, ItemCheckedEventArgs e)
 		{
 			var t = (Target) e.Item.Tag;
+			Check.IsNull (t);
+
 			if (e.Item.Checked) {
 				settings.DeviceTargets.Add (t);
 			} else {
