@@ -73,9 +73,8 @@ namespace PluginSpaceport
 
 		public void NotifyRemoved (Target target)
 		{
-			Invoke ((MethodInvoker) (() => {
-				listTargets.Items.RemoveByKey (target.ID);
-			}));
+			Invoke ((MethodInvoker) (() =>
+				listTargets.Items.RemoveByKey (target.ID)));
 		}
 
 		public void OnComplete()
