@@ -12,6 +12,9 @@ using PluginCore.Managers;
 using PluginCore.Utilities;
 using PluginSpaceport.Helpers;
 using PluginSpaceport.Properties;
+using ProjectManager;
+using ProjectManager.Projects;
+using ProjectManager.Projects.AS3;
 using SpaceportUpdaterPlugin;
 using WeifenLuo.WinFormsUI.Docking;
 using log4net;
@@ -25,6 +28,7 @@ namespace PluginSpaceport
 		{
 			EventManager.AddEventHandler (this, EventType.Command);
 			Log4NetHelper.ConfigureFromXML (Resources.log4net);
+			SubDataEvent (ProjectManagerEvents.Project, ProjectChanged);
 			LoadSettings ();
 
 			//TODO: figure out what to do when this fails
@@ -41,24 +45,53 @@ namespace PluginSpaceport
 
 			AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
 			{
-				Exception ex = (Exception)args.ExceptionObject;
+				var ex = (Exception)args.ExceptionObject;
 				logger.Fatal (ex.Message, ex);
 			};
 		}
 
 		public void Dispose()
 		{
-			spc.Dispose ();
-			SaveSettings ();
+			spc.Dispose();
+			SaveSettings();
 		}
 
 		private SPWrapper sp;
 		private SpaceportController spc;
 		private ILog logger;
 		private Settings settings;
+		private bool isEnabled;
 
 		private readonly Version VERSION = new Version (0, 1);
-		private readonly string SETTINGS_PATH = @"Spaceport\Settings.fdb";
+		private const string SETTINGS_PATH = @"Spaceport\Settings.fdb";
+
+		private void ProjectChanged (DataEvent e)
+		{
+			var p = e.Data as AS3Project;
+			if (p != null) {
+				TraceManager.AddAsync ("Spaceport switching to new project at " + p.Directory);
+				sp.ProjectDirectory = p.Directory;
+				EnablePlugin (enabled:true);
+			} else {
+				EnablePlugin (enabled:false);
+			}
+		}
+
+		private void EnablePlugin (bool enabled)
+		{
+			if (isEnabled != enabled) // Ignore duplicate statuses, review
+			{
+				isEnabled = enabled;
+				TraceManager.AddAsync ((enabled ? "Enabling" : "Disabling")
+					+ " Spaceport plugin");
+
+				var eventType = isEnabled
+					? SPPluginEvents.Enabled
+					: SPPluginEvents.Disabled;
+				var e = new DataEvent (EventType.Command, eventType, enabled);
+				EventManager.DispatchEvent (this, e);
+			}
+		}
 
 		private void LoadSettings()
 		{

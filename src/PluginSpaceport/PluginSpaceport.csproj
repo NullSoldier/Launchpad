@@ -51,6 +51,7 @@
     <Compile Include="Observable\IObservable.cs" />
     <Compile Include="Observable\IObserver.cs" />
     <Compile Include="Observable\Unsubscriber.cs" />
+    <Compile Include="SPPluginEvents.cs" />
     <Compile Include="SPWrapper.cs" />
     <Compile Include="SPDeviceWatcher.cs" />
     <Compile Include="Helpers\FileHelper.cs" />

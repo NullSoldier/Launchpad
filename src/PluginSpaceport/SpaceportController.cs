@@ -10,6 +10,7 @@ using PluginCore;
 using PluginCore.Managers;
 using PluginSpaceport.Helpers;
 using PluginSpaceport.Properties;
+using ProjectManager;
 using ProjectManager.Projects;
 using SpaceportUpdaterPlugin;
 using log4net;
@@ -26,12 +27,10 @@ namespace PluginSpaceport
 			this.sp = sp;
 			this.settings = settings;
 			this.version = version;
+			this.events = events;
 			this.updater = new UpdaterHook();
 
 			Initialize();
-
-			events.SubDataEvent (ProjectCommand, OpenedProject);
-			events.SubDataEvent (TestCommand, TestProject);
 		}
 
 		public void Dispose()
@@ -39,36 +38,9 @@ namespace PluginSpaceport
 			watcher.Stop();
 		}
 
-		private void OpenedProject (DataEvent e)
-		{
-			//TODO: remove. disable plugin when non AS3 project opened
-			if (e.Data == null) { return; }
-
-			TraceManager.AddAsync ("Spaceport switching to new project at " + ((Project)e.Data).Directory);
-			sp.ProjectDirectory = ((Project)e.Data).Directory;
-		}
-
-		private void TestProject (DataEvent e)
-		{
-			var s = watcher.Active.Intersect (settings.DeviceTargets);
-			var flashFound = false;
-
-			foreach (var t in s)
-			{
-				if (t.Platform == DevicePlatform.FlashPlayer) {
-					flashFound = true;
-					continue;
-				}
-				sp.RunOnTarget (t, TraceManager.AddAsync);
-			}
-
-			if (!flashFound) {
-				e.Handled = true;
-			}
-		}
-
 		private Settings settings;
-		private SPWrapper sp; 
+		private SPWrapper sp;
+		private EventRouter events;
 		private SpaceportMenu menu;
 		private SPDeviceWatcher watcher;
 		private Image icon;
@@ -77,8 +49,6 @@ namespace PluginSpaceport
 
 		private readonly UpdaterHook updater = new UpdaterHook();
 		private readonly Version version;
-		private const string TestCommand = "ProjectManager.TestingProject";
-		private const string ProjectCommand = "ProjectManager.Project";
 
 		private void Initialize()
 		{
@@ -87,7 +57,8 @@ namespace PluginSpaceport
 			icon = Image.FromHbitmap (Resources.spaceportIcon.GetHbitmap ());
 			logger = LogManager.GetLogger (typeof (SpaceportController));
 
-			//PluginBase.MainForm.CreateDockablePanel (new MainUI (), Guid, icon, DockState.Hidden);
+			events.SubDataEvent (SPPluginEvents.Enabled, PluginEnabled);
+			events.SubDataEvent (SPPluginEvents.Disabled, PluginDisabled);
 
 			menu = new SpaceportMenu (PluginBase.MainForm.MenuStrip);
 			menu.SelectTargets.Click += SelectTargets_Clicked;
@@ -116,6 +87,37 @@ namespace PluginSpaceport
 
 			if (menu.CheckUpdates.Checked)
 				updater.StartUpdateRunner (version);
+		}
+
+
+		private void PluginEnabled (DataEvent e)
+		{
+			events.SubDataEvent (ProjectManagerEvents.TestProject, TestProject);
+			watcher.Start();
+		}
+
+		private void PluginDisabled (DataEvent e)
+		{
+			events.UnsubDataEvent (ProjectManagerEvents.TestProject, TestProject);
+			watcher.Stop ();
+		}
+
+		private void TestProject (DataEvent e)
+		{
+			var s = watcher.Active.Intersect (settings.DeviceTargets);
+			var flashFound = false;
+
+			foreach (var t in s) 
+			{
+				if (t.Platform == DevicePlatform.FlashPlayer) {
+					flashFound = true;
+					continue;
+				}
+				sp.RunOnTarget (t, TraceManager.AddAsync);
+			}
+			if (!flashFound) {
+				e.Handled = true;
+			}
 		}
 
 		private void SelectTargets_Clicked (object s, EventArgs ev)

@@ -14,10 +14,16 @@ namespace PluginSpaceport
 	{
 		public void SubDataEvent (string action, Action<DataEvent> callback)
 		{
-			if (!deSubs.ContainsKey (action)) {
-				deSubs.Add (action, new List<Action<DataEvent>> ());
+			if (!subs.ContainsKey (action)) {
+				subs.Add (action, new List<Action<DataEvent>> ());
 			}
-			deSubs[action].Add (callback);
+			subs[action].Add (callback);
+		}
+
+		public void UnsubDataEvent (string action, Action<DataEvent> callback)
+		{
+			if (subs.ContainsKey (action))
+				subs[action].Remove (callback);
 		}
 
 		public void HandleEvent (object sender, NotifyEvent e,
@@ -26,12 +32,12 @@ namespace PluginSpaceport
 			var de = e as DataEvent;
 
 			// If it's a DE event with subs for the DE's action
-			if (de != null && deSubs.ContainsKey (de.Action)) {
-				deSubs[de.Action].ForEach (i => i (de));
+			if (de != null && subs.ContainsKey (de.Action)) {
+				subs[de.Action].ForEach (i => i (de));
 			}	
 		}
 
-		private Dictionary<string, List<Action<DataEvent>>> deSubs
+		private Dictionary<string, List<Action<DataEvent>>> subs
 			= new Dictionary<string, List<Action<DataEvent>>>();
 	}
 }
