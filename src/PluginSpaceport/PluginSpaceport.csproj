@@ -47,7 +47,6 @@
   <ItemGroup>
     <Compile Include="EventRouter.cs" />
     <Compile Include="Helpers\Check.cs" />
-    <Compile Include="Helpers\EnumerableHelper.cs" />
     <Compile Include="Helpers\SPHelper.cs" />
     <Compile Include="Helpers\TargetHelper.cs" />
     <Compile Include="Observable\IObservable.cs" />

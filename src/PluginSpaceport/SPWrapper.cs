@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using InstallerCore;
 using PluginCore.Managers;
 using PluginSpaceport.Helpers;
 using PluginSpaceport.Properties;
@@ -50,15 +51,17 @@ namespace PluginSpaceport
 
 		public void GetDevicesNames (Action<IEnumerable<Target>> complete)
 		{
-			var targets = new List<Target> {
-				new Target (/*name*/"Simulator", /*id*/"sim", DevicePlatform.Sim),
-				new Target (/*name*/"Flash Player", /*id*/"flash", DevicePlatform.FlashPlayer),
-				new Target (/*id*/"Some_Sample_Phone", DevicePlatform.iOS)
-			};
 			var process = CreateProcess (/*cmd*/"push", /*args*/"");
 			process.Start();
 
 			string data = process.StandardOutput.ReadToEnd();
+
+			IEnumerable<Target> targets = data.Split (new [] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries)
+				.Select (i => new Target (i, DevicePlatform.iOS))
+				.Concat (new [] {
+					new Target ("sim", "Simulator", DevicePlatform.Sim),
+					new Target ("flash", "FlashPlayer", DevicePlatform.FlashPlayer)
+				});
 
 			complete (targets);
 		}

@@ -12,11 +12,11 @@ namespace PluginSpaceport
 		}
 
 		public Target (string id, DevicePlatform platform)
-			: this (string.Empty, id, platform)
+			: this (id, string.Empty, platform)
 		{
 		}
 
-		public Target(string name, string id, DevicePlatform platform)
+		public Target (string id, string name, DevicePlatform platform)
 		{
 			this.Name = name;
 			this.ID = id;
