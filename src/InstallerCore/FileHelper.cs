@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using PluginCore.Helpers;
 
-namespace InstallerCore
+namespace UpdaterCore
 {
 	public static class FileHelper
 	{

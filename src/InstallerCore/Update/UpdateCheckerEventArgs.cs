@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using InstallerCore.Update;
+using UpdaterCore.Update;
 
-namespace InstallerCore
+namespace UpdaterCore
 {
 	public class UpdateCheckerEventArgs : EventArgs
 	{

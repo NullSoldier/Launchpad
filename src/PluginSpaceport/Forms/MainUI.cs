@@ -7,7 +7,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-namespace PluginSpaceport
+namespace Launchpad
 {
 	public partial class MainUI : UserControl
 	{

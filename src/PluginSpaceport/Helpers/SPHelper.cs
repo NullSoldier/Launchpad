@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
-namespace PluginSpaceport.Helpers
+namespace Launchpad.Helpers
 {
 	public static class SPHelper
 	{

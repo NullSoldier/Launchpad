@@ -101,9 +101,9 @@
     <None Include="Resources\icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\InstallerCore\InstallerCore.csproj">
+    <ProjectReference Include="..\InstallerCore\UpdaterCore.csproj">
       <Project>{4FBB9DDC-6E2F-4092-A679-E4B6574E7697}</Project>
-      <Name>InstallerCore</Name>
+      <Name>UpdaterCore</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

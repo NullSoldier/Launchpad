@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using InstallerCore;
+using UpdaterCore;
 using PluginCore.Managers;
-using PluginSpaceport.Helpers;
-using PluginSpaceport.Properties;
+using Launchpad.Helpers;
+using Launchpad.Properties;
 
-namespace PluginSpaceport
+namespace Launchpad
 {
 	public class SPWrapper
 	{

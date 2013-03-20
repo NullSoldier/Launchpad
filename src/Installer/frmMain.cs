@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using InstallerCore;
+using UpdaterCore;
 using PluginInstaller.Properties;
 using log4net;
 

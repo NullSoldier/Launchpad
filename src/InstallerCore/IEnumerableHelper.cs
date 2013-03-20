@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace InstallerCore
+namespace UpdaterCore
 {
 	public static class IEnumerableHelper
 	{

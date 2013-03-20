@@ -8,8 +8,8 @@
     <ProjectGuid>{C93B6254-CDE3-4619-B386-29E1BF5E2BE5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PluginSpaceport</RootNamespace>
-    <AssemblyName>SpaceportPlugin</AssemblyName>
+    <RootNamespace>Launchpad</RootNamespace>
+    <AssemblyName>Launchpad</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventRouter.cs" />
+    <Compile Include="ExtensionAttribute.cs" />
     <Compile Include="Helpers\Check.cs" />
     <Compile Include="Helpers\SPHelper.cs" />
     <Compile Include="Helpers\TargetHelper.cs" />
@@ -78,7 +79,7 @@
     <Compile Include="Settings.cs" />
     <Compile Include="SpaceportController.cs" />
     <Compile Include="SpaceportMenu.cs" />
-    <Compile Include="SpaceportPlugin.cs" />
+    <Compile Include="LaunchPad.cs" />
     <Compile Include="Forms\frmPatch.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -116,16 +117,7 @@
     <None Include="Resources\spaceportIcon.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\icon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\log4net.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\InstallerCore\InstallerCore.csproj">
-      <Project>{4fbb9ddc-6e2f-4092-a679-e4b6574e7697}</Project>
-      <Name>InstallerCore</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\androidIcon.png" />
@@ -141,6 +133,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\page_white_flash.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InstallerCore\UpdaterCore.csproj">
+      <Project>{4fbb9ddc-6e2f-4092-a679-e4b6574e7697}</Project>
+      <Name>UpdaterCore</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

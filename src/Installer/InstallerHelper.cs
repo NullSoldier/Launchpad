@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using InstallerCore;
+using UpdaterCore;
 
 namespace PluginInstaller
 {

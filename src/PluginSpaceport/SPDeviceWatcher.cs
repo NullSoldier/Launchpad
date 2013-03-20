@@ -4,9 +4,9 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text;
 using System.Timers;
-using PluginSpaceport.Observable;
+using Launchpad.Observable;
 
-namespace PluginSpaceport
+namespace Launchpad
 {
 	public class SPDeviceWatcher
 		: IObservable<Target>

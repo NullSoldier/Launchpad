@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
-using InstallerCore.Rollback;
 using PluginInstaller;
+using UpdaterCore.Rollback;
 using log4net;
 using log4net.Core;
 
-namespace InstallerCore
+namespace UpdaterCore
 {
 	public class Installer
 	{

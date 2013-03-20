@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 
-namespace InstallerCore
+namespace UpdaterCore
 {
 	public class UpdateHelper
 	{

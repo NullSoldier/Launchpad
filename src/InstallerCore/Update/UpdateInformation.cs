@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace InstallerCore.Update
+namespace UpdaterCore.Update
 {
 	public class UpdateInformation
 	{

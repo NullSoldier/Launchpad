@@ -6,7 +6,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using InstallerCore;
+using UpdaterCore;
 using log4net;
 
 namespace PluginInstaller

@@ -8,8 +8,8 @@
     <ProjectGuid>{4FBB9DDC-6E2F-4092-A679-E4B6574E7697}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>InstallerCore</RootNamespace>
-    <AssemblyName>InstallerCore</AssemblyName>
+    <RootNamespace>UpdaterCore</RootNamespace>
+    <AssemblyName>UpdaterCore</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

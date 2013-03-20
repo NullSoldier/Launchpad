@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PluginSpaceport
+namespace Launchpad
 {
 	public static class SPPluginEvents
 	{

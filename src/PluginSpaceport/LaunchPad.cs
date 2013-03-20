@@ -1,28 +1,18 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Drawing;
 using System.IO;
-using System.Windows.Forms;
-using System.Xml;
-using InstallerCore;
-using PluginCommon;
+using Launchpad.Helpers;
+using Launchpad.Properties;
+using log4net;
 using PluginCore;
 using PluginCore.Helpers;
 using PluginCore.Managers;
 using PluginCore.Utilities;
-using PluginSpaceport.Helpers;
-using PluginSpaceport.Properties;
 using ProjectManager;
-using ProjectManager.Projects;
 using ProjectManager.Projects.AS3;
-using SpaceportUpdaterPlugin;
-using WeifenLuo.WinFormsUI.Docking;
-using log4net;
-using log4net.Config;
 
-namespace PluginSpaceport
+namespace Launchpad
 {
-	public class SpaceportPlugin : EventRouter, IPlugin
+	public class LaunchPad : EventRouter, IPlugin
 	{
 		public void Initialize()
 		{
@@ -40,7 +30,7 @@ namespace PluginSpaceport
 				Resources.SpaceportPushName);
 
 			sp = new SPWrapper (pushPath);
-			logger = LogManager.GetLogger (typeof (SpaceportPlugin));
+			logger = LogManager.GetLogger (typeof (LaunchPad));
 			spc = new SpaceportController (this, sp, settings, VERSION);
 
 			AppDomain.CurrentDomain.UnhandledException += (sender, args) =>

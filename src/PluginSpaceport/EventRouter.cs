@@ -1,14 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using InstallerCore;
-using InstallerCore.Rollback;
 using PluginCore;
-using PluginCore.Managers;
-using ProjectManager.Projects;
 
-namespace PluginSpaceport
+namespace Launchpad
 {
 	public class EventRouter : IEventHandler
 	{

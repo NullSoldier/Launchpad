@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
-using PluginSpaceport.Properties;
+using Launchpad.Properties;
 using log4net;
 using log4net.Config;
 using log4net.Core;
 
-namespace PluginSpaceport.Helpers
+namespace Launchpad.Helpers
 {
 	public static class Log4NetHelper
 	{

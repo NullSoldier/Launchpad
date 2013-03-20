@@ -1,4 +1,4 @@
-﻿namespace PluginSpaceport
+﻿namespace Launchpad
 {
 	partial class MainUI
 	{

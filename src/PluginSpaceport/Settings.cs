@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Text;
 using PluginCore.Localization;
 
-namespace PluginSpaceport
+namespace Launchpad
 {
 	[Serializable]
 	public class Settings

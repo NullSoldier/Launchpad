@@ -5,11 +5,11 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using PluginSpaceport.Helpers;
-using PluginSpaceport.Observable;
-using PluginSpaceport.Properties;
+using Launchpad.Helpers;
+using Launchpad.Observable;
+using Launchpad.Properties;
 
-namespace PluginSpaceport
+namespace Launchpad
 {
 	public partial class frmTargets : Form, IObserver<Target>
 	{

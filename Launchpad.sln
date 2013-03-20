@@ -1,13 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginSpaceport", "src\PluginSpaceport\PluginSpaceport.csproj", "{C93B6254-CDE3-4619-B386-29E1BF5E2BE5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Launchpad", "src\PluginSpaceport\Launchpad.csproj", "{C93B6254-CDE3-4619-B386-29E1BF5E2BE5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Installer", "src\Installer\Installer.csproj", "{F81EFCE4-C491-40C1-8E8C-27965BA89FB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstallerCore", "src\InstallerCore\InstallerCore.csproj", "{4FBB9DDC-6E2F-4092-A679-E4B6574E7697}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlashDevelop", "lib\FlashDevelop\FlashDevelop\FlashDevelop.csproj", "{EFD07485-9A64-4EEC-94E7-ACBD4DA5CA93}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdaterCore", "src\InstallerCore\UpdaterCore.csproj", "{4FBB9DDC-6E2F-4092-A679-E4B6574E7697}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,18 +52,6 @@ Global
 		{4FBB9DDC-6E2F-4092-A679-E4B6574E7697}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4FBB9DDC-6E2F-4092-A679-E4B6574E7697}.Release|x86.ActiveCfg = Release|x86
 		{4FBB9DDC-6E2F-4092-A679-E4B6574E7697}.Release|x86.Build.0 = Release|x86
-		{EFD07485-9A64-4EEC-94E7-ACBD4DA5CA93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EFD07485-9A64-4EEC-94E7-ACBD4DA5CA93}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EFD07485-9A64-4EEC-94E7-ACBD4DA5CA93}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{EFD07485-9A64-4EEC-94E7-ACBD4DA5CA93}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{EFD07485-9A64-4EEC-94E7-ACBD4DA5CA93}.Debug|x86.ActiveCfg = Debug|x86
-		{EFD07485-9A64-4EEC-94E7-ACBD4DA5CA93}.Debug|x86.Build.0 = Debug|x86
-		{EFD07485-9A64-4EEC-94E7-ACBD4DA5CA93}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EFD07485-9A64-4EEC-94E7-ACBD4DA5CA93}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EFD07485-9A64-4EEC-94E7-ACBD4DA5CA93}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{EFD07485-9A64-4EEC-94E7-ACBD4DA5CA93}.Release|Mixed Platforms.Build.0 = Release|x86
-		{EFD07485-9A64-4EEC-94E7-ACBD4DA5CA93}.Release|x86.ActiveCfg = Release|x86
-		{EFD07485-9A64-4EEC-94E7-ACBD4DA5CA93}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

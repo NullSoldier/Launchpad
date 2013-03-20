@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using Ionic.Zip;
 
-namespace InstallerCore
+namespace UpdaterCore
 {
 	public class UpdateExtractor
 	{

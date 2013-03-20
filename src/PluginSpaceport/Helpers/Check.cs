@@ -4,7 +4,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Text;
 
-namespace PluginSpaceport.Helpers
+namespace Launchpad.Helpers
 {
 	public static class Check
 	{

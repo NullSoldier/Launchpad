@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace InstallerCore.Rollback
+namespace UpdaterCore.Rollback
 {
 	public interface IRevertableAction
 	{

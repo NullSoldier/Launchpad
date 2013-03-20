@@ -8,8 +8,8 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using InstallerCore;
-using InstallerCore.Update;
+using UpdaterCore;
+using UpdaterCore.Update;
 using PluginCore;
 using PluginCore.Helpers;
 using PluginCore.Managers;
@@ -164,7 +164,7 @@ namespace SpaceportUpdaterPlugin
 			UpdateRunner = new UpdateRunner (new Uri (remoteUpdateFile));
 			UpdateRunner.UpdateFound += (o, e) => FoundUpdate = e.UpdateInfo;
 			
-			var dataDir = InstallerCore.FileHelper.FlashDevelopDataDir;
+			var dataDir = UpdaterCore.FileHelper.FlashDevelopDataDir;
 			var localUpdateDir = Path.Combine (dataDir, localUpdateRelative);
 			UpdateExtractor = new UpdateExtractor (localUpdateDir);
 			
@@ -176,7 +176,7 @@ namespace SpaceportUpdaterPlugin
 		{
 			// Use URI to avoid file name formatting differences
 			var flashAssemblyUri = new Uri (Assembly.GetEntryAssembly ().CodeBase);
-			string dataDir = InstallerCore.FileHelper.FlashDevelopDataDir;
+			string dataDir = UpdaterCore.FileHelper.FlashDevelopDataDir;
 			string installerPath = Path.Combine (dataDir, localInstallerRelative);
 
 			string args = string.Format ("\"{0}\" \"{1}\"", WaitingUpdate.Version, flashAssemblyUri.LocalPath);

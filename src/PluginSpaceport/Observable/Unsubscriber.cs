@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PluginSpaceport.Observable
+namespace Launchpad.Observable
 {
 	public class Unsubscriber<T> : IDisposable
 	{

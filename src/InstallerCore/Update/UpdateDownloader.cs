@@ -6,7 +6,7 @@ using System.Net;
 using System.Text;
 using log4net;
 
-namespace InstallerCore
+namespace UpdaterCore
 {
 	public class UpdateDownloader
 	{

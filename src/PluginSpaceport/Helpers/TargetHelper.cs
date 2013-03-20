@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace PluginSpaceport.Helpers
+namespace Launchpad.Helpers
 {
 	public static class TargetHelper
 	{

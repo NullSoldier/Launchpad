@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using System.Threading;
-using InstallerCore.Update;
+using UpdaterCore.Update;
 
-namespace InstallerCore
+namespace UpdaterCore
 {
 	public class UpdateRunner
 	{
