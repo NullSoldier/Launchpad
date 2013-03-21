@@ -8,8 +8,8 @@
     <ProjectGuid>{F81EFCE4-C491-40C1-8E8C-27965BA89FB2}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PluginInstaller</RootNamespace>
-    <AssemblyName>PluginInstaller</AssemblyName>
+    <RootNamespace>Updater</RootNamespace>
+    <AssemblyName>Updater</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -101,7 +101,7 @@
     <None Include="Resources\icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\InstallerCore\UpdaterCore.csproj">
+    <ProjectReference Include="..\UpdaterCore\UpdaterCore.csproj">
       <Project>{4FBB9DDC-6E2F-4092-A679-E4B6574E7697}</Project>
       <Name>UpdaterCore</Name>
     </ProjectReference>
@@ -114,7 +114,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>call "$(SolutionDir)\tools\CreateMergedInstaller.bat" "$(SolutionDir)\tools"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

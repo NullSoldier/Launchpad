@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using UpdaterCore;
 
-namespace PluginInstaller
+namespace Updater
 {
 	public static class InstallerHelper
 	{

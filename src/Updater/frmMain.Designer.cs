@@ -1,4 +1,4 @@
-﻿namespace PluginInstaller
+﻿namespace Updater
 {
 	partial class frmMain
 	{

@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Launchpad", "src\PluginSpaceport\Launchpad.csproj", "{C93B6254-CDE3-4619-B386-29E1BF5E2BE5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Launchpad", "src\Launchpad\Launchpad.csproj", "{C93B6254-CDE3-4619-B386-29E1BF5E2BE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Installer", "src\Installer\Installer.csproj", "{F81EFCE4-C491-40C1-8E8C-27965BA89FB2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Updater", "src\Updater\Updater.csproj", "{F81EFCE4-C491-40C1-8E8C-27965BA89FB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdaterCore", "src\InstallerCore\UpdaterCore.csproj", "{4FBB9DDC-6E2F-4092-A679-E4B6574E7697}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdaterCore", "src\UpdaterCore\UpdaterCore.csproj", "{4FBB9DDC-6E2F-4092-A679-E4B6574E7697}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

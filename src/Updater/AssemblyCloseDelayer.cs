@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using UpdaterCore;
 using log4net;
 
-namespace PluginInstaller
+namespace Updater
 {
 	public static class AssemblyCloseDelayer
 	{

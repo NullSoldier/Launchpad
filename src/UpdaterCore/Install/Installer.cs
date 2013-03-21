@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
-using PluginInstaller;
+using Updater;
 using UpdaterCore.Rollback;
 using log4net;
 using log4net.Core;

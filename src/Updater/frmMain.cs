@@ -10,10 +10,10 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using UpdaterCore;
-using PluginInstaller.Properties;
+using Updater.Properties;
 using log4net;
 
-namespace PluginInstaller
+namespace Updater
 {
 	public partial class frmMain : Form
 	{

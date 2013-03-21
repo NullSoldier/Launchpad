@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using log4net;
 
-namespace PluginInstaller
+namespace Updater
 {
 	public static class InstallerArgsParser
 	{

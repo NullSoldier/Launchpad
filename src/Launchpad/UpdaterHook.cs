@@ -13,7 +13,7 @@ using UpdaterCore.Update;
 using PluginCore;
 using PluginCore.Helpers;
 using PluginCore.Managers;
-using PluginInstaller;
+using Updater;
 using log4net;
 
 namespace SpaceportUpdaterPlugin

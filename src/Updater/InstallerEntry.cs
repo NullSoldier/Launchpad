@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using log4net;
 
-namespace PluginInstaller
+namespace Updater
 {
 	public class InstallerEntry : IInstallerModeCallbackSet
 	{

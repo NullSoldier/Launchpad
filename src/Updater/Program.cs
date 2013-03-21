@@ -5,13 +5,13 @@ using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
-using PluginInstaller.Properties;
+using Updater.Properties;
 using log4net;
 using log4net.Config;
 using log4net.Core;
 using log4net.Repository.Hierarchy;
 
-namespace PluginInstaller
+namespace Updater
 {
 	public static class Program
 	{
