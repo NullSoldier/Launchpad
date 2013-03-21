@@ -6,3 +6,4 @@ _*
 *.Cache
 *.cachefile
 lib/FlashDevelop/
+resources/spaceport-sdk
