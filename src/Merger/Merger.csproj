@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <UsingTask TaskName="ILMerge.MSBuild.Tasks.ILMerge" AssemblyFile="ILMerge.MSBuild.Tasks.dll" />
+  <PropertyGroup>
+    <ProjectGuid>{76D77D8B-01D4-48E2-896D-E5E9D217FDCA}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Launchpad\Launchpad.csproj">
+      <Project>{7b05efcc-d6e8-49c4-85b9-85ae9e22ead9}</Project>
+      <Name>Launchpad</Name>
+    </ProjectReference>
+  </ItemGroup>
+  
+  <Target Name="Build">
+	<PropertyGroup>
+		<SourceDir>$(SolutionDir)src\Launchpad\bin\x86\Debug\</SourceDir>
+		<DestDir>..\bin\x86\Debug\</DestDir>
+		<OutputName>LaunchPadMerged.dll</OutputName>
+	</PropertyGroup>
+    <ItemGroup>
+      <MergeAsm Include="$(SourceDir)Launchpad.dll" />
+	  <MergeAsm Include="$(SourceDir)UpdaterCore.dll" />
+      <MergeAsm Include="$(SourceDir)PluginCore.dll" />
+	  <MergeAsm Include="$(SourceDir)SwfOp.dll" />
+	  <MergeAsm Include="$(SourceDir)ProjectManager.dll" />
+	  <MergeAsm Include="$(SourceDir)log4net.dll" />
+    </ItemGroup>
+    <Message Text="Merging assemblies into $(OutputName)" />
+    <ILMerge InputAssemblies="@(MergeAsm)" OutputFile="$(DestDir)$(OutputName)" />
+  </Target>
+  <Target Name="Rebuild" DependsOnTargets="Build">
+  </Target>
+</Project>
