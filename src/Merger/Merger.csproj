@@ -10,20 +10,19 @@
       <Name>Launchpad</Name>
     </ProjectReference>
   </ItemGroup>
-  
   <Target Name="Build">
-	<PropertyGroup>
-		<SourceDir>$(SolutionDir)src\Launchpad\bin\x86\Debug\</SourceDir>
-		<DestDir>..\bin\x86\Debug\</DestDir>
-		<OutputName>LaunchPadMerged.dll</OutputName>
-	</PropertyGroup>
+    <PropertyGroup>
+      <SourceDir>$(SolutionDir)src\Launchpad\bin\x86\Debug\</SourceDir>
+      <DestDir>..\bin\x86\Debug\</DestDir>
+      <OutputName>LaunchPadMerged.dll</OutputName>
+    </PropertyGroup>
     <ItemGroup>
       <MergeAsm Include="$(SourceDir)Launchpad.dll" />
-	  <MergeAsm Include="$(SourceDir)UpdaterCore.dll" />
+      <MergeAsm Include="$(SourceDir)UpdaterCore.dll" />
       <MergeAsm Include="$(SourceDir)PluginCore.dll" />
-	  <MergeAsm Include="$(SourceDir)SwfOp.dll" />
-	  <MergeAsm Include="$(SourceDir)ProjectManager.dll" />
-	  <MergeAsm Include="$(SourceDir)log4net.dll" />
+      <MergeAsm Include="$(SourceDir)SwfOp.dll" />
+      <MergeAsm Include="$(SourceDir)ProjectManager.dll" />
+      <MergeAsm Include="$(SourceDir)log4net.dll" />
     </ItemGroup>
     <Message Text="Merging assemblies into $(OutputName)" />
     <ILMerge InputAssemblies="@(MergeAsm)" OutputFile="$(DestDir)$(OutputName)" />
