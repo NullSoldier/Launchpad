@@ -9,6 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdaterCore", "src\UpdaterC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merger", "src\Merger\Merger.csproj", "{76D77D8B-01D4-48E2-896D-E5E9D217FDCA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdatePacker", "src\UpdatePacker\UpdatePacker.csproj", "{C636A1C0-50BF-4224-AAD4-F2283C8F4558}"
+	ProjectSection(ProjectDependencies) = postProject
+		{76D77D8B-01D4-48E2-896D-E5E9D217FDCA} = {76D77D8B-01D4-48E2-896D-E5E9D217FDCA}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,6 +69,16 @@ Global
 		{76D77D8B-01D4-48E2-896D-E5E9D217FDCA}.Release|Mixed Platforms.Build.0 = Debug|x86
 		{76D77D8B-01D4-48E2-896D-E5E9D217FDCA}.Release|x86.ActiveCfg = Debug|x86
 		{76D77D8B-01D4-48E2-896D-E5E9D217FDCA}.Release|x86.Build.0 = Debug|x86
+		{C636A1C0-50BF-4224-AAD4-F2283C8F4558}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{C636A1C0-50BF-4224-AAD4-F2283C8F4558}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{C636A1C0-50BF-4224-AAD4-F2283C8F4558}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{C636A1C0-50BF-4224-AAD4-F2283C8F4558}.Debug|x86.ActiveCfg = Debug|x86
+		{C636A1C0-50BF-4224-AAD4-F2283C8F4558}.Debug|x86.Build.0 = Debug|x86
+		{C636A1C0-50BF-4224-AAD4-F2283C8F4558}.Release|Any CPU.ActiveCfg = Debug|x86
+		{C636A1C0-50BF-4224-AAD4-F2283C8F4558}.Release|Mixed Platforms.ActiveCfg = Debug|x86
+		{C636A1C0-50BF-4224-AAD4-F2283C8F4558}.Release|Mixed Platforms.Build.0 = Debug|x86
+		{C636A1C0-50BF-4224-AAD4-F2283C8F4558}.Release|x86.ActiveCfg = Debug|x86
+		{C636A1C0-50BF-4224-AAD4-F2283C8F4558}.Release|x86.Build.0 = Debug|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
