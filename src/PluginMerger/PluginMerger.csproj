@@ -3,6 +3,12 @@
   <UsingTask TaskName="ILMerge.MSBuild.Tasks.ILMerge" AssemblyFile="ILMerge.MSBuild.Tasks.dll" />
   <PropertyGroup>
     <ProjectGuid>{76D77D8B-01D4-48E2-896D-E5E9D217FDCA}</ProjectGuid>
+    <SourceDir>$(SolutionDir)src\Launchpad\bin\x86\Debug\</SourceDir>
+    <DestDir>bin\x86\Debug\</DestDir>
+    <OutputName>LaunchPadMerged.dll</OutputName>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyName>PluginMerger</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Launchpad\Launchpad.csproj">
@@ -11,11 +17,7 @@
     </ProjectReference>
   </ItemGroup>
   <Target Name="Build">
-    <PropertyGroup>
-      <SourceDir>$(SolutionDir)src\Launchpad\bin\x86\Debug\</SourceDir>
-      <DestDir>..\bin\x86\Debug\</DestDir>
-      <OutputName>LaunchPadMerged.dll</OutputName>
-    </PropertyGroup>
+    <MakeDir Directories="$(DestDir)" />
     <ItemGroup>
       <MergeAsm Include="$(SourceDir)Launchpad.dll" />
       <MergeAsm Include="$(SourceDir)UpdaterCore.dll" />
@@ -25,8 +27,11 @@
       <MergeAsm Include="$(SourceDir)log4net.dll" />
     </ItemGroup>
     <Message Text="Merging assemblies into $(OutputName)" />
-    <ILMerge InputAssemblies="@(MergeAsm)" OutputFile="$(DestDir)$(OutputName)" />
+    <ILMerge InputAssemblies="@(MergeAsm)" OutputFile="..\$(DestDir)$(OutputName)" />
   </Target>
-	<Target Name="Clean" />
+  <Target Name="Clean">
+    <RemoveDir Directories="bin" />
+    <RemoveDir Directories="obj" />
+  </Target>
   <Target Name="Rebuild" DependsOnTargets="Build" />
 </Project>

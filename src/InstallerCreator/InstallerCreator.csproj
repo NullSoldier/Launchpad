@@ -8,32 +8,27 @@
     <ProjectGuid>{6F443870-9519-4B25-8C0A-2C3F7C4056CE}</ProjectGuid>
 		<NSISPath>&quot;C:\Program Files (x86)\NSIS\makensis.exe&quot;</NSISPath>
 		<OutputDir>bin\x86\Debug\</OutputDir>
+		<InstallScript>InstallerScript.nsi</InstallScript>
   </PropertyGroup>
 	
-	<ItemGroup>
-		<installScript Include="InstallerScript.nsi" />
-	</ItemGroup>
-	
   <Target Name="Build">
-		<ItemGroup>
-			<UpdateFile Include="$(SolutionDir)src\UpdatePacker\bin\x86\Debug\Update.zip" />
-		</ItemGroup>
-		
 		<Message Text="Copying Update package contents to Update/" />
-		<Copy SourceFiles="@(UpdateFile)" DestinationFolder="." />
+		<Copy SourceFiles="$(SolutionDir)src\UpdatePacker\bin\x86\Debug\Update.zip" DestinationFolder="." />
 		<Unzip
 			ZipFileName="Update.zip"
 			TargetDirectory="." />
 			
 		<Message Text="Building installer" />
-    <NSISC sourceFile="@(installScript)" NSISEngine="$(NSISPath)" />
+    <NSISC sourceFile="$(InstallScript)" NSISEngine="$(NSISPath)" />
 		
-		<Message Text="Copying built installer to $(OutputDir)" />
+		<Message Text="Move built installer to $(OutputDir)" />
 		<Move SourceFiles="LaunchpadInstaller.exe" DestinationFiles="$(OutputDir)LaunchpadInstaller.exe" />
   </Target>
 	
 	<Target Name="Clean">
-		<RemoveDir Directories="updates" />
+		<RemoveDir Directories="bin" />
+		<RemoveDir Directories="obj" />
+		<RemoveDir Directories="update" />
 		<Delete Files="Update.zip" />
 	</Target>
 	

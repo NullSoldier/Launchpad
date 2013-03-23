@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Updater", "src\Updater\Upda
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdaterCore", "src\UpdaterCore\UpdaterCore.csproj", "{4FBB9DDC-6E2F-4092-A679-E4B6574E7697}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merger", "src\Merger\Merger.csproj", "{76D77D8B-01D4-48E2-896D-E5E9D217FDCA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginMerger", "src\PluginMerger\PluginMerger.csproj", "{76D77D8B-01D4-48E2-896D-E5E9D217FDCA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdatePacker", "src\UpdatePacker\UpdatePacker.csproj", "{C636A1C0-50BF-4224-AAD4-F2283C8F4558}"
 	ProjectSection(ProjectDependencies) = postProject
