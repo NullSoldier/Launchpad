@@ -7,3 +7,5 @@ _*
 *.cachefile
 lib/FlashDevelop/
 resources/spaceport-sdk
+src/InstallerCreator/Update.zip
+src/InstallerCreator/Update
