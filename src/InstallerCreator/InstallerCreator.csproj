@@ -1,36 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <UsingTask TaskName="NSISCTask.NSISC" AssemblyFile="NSISCTask.dll" />
-	<UsingTask TaskName="MSBuild.Community.Tasks.Zip" AssemblyFile="MSBuild.Community.Tasks.dll" />
-	<UsingTask TaskName="MSBuild.Community.Tasks.Unzip" AssemblyFile="MSBuild.Community.Tasks.dll" />
-  
-	<PropertyGroup>
+  <UsingTask TaskName="MSBuild.Community.Tasks.Zip" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Unzip" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  <PropertyGroup>
     <ProjectGuid>{6F443870-9519-4B25-8C0A-2C3F7C4056CE}</ProjectGuid>
-		<NSISPath>&quot;C:\Program Files (x86)\NSIS\makensis.exe&quot;</NSISPath>
-		<OutputDir>bin\x86\Debug\</OutputDir>
-		<InstallScript>InstallerScript.nsi</InstallScript>
+    <NSISPath>"C:\Program Files (x86)\NSIS\makensis.exe"</NSISPath>
+    <OutputDir>bin\x86\Debug\</OutputDir>
+    <InstallScript>InstallerScript.nsi</InstallScript>
   </PropertyGroup>
-	
+  <ItemGroup>
+    <None Include="InstallerScript.nsi" />
+  </ItemGroup>
   <Target Name="Build">
-		<Message Text="Copying Update package contents to Update/" />
-		<Copy SourceFiles="$(SolutionDir)src\UpdatePacker\bin\x86\Debug\Update.zip" DestinationFolder="." />
-		<Unzip
-			ZipFileName="Update.zip"
-			TargetDirectory="." />
-			
-		<Message Text="Building installer" />
+    <Message Text="Copying Update package contents to Update/" />
+    <Copy SourceFiles="..\UpdatePacker\bin\x86\Debug\Update.zip" DestinationFolder="." />
+    <Unzip ZipFileName="Update.zip" TargetDirectory="." />
+    <Message Text="Building installer" />
     <NSISC sourceFile="$(InstallScript)" NSISEngine="$(NSISPath)" />
-		
-		<Message Text="Move built installer to $(OutputDir)" />
-		<Move SourceFiles="LaunchpadInstaller.exe" DestinationFiles="$(OutputDir)LaunchpadInstaller.exe" />
+    <Message Text="Move built installer to $(OutputDir)" />
+    <Move SourceFiles="LaunchpadInstaller.exe" DestinationFiles="$(OutputDir)LaunchpadInstaller.exe" />
   </Target>
-	
-	<Target Name="Clean">
-		<RemoveDir Directories="bin" />
-		<RemoveDir Directories="obj" />
-		<RemoveDir Directories="update" />
-		<Delete Files="Update.zip" />
-	</Target>
-	
-	<Target Name="Rebuild" DependsOnTargets="Build" />
+  <Target Name="Clean">
+    <RemoveDir Directories="bin" />
+    <RemoveDir Directories="obj" />
+    <RemoveDir Directories="update" />
+    <Delete Files="Update.zip" />
+  </Target>
+  <Target Name="Rebuild" DependsOnTargets="Build" />
 </Project>

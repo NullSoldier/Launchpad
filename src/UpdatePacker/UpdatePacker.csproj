@@ -4,8 +4,8 @@
   
 	<PropertyGroup>
 		<ProjectGuid>{C636A1C0-50BF-4224-AAD4-F2283C8F4558}</ProjectGuid>
-		<SDKDir>$(SolutionDir)resources\spaceport-sdk\</SDKDir>
-		<LaunchpadPath>$(SolutionDir)src\PluginMerger\bin\x86\Debug\LaunchpadMerged.dll</LaunchpadPath>
+		<SDKDir>..\..\resources\spaceport-sdk\</SDKDir>
+		<LaunchpadPath>..\PluginMerger\bin\x86\Debug\LaunchpadMerged.dll</LaunchpadPath>
 		<OutputDir>bin\x86\Debug\</OutputDir>
   </PropertyGroup>
 	

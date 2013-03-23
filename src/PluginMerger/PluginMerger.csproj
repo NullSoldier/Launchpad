@@ -3,7 +3,7 @@
   <UsingTask TaskName="ILMerge.MSBuild.Tasks.ILMerge" AssemblyFile="ILMerge.MSBuild.Tasks.dll" />
   <PropertyGroup>
     <ProjectGuid>{76D77D8B-01D4-48E2-896D-E5E9D217FDCA}</ProjectGuid>
-    <SourceDir>$(SolutionDir)src\Launchpad\bin\x86\Debug\</SourceDir>
+    <SourceDir>..\Launchpad\bin\x86\Debug\</SourceDir>
     <DestDir>bin\x86\Debug\</DestDir>
     <OutputName>LaunchPadMerged.dll</OutputName>
   </PropertyGroup>
