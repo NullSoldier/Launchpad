@@ -27,6 +27,6 @@
     <Message Text="Merging assemblies into $(OutputName)" />
     <ILMerge InputAssemblies="@(MergeAsm)" OutputFile="$(DestDir)$(OutputName)" />
   </Target>
-  <Target Name="Rebuild" DependsOnTargets="Build">
-  </Target>
+	<Target Name="Clean" />
+  <Target Name="Rebuild" DependsOnTargets="Build" />
 </Project>

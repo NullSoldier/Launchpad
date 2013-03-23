@@ -1,23 +1,41 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <UsingTask TaskName="NSISCTask.NSISC" AssemblyFile="NSISCTask.dll" />
-  <PropertyGroup>
+	<UsingTask TaskName="MSBuild.Community.Tasks.Zip" AssemblyFile="MSBuild.Community.Tasks.dll" />
+	<UsingTask TaskName="MSBuild.Community.Tasks.Unzip" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  
+	<PropertyGroup>
     <ProjectGuid>{6F443870-9519-4B25-8C0A-2C3F7C4056CE}</ProjectGuid>
 		<NSISPath>&quot;C:\Program Files (x86)\NSIS\makensis.exe&quot;</NSISPath>
-		<OutDir>bin\x86\Debug\</OutDir>
+		<OutputDir>bin\x86\Debug\</OutputDir>
   </PropertyGroup>
-  <ItemGroup>
-    <installScript Include="InstallerScript.nsi" />
-  </ItemGroup>
+	
+	<ItemGroup>
+		<installScript Include="InstallerScript.nsi" />
+	</ItemGroup>
+	
   <Target Name="Build">
-    <NSISC sourceFile="@(installScript)" NSISEngine="$(NSISPath)" />
-		
 		<ItemGroup>
-			<OutputFile Include="InstallerScript.exe" />
+			<UpdateFile Include="$(SolutionDir)src\UpdatePacker\bin\x86\Debug\Update.zip" />
 		</ItemGroup>
 		
-		<Copy SourceFiles="@(OutputFile)" DestinationFiles="$(OutDir)LaunchpadInstaller.exe" />
-		<Delete Files="@(OutputFile)" />
+		<Message Text="Copying Update package contents to Update/" />
+		<Copy SourceFiles="@(UpdateFile)" DestinationFolder="." />
+		<Unzip
+			ZipFileName="Update.zip"
+			TargetDirectory="." />
+			
+		<Message Text="Building installer" />
+    <NSISC sourceFile="@(installScript)" NSISEngine="$(NSISPath)" />
+		
+		<Message Text="Copying built installer to $(OutputDir)" />
+		<Move SourceFiles="LaunchpadInstaller.exe" DestinationFiles="$(OutputDir)LaunchpadInstaller.exe" />
   </Target>
-  <Target Name="Rebuild" DependsOnTargets="Build" />
+	
+	<Target Name="Clean">
+		<RemoveDir Directories="updates" />
+		<Delete Files="Update.zip" />
+	</Target>
+	
+	<Target Name="Rebuild" DependsOnTargets="Build" />
 </Project>
