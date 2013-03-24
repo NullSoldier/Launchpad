@@ -17,6 +17,5 @@ namespace Launchpad
 		}
 
 		private List<Target> targets = new List<Target>();
-		private string installDir = "";
 	}
 }

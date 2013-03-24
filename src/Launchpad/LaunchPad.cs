@@ -16,20 +16,19 @@ namespace Launchpad
 	{
 		public void Initialize()
 		{
+			AppDomain.CurrentDomain.UnhandledException += (s, e) => {
+				var ex = e.ExceptionObject as Exception;
+				logger.Fatal (ex.Message, ex);
+			};
+
 			EventManager.AddEventHandler (this, EventType.Command);
 			Log4NetHelper.ConfigureFromXML (Resources.log4net);
 			SubDataEvent (ProjectManagerEvents.Project, ProjectChanged);
-			LoadSettings ();
+			LoadSettings();
 
 			sp = new SPWrapper (LaunchpadPaths.SpaceportPath);
 			logger = LogManager.GetLogger (typeof (LaunchPad));
 			spc = new SpaceportController (this, sp, settings, VERSION);
-
-			AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
-			{
-				var ex = (Exception)args.ExceptionObject;
-				logger.Fatal (ex.Message, ex);
-			};
 		}
 
 		public void Dispose()
@@ -40,8 +39,8 @@ namespace Launchpad
 
 		private SPWrapper sp;
 		private SpaceportController spc;
-		private ILog logger;
 		private Settings settings;
+		private ILog logger;
 		private bool isEnabled;
 
 		private readonly Version VERSION = new Version (0, 1);
