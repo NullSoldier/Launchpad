@@ -144,7 +144,7 @@ namespace Launchpad
 
 		private void About_Clicked(object s, EventArgs ev)
 		{
-			Process.Start ("http://getneo.spaceport.io");
+			Process.Start ("http://spaceport.io");
 		}
 	}
 }
