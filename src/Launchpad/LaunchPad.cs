@@ -53,7 +53,7 @@ namespace Launchpad
 		private bool isEnabled;
 
 		private readonly Version VERSION = new Version (0, 1);
-		private const string SETTINGS_PATH = @"Spaceport\Settings.fdb";
+		private const string SETTINGS_PATH = @"Launchpad\Settings.fdb";
 
 		private void ProjectChanged (DataEvent e)
 		{
@@ -99,6 +99,7 @@ namespace Launchpad
 		private void SaveSettings()
 		{
 			var path = Path.Combine (PathHelper.DataDir, SETTINGS_PATH);
+			Directory.CreateDirectory (new FileInfo (path).DirectoryName);
 			ObjectSerializer.Serialize (path, settings);
 		}
 
