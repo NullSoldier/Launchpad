@@ -1,29 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using PluginCore.Helpers;
 
 namespace Launchpad
 {
-	public class LaunchpadPaths
+	public static class LaunchpadPaths
 	{
 		public static string SettingsPath
 		{
-			get { return Path.Combine (PathHelper.DataDir, settings); }
+			get { return Path.Combine (PathHelper.DataDir,
+				"Launchpad\\Settings.fdb"); }
 		}
 
 		public static string SpaceportPath
 		{
-			get { return Path.Combine (PathHelper.ToolDir, spaceport); }
+			get { return Path.Combine (PathHelper.ToolDir,
+				"spaceport-sdk\\sp.exe"); }
 		}
 
 		public static DirectoryInfo CreateParentFolder (String path)
 		{
-			return Directory.CreateDirectory (new FileInfo (path).DirectoryName);
+			string dir = new FileInfo (path).DirectoryName;
+			return Directory.CreateDirectory (dir);
 		}
-
-		private const string settings = @"Launchpad\Settings.fdb";
-		private const string spaceport = @"spaceport-sdk\sp.exe";
 	}
 }
