@@ -21,15 +21,7 @@ namespace Launchpad
 			SubDataEvent (ProjectManagerEvents.Project, ProjectChanged);
 			LoadSettings ();
 
-			//TODO: figure out what to do when this fails
-			if (String.IsNullOrEmpty (settings.SpaceportInstallDir))
-				settings.SpaceportInstallDir = @"C:\Program Files (x86)\Spaceport";
-
-			//TODO: check this exists, and lock it until close
-			var pushPath = Path.Combine (settings.SpaceportInstallDir,
-				Resources.SpaceportPushName);
-
-			sp = new SPWrapper (pushPath);
+			sp = new SPWrapper (LaunchpadPaths.SpaceportPath);
 			logger = LogManager.GetLogger (typeof (LaunchPad));
 			spc = new SpaceportController (this, sp, settings, VERSION);
 
@@ -53,7 +45,6 @@ namespace Launchpad
 		private bool isEnabled;
 
 		private readonly Version VERSION = new Version (0, 1);
-		private const string SETTINGS_PATH = @"Launchpad\Settings.fdb";
 
 		private void ProjectChanged (DataEvent e)
 		{
@@ -86,8 +77,8 @@ namespace Launchpad
 		private void LoadSettings()
 		{
 			settings = new Settings();
-			var path = Path.Combine (PathHelper.DataDir, SETTINGS_PATH);
 
+			var path = LaunchpadPaths.SettingsPath;
 			if (!File.Exists (path)) {
 				SaveSettings();
 			} else {
@@ -98,8 +89,8 @@ namespace Launchpad
 
 		private void SaveSettings()
 		{
-			var path = Path.Combine (PathHelper.DataDir, SETTINGS_PATH);
-			Directory.CreateDirectory (new FileInfo (path).DirectoryName);
+			var path = LaunchpadPaths.SettingsPath;
+			LaunchpadPaths.CreateParentFolder (path);
 			ObjectSerializer.Serialize (path, settings);
 		}
 
