@@ -9,3 +9,4 @@ lib/FlashDevelop/
 resources/spaceport-sdk
 src/InstallerCreator/Update.zip
 src/InstallerCreator/Update
+src/InstallerCreator/LaunchpadInstaller.exe
