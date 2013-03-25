@@ -16,6 +16,20 @@ namespace Launchpad
 			set { targets = value; }
 		}
 
+		public bool DeployDefault
+		{
+			get { return deployDefault; }
+			set { deployDefault = value; }
+		}
+
+		public bool DeploySim
+		{
+			get { return deploySim; }
+			set { deploySim = value; }
+		}
+
 		private List<Target> targets = new List<Target>();
+		private bool deployDefault = true;
+		private bool deploySim = false;
 	}
 }

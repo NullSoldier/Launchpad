@@ -102,20 +102,12 @@ namespace Launchpad
 
 		private void TestProject (DataEvent e)
 		{
-			var s = watcher.Active.Intersect (settings.DeviceTargets);
-			var flashFound = false;
+			e.Handled = !settings.DeployDefault;
 
-			foreach (var t in s) 
-			{
-				if (t.Platform == DevicePlatform.FlashPlayer) {
-					flashFound = true;
-					continue;
-				}
-				sp.RunOnTarget (t, TraceManager.AddAsync);
-			}
-			if (!flashFound) {
-				e.Handled = true;
-			}
+			watcher.Active
+			    .Intersect (settings.DeviceTargets)
+			    .Where (t => t.Platform != DevicePlatform.FlashPlayer)
+			    .ForEach (t => sp.RunOnTarget (t, TraceManager.AddAsync));
 		}
 
 		private void SelectTargets_Clicked (object s, EventArgs ev)
