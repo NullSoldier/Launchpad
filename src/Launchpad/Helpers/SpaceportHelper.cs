@@ -6,7 +6,7 @@ using UpdaterCore;
 
 namespace Launchpad.Helpers
 {
-	public static class SPHelper
+	public static class SpaceportHelper
 	{
 		public static Process RunOnTarget (this SPWrapper self, Target t,
 			Action<string> output, 
