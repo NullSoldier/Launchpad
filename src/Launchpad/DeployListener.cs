@@ -32,9 +32,10 @@ namespace Launchpad
 		private void startDeploy()
 		{
 			var targets = watcher.Active
-			    .Intersect (settings.DeviceTargets)
-			    .Where (t => t.Platform != DevicePlatform.FlashPlayer)
-			    .ToArray();
+				.Intersect (settings.DeviceTargets)
+				.ConcatIf (settings.DeploySim, new Target ("sim", DevicePlatform.Sim))
+				.Where (t => t.Platform != DevicePlatform.FlashPlayer)
+				.ToArray();
 
 			if (targets.Length > 0) {
 				startBuild (() => startPush (targets));
@@ -56,8 +57,12 @@ namespace Launchpad
 					}
 					pushes.Remove (process.Id);
 				});
-			pushes.Add (p.Id, p);
-			TraceHelper.Trace ("Deploy to devices " + targets.Count() + " process ("+p.Id+") started", TraceType.ProcessStart);
+			if (p != null) {
+				pushes.Add (p.Id, p);
+				TraceHelper.Trace ("Deploy to devices " + targets.Count() + " process ("+p.Id+") started", TraceType.ProcessStart);
+			} else {
+				TraceHelper.TraceError ("Push to devices failed");
+			}
 		}
 
 		private void startBuild (Action finished)

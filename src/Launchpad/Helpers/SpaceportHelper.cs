@@ -41,7 +41,6 @@ namespace Launchpad.Helpers
 				return self.Push (ts, output, errors, exited);
 			else if (pushable.Length > 0 && sim != null) {
 				errors ("Failed to push: Pushing to both a SIM and a phone does not currently work.");
-				exited (1, null);
 				return null;
 			}
 			
