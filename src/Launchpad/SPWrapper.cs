@@ -34,8 +34,21 @@ namespace Launchpad
 			Action<string> errors,
 			Action<int, Process> exited)
 		{
-			Check.IsPushable (t.Platform);
-			return StartProcess ("push " + t.ID, output, output, exited);
+			return Push (new [] {t}, output, errors, exited);
+		}
+
+		public Process Push (IEnumerable<Target> ts,
+			Action<string> output,
+			Action<string> errors,
+			Action<int, Process> exited)
+		{
+			StringBuilder builder = new StringBuilder();
+			foreach (var t in ts) {
+				Check.IsPushable (t.Platform);
+				builder.Append (" ");
+				builder.Append (t.ID);
+			}
+			return StartProcess ("push " + builder, output, errors, exited);
 		}
 
 		public Process Build (
