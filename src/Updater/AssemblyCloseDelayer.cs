@@ -13,7 +13,7 @@ namespace Updater
 {
 	public static class AssemblyCloseDelayer
 	{
-		public static void WaitForAssembliesAsync (IEnumerableHelper.Action processesClosed, params string[] assemblyPaths)
+		public static void WaitForAssembliesAsync (Action processesClosed, params string[] assemblyPaths)
 		{
 			var thread = new Thread(() =>
 			{

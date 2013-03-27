@@ -13,7 +13,7 @@ namespace Launchpad
 {
 	public partial class frmTargets : Form, IObserver<Target>
 	{
-		public frmTargets (SPDeviceWatcher watcher, Settings settings)
+		public frmTargets (DeviceWatcher watcher, Settings settings)
 		{
 			InitializeComponent();
 
@@ -22,7 +22,7 @@ namespace Launchpad
 		}
 
 		private Settings settings;
-		private SPDeviceWatcher watcher;
+		private DeviceWatcher watcher;
 		private IDisposable unsub;
 
 		private void LoadingForm (object s, EventArgs e)
@@ -34,8 +34,16 @@ namespace Launchpad
 			images.Images.Add (DevicePlatform.Android,		Resources.androidIcon);
 			listTargets.SmallImageList = images;
 			
+			addBuiltInTargets();
+
+			// Subscribe to device added/removed notifications
 			unsub = watcher.Subscribe (this);
-			listTargets.ItemChecked += DeviceChecked;
+			listTargets.ItemChecked += onTargetChecked;
+		}
+
+		private void onTargetChecked (object s, ItemCheckedEventArgs e)
+		{
+			setTargetEnabled (e.Item.Tag as Target, e.Item.Checked);
 		}
 
 		private void ClosingForm (object s, FormClosingEventArgs e)
@@ -43,33 +51,15 @@ namespace Launchpad
 			unsub.Dispose();
 		}
 
-		private void DeviceChecked (object sender, ItemCheckedEventArgs e)
+		private void btnOk_Click(object sender, EventArgs e)
 		{
-			var t = (Target) e.Item.Tag;
-			Check.IsNull (t);
-
-			if (e.Item.Checked) {
-				settings.DeviceTargets.Add (t);
-			} else {
-				settings.DeviceTargets.Remove (t);
-			}
+			Close ();
 		}
 
 		public void NotifyAdded (Target t)
 		{
 			Invoke ((MethodInvoker) (() =>
-			{
-				var i = new ListViewItem (new[]
-				{
-					t.Name,
-					t.Platform.GetString()
-				});
-				i.Name = t.ID;
-				i.Tag = t;
-				i.Checked = settings.DeviceTargets.Contains (t);
-				i.ImageKey = t.Platform.GetString();
-				listTargets.Items.Add (i);
-			}));
+				addTargetItem (t, settings.DeviceTargets.Contains (t))));
 		}
 
 		public void NotifyRemoved (Target target)
@@ -88,9 +78,43 @@ namespace Launchpad
 			throw new NotImplementedException ();
 		}
 
-		private void btnOk_Click(object sender, EventArgs e)
+		private void setTargetEnabled(Target t, bool enabled)
 		{
-			Close();
+			switch (t.Platform)
+			{
+				case DevicePlatform.FlashPlayer:
+					settings.DeployDefault = enabled;
+					break;
+				case DevicePlatform.Sim:
+					settings.DeploySim = enabled;
+					break;
+				default:
+					if (enabled) { settings.DeviceTargets.Add (t); }
+					else { settings.DeviceTargets.Remove (t); }
+					break;
+			}
+		}
+
+		private void addTargetItem (Target t, bool isChecked)
+		{
+			var i = new ListViewItem (new[] {
+				t.Name,
+				t.Platform.GetString()
+			});
+			i.Name = t.ID;
+			i.Tag = t;
+			i.ImageKey = t.Platform.GetString();
+			i.Checked = isChecked;
+			listTargets.Items.Add (i);
+		}
+
+		private void addBuiltInTargets()
+		{
+			var f = new Target ("Flash Player", DevicePlatform.FlashPlayer);
+			addTargetItem (f, settings.DeployDefault);
+
+			var s = new Target ("sim", "Spaceport Simulator", DevicePlatform.Sim);
+			addTargetItem (s, settings.DeploySim);
 		}
 	}
 }

@@ -22,13 +22,13 @@ namespace Launchpad
 		: IDisposable
 	{
 		public SpaceportController (
-			EventRouter events, SPWrapper sp,
-			Settings settings, Version version)
+			EventRouter events, Settings settings,
+			DeviceWatcher watcher, Version version)
 		{
-			this.sp = sp;
 			this.settings = settings;
 			this.version = version;
 			this.events = events;
+			this.watcher = watcher;
 			this.updater = new UpdaterHook();
 
 			Initialize();
@@ -40,10 +40,9 @@ namespace Launchpad
 		}
 
 		private Settings settings;
-		private SPWrapper sp;
 		private EventRouter events;
+		private DeviceWatcher watcher;
 		private SpaceportMenu menu;
-		private SPDeviceWatcher watcher;
 		private Image icon;
 		private Control form;
 		private ILog logger;
@@ -67,9 +66,6 @@ namespace Launchpad
 			menu.UpdateNow.Click += UpdateSpaceport_Clicked;
 			menu.CheckUpdates.CheckedChanged += CheckUpdates_CheckChanged;
 
-			watcher = new SPDeviceWatcher (sp);
-			watcher.Start();
-
 			// Subscribe to updater hooks for the UI
 			updater.UpdateRunner.CheckUpdateStarted += (s, ev) =>
 				logger.Info ("Spaceport updater runner started");
@@ -87,27 +83,40 @@ namespace Launchpad
 				updater.StartUpdateRunner (version);
 		}
 
-
 		private void PluginEnabled (DataEvent e)
 		{
 			events.SubDataEvent (ProjectManagerEvents.TestProject, TestProject);
+			events.SubDataEvent (ProjectManagerEvents.BuildProject, BuildProject);
 			watcher.Start();
 		}
 
 		private void PluginDisabled (DataEvent e)
 		{
 			events.UnsubDataEvent (ProjectManagerEvents.TestProject, TestProject);
+			events.UnsubDataEvent (ProjectManagerEvents.BuildProject, BuildProject);
 			watcher.Stop ();
 		}
 
 		private void TestProject (DataEvent e)
 		{
-			e.Handled = !settings.DeployDefault;
+			var clearEvent = new DataEvent (EventType.Command, "ResultsPanel.ClearResults", null);
+			var testEvent = new DataEvent (EventType.Command, SPPluginEvents.StartDeploy, null);
+			EventManager.DispatchEvent (this, clearEvent);
+			EventManager.DispatchEvent (this, testEvent);
 
-			watcher.Active
-			    .Intersect (settings.DeviceTargets)
-			    .Where (t => t.Platform != DevicePlatform.FlashPlayer)
-			    .ForEach (t => sp.RunOnTarget (t, TraceManager.AddAsync));
+			if (!settings.DeployDefault)
+				e.Handled = true;
+		}
+
+		private void BuildProject (DataEvent e)
+		{
+			var clearEvent = new DataEvent (EventType.Command, "ResultsPanel.ClearResults", null);
+			var buildEvent = new DataEvent (EventType.Command, SPPluginEvents.StartBuild, null);
+			EventManager.DispatchEvent (this, clearEvent);
+			EventManager.DispatchEvent (this, buildEvent);
+
+			if (!settings.DeployDefault)
+				e.Handled = true;
 		}
 
 		private void SelectTargets_Clicked (object s, EventArgs ev)
@@ -134,9 +143,14 @@ namespace Launchpad
 			}
 		}
 
-		private void About_Clicked(object s, EventArgs ev)
+		private void About_Clicked (object s, EventArgs ev)
 		{
 			Process.Start ("http://spaceport.io");
+		}
+
+		private void onOutput (string o)
+		{
+			TraceManager.AddAsync ("Spaceport: " + o);
 		}
 	}
 }

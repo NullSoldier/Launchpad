@@ -48,17 +48,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeployListener.cs" />
+    <Compile Include="DiscoveryStatus.cs" />
     <Compile Include="EventRouter.cs" />
     <Compile Include="Helpers\Check.cs" />
     <Compile Include="Helpers\SPHelper.cs" />
     <Compile Include="Helpers\TargetHelper.cs" />
+    <Compile Include="Helpers\TraceHelper.cs" />
     <Compile Include="LaunchpadPaths.cs" />
     <Compile Include="Observable\IObservable.cs" />
     <Compile Include="Observable\IObserver.cs" />
     <Compile Include="Observable\Unsubscriber.cs" />
     <Compile Include="SPPluginEvents.cs" />
     <Compile Include="SPWrapper.cs" />
-    <Compile Include="SPDeviceWatcher.cs" />
+    <Compile Include="DeviceWatcher.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Forms\frmTargets.cs">
       <SubType>Form</SubType>

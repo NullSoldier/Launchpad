@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading;
 using UpdaterCore;
 using PluginCore.Managers;
 using Launchpad.Helpers;
@@ -19,60 +21,55 @@ namespace Launchpad
 
 		public string ProjectDirectory { private get; set; }
 
-		public Process Sim (Action<string> output)
+		public Process Sim (
+			Action<string> output, 
+			Action<string> errors,
+			Action<int, Process> exited)
 		{
-			TraceManager.AddAsync ("Running on simulator");
-
-			var process = CreateProcess (/*cmd*/"sim", /*args*/string.Empty);
-			process.OutputDataReceived += (s, ev) => output (ev.Data);
-			process.Start ();
-			process.BeginOutputReadLine ();
-			return process;
+			return StartProcess ("sim", output, errors, exited);
 		}
 
-		public Process Push (Target t, Action<string> output)
+		public Process Push (Target t,
+			Action<string> output,
+			Action<string> errors,
+			Action<int, Process> exited)
 		{
-			if (t.Platform != DevicePlatform.Android
-				&& t.Platform != DevicePlatform.iOS)
-			{
-				throw new ArgumentOutOfRangeException ("t",
-					"PushToDevice only supports devices on wifi");
-			}
-
-			TraceManager.AddAsync (string.Format ("Running on device {0} ({1})",
-				t.Name, t.Platform.GetString ()));
-
-			var process = CreateProcess ("push", t.ID);
-			process.OutputDataReceived += (s, ev) => output (ev.Data);
-			process.Start ();
-			process.BeginOutputReadLine ();
-			return process;
+			Check.IsPushable (t.Platform);
+			return StartProcess ("push " + t.ID, output, output, exited);
 		}
 
-		public void GetDevicesNames (Action<IEnumerable<Target>> complete)
+		public Process Build (
+			Action<string> output,
+			Action<string> errors,
+			Action<int, Process> exited)
 		{
-			var process = CreateProcess (/*cmd*/"push", /*args*/"");
-			process.Start();
+			return StartProcess ("build", output, errors, exited);
+		}
 
-			string data = process.StandardOutput.ReadToEnd();
-
-			IEnumerable<Target> targets = data.Split (new [] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries)
-				.Select (i => new Target (i, DevicePlatform.iOS))
-				.Concat (new [] {
-					new Target ("sim", "Simulator", DevicePlatform.Sim),
-					new Target ("flash", "FlashPlayer", DevicePlatform.FlashPlayer)
-				});
-
-			complete (targets);
+		public Process StartGetDevicesNames (
+			Action<Target, DiscoveryStatus> found)
+		{
+			var parseDevice = new Action<string> (o => {
+				if (o == null) {
+					return;
+				}
+				var target = new Target (o.Substring (1),
+					DevicePlatform.iOS);
+				var status = o.StartsWith ("+") ?
+					DiscoveryStatus.FOUND :
+					DiscoveryStatus.LOST;
+				found (target, status);
+			});
+			return StartProcess ("push --list", parseDevice, null, null);
 		}
 
 		private readonly FileInfo sp;
 
-		private Process CreateProcess(string cmd, string args)
+		private Process StartProcess (string cmd,
+			Action<string> output,
+			Action<string> errors,
+			Action<int, Process> exited)
 		{
-			var fullArgs = cmd + " "
-				+ args + " ";
-
 			var start = new ProcessStartInfo
 			{
 				FileName = sp.FullName,
@@ -80,10 +77,24 @@ namespace Launchpad
 				CreateNoWindow = true,
 				UseShellExecute = false,
 				RedirectStandardOutput = true,
-				Arguments = fullArgs
+				RedirectStandardError = true,
+				Arguments = cmd
 			};
 			
-			var process = new Process {StartInfo = start};
+			var process = new Process();
+			process.StartInfo = start;
+			process.EnableRaisingEvents = true;
+
+			if (output != null)
+				process.OutputDataReceived += (s, ev) => output (ev.Data);
+			if (errors != null)
+				process.ErrorDataReceived += (s, ev) => errors (ev.Data);
+			if (exited != null)
+				process.Exited += (s, ev) => exited (((Process)s).ExitCode, (Process)s);
+
+			process.Start ();
+			process.BeginOutputReadLine();
+			process.BeginErrorReadLine();
 			return process;
 		}
 	}

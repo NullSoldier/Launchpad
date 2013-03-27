@@ -43,7 +43,7 @@ namespace Updater
 			LogMessage ("Waiting for FlashDevelop to close...");
 
 			AssemblyCloseDelayer.WaitForAssembliesAsync (() =>
-				Invoke ((IEnumerableHelper.Action)(() => {
+				Invoke ((Action)(() => {
 					inLicense.Visible = true;
 					btnAgree.Visible = true;
 					inConsole.Visible = false;

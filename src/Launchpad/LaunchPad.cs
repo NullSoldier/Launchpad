@@ -26,9 +26,11 @@ namespace Launchpad
 			SubDataEvent (ProjectManagerEvents.Project, ProjectChanged);
 			LoadSettings();
 
-			sp = new SPWrapper (LaunchpadPaths.SpaceportPath);
 			logger = LogManager.GetLogger (typeof (LaunchPad));
-			spc = new SpaceportController (this, sp, settings, VERSION);
+			sp = new SPWrapper (LaunchpadPaths.SpaceportPath);
+			watcher = new DeviceWatcher (sp);
+			spc = new SpaceportController (this, settings, watcher, VERSION);
+			deployer = new DeployListener (this, sp, settings, watcher);
 		}
 
 		public void Dispose()
@@ -39,7 +41,9 @@ namespace Launchpad
 
 		private SPWrapper sp;
 		private SpaceportController spc;
+		private DeviceWatcher watcher;
 		private Settings settings;
+		private DeployListener deployer;
 		private ILog logger;
 		private bool isEnabled;
 

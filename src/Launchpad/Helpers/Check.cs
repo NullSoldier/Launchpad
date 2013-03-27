@@ -23,5 +23,18 @@ namespace Launchpad.Helpers
 			if (value == null)
 				throw new NoNullAllowedException ("Value cannot be null");
 		}
+
+		public static void IsPushable (DevicePlatform p)
+		{
+			switch (p)
+			{
+				case DevicePlatform.Android:
+				case DevicePlatform.iOS:
+					return;
+				default:
+					var msg = "You can only push to either Android or iOS";
+					throw new ArgumentOutOfRangeException (msg);
+			}
+		}
 	}
 }
