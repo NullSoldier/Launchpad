@@ -103,6 +103,23 @@ namespace UpdaterCore
 			}
 		}
 
+		public static IEnumerable<TSource> ConcatIf<TSource> (this IEnumerable<TSource> a,
+			bool predicate,
+			TSource b)
+		{
+			if (predicate)
+				return a.Concat (b);
+			else
+				return a;
+		}
+ 
+		public static IEnumerable<TSource> Concat<TSource> (
+			this IEnumerable<TSource> a,
+			TSource b)
+		{
+			return Concat (a, new [] {b});
+		}
+
 		/// <summary>
 		/// Concatenates two sequences.
 		/// </summary>
