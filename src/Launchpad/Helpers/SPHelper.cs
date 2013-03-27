@@ -23,5 +23,35 @@ namespace Launchpad.Helpers
 					throw new ArgumentOutOfRangeException ("t", "Can't push to this platform");
 			}
 		}
+
+		public static Process RunOnTargets (this SPWrapper self,
+			IEnumerable<Target> ts,
+			Action<string> output, 
+			Action<string> errors,
+			Action<int, Process> exited)
+		{
+			var sim = ts.FirstOrDefault (t => t.Platform == DevicePlatform.Sim);
+			var pushable = ts
+				.Where (isPushable)
+				.ToArray();
+
+			if (pushable.Length == 0 && sim != null)
+				return self.Sim (output, errors, exited);
+			else if (pushable.Length > 0 && sim == null)
+				return self.Push (ts, output, errors, exited);
+			else if (pushable.Length > 0 && sim != null) {
+				errors ("Failed to push: Pushing to both a SIM and a phone does not currently work.");
+				exited (1, null);
+				return null;
+			}
+			
+			throw new Exception ("Cannot run on no targets");
+		}
+
+		private static bool isPushable (Target t)
+		{
+			return t.Platform == DevicePlatform.iOS
+				|| t.Platform == DevicePlatform.Android;
+		}
 	}
 }

@@ -47,20 +47,17 @@ namespace Launchpad
 		{
 			cancelPushes();
 
-			foreach (var t in targets) {
-				var p = sp.RunOnTarget (t,
-					TraceHelper.TraceInfo,
-					TraceHelper.TraceError,
-					(exitCode, process) => {
-						if (exitCode != 0) {
-							TraceHelper.TraceError ("Push process ("+process.Id+") terminated for "
-								+ t.Name + " with exit code " + exitCode);
-						}
-						pushes.Remove (process.Id);
-					});
-				pushes.Add (p.Id, p);
-				TraceHelper.Trace ("Deploy to " + t.Name + " process ("+p.Id+") started", TraceType.ProcessStart);
-			}
+			var p = sp.RunOnTargets (targets,
+				TraceHelper.TraceInfo,
+				TraceHelper.TraceError,
+				(exitCode, process) => {
+					if (exitCode != 0) {
+						TraceHelper.TraceError ("Push process ("+process.Id+") terminated for with exit code " + exitCode);
+					}
+					pushes.Remove (process.Id);
+				});
+			pushes.Add (p.Id, p);
+			TraceHelper.Trace ("Deploy to devices " + targets.Count() + " process ("+p.Id+") started", TraceType.ProcessStart);
 		}
 
 		private void startBuild (Action finished)
