@@ -112,9 +112,18 @@ namespace Launchpad
 			if (o == null)
 				return;
 
-			var traceType = errorRegex.IsMatch(o) 
-				? TraceType.Error : TraceType.Info;
-			TraceHelper.Trace (o, traceType);
+			var match = errorRegex.Match (o);
+			if (match.Success) {
+				var formatted = String.Format ("{0}({1}): col: {2} {3}:{4}",
+					match.Groups["file"],
+					match.Groups["line"],
+					match.Groups["col"],
+					match.Groups["type"],
+					match.Groups["msg"]);
+				TraceHelper.TraceError (formatted);
+			} else {
+				TraceHelper.TraceInfo (o);
+			}
 		}
 
 		private void cancelBuild()
