@@ -20,7 +20,7 @@ namespace Launchpad
 			this.watcher = watcher;
 			
 			events.SubDataEvent (SPPluginEvents.StartDeploy, de => startDeploy());
-			events.SubDataEvent (SPPluginEvents.StartBuild, de => startBuild (null));
+			events.SubDataEvent (SPPluginEvents.StartBuild, de => startBuild());
 		}
 
 		private readonly DeviceWatcher watcher;
@@ -38,7 +38,7 @@ namespace Launchpad
 				.ToArray();
 
 			if (targets.Length > 0) {
-				startBuild (() => startPush (targets));
+				buildProject (() => startPush (targets));
 			} else {
 				TraceHelper.TraceError ("Failed to start spaceport app, no devices to push to found.");
 			}
@@ -65,7 +65,17 @@ namespace Launchpad
 			}
 		}
 
-		private void startBuild (Action finished)
+		private void startBuild ()
+		{
+			var target = this.watcher.Active
+				.Intersect (this.settings.DeviceTargets)
+				.FirstOrDefault(t => t.Platform != DevicePlatform.FlashPlayer);
+
+			if (target != null || settings.DeploySim)
+				buildProject (null);
+		}
+
+		private void buildProject (Action finished)
 		{
 			cancelBuild();
 			
