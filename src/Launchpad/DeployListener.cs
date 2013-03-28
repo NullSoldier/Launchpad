@@ -49,7 +49,7 @@ namespace Launchpad
 			cancelPushes();
 
 			var p = sp.RunOnTargets (targets,
-				TraceHelper.TraceInfo,
+				processPushOutput,
 				TraceHelper.TraceError,
 				(exitCode, process) => {
 					if (exitCode != 0) {
@@ -91,6 +91,11 @@ namespace Launchpad
 		}
 
 		private Regex errorRegex = new Regex ("(?<file>.*?):(?<line>[0-9]*):(?<col>[0-9]*):\\s?(?<type>(Error)?(Warning)?):(?<msg>.*\t?)", RegexOptions.Compiled);
+		private void processPushOutput (String o)
+		{
+			if (o != null && !o.StartsWith ("Javascript:"))
+				TraceHelper.TraceInfo (o);
+		}
 
 		private void processBuildOutput (String o)
 		{
