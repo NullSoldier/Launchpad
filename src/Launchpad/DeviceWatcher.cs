@@ -21,9 +21,6 @@ namespace Launchpad
 			timer = new Timer (2000);
 			timer.AutoReset = true;
 			timer.Elapsed += onTimerElapsed;
-
-			//TODO: hack until device discovery works
-			processDevice (new Target ("Navi", DevicePlatform.iOS), DiscoveryStatus.FOUND);
 		}
 
 		public readonly List<Target> Active = new List<Target>();
