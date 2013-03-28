@@ -23,6 +23,7 @@ namespace Launchpad
 			events.SubDataEvent (SPPluginEvents.StartBuild, de => startBuild());
 		}
 
+		private readonly Regex errorRegex = new Regex ("(?<file>.*?):(?<line>[0-9]*):(?<col>[0-9]*):\\s?(?<type>(Error)?(Warning)?):(?<msg>.*\t?)", RegexOptions.Compiled);
 		private readonly DeviceWatcher watcher;
 		private readonly Settings settings;
 		private readonly SPWrapper sp;
@@ -57,6 +58,7 @@ namespace Launchpad
 					}
 					pushes.Remove (process.Id);
 				});
+			// Did it start successfully?
 			if (p != null) {
 				pushes.Add (p.Id, p);
 				TraceHelper.Trace ("Deploy to devices " + targets.Count() + " process ("+p.Id+") started", TraceType.ProcessStart);
@@ -91,6 +93,7 @@ namespace Launchpad
 		{
 			switch (exitCode) {
 				case 0:
+					TraceHelper.TraceInfo ("(sp)Build succeeded");
 					if (success != null)
 						success();
 					break;
@@ -100,11 +103,10 @@ namespace Launchpad
 			}
 		}
 
-		private Regex errorRegex = new Regex ("(?<file>.*?):(?<line>[0-9]*):(?<col>[0-9]*):\\s?(?<type>(Error)?(Warning)?):(?<msg>.*\t?)", RegexOptions.Compiled);
 		private void processPushOutput (String o)
 		{
 			if (o != null && !o.StartsWith ("Javascript:"))
-				TraceHelper.TraceInfo (o);
+				TraceHelper.Trace (o, TraceType.Debug);
 		}
 
 		private void processBuildOutput (String o)
