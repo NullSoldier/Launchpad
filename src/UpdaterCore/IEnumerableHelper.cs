@@ -16,6 +16,20 @@ namespace UpdaterCore
 
 	public static class IEnumerableHelper
 	{
+		public static Dictionary<TKey, TValue> ToDictionary<T, TKey, TValue> (
+			this IEnumerable<T> self,
+			Func<T, TKey> keyPredicate,
+			Func<T, TValue> valuePredicate)
+		{
+			var result = new Dictionary<TKey, TValue>();
+			foreach (var value in self) {
+				result.Add (
+					keyPredicate (value),
+					valuePredicate (value));
+			}
+			return result;
+		}
+ 
 		public static void ForEach<T> (
 			this IEnumerable<T> self,
 			Action<T> p)
@@ -46,6 +60,12 @@ namespace UpdaterCore
 				count++;
 			}
 			return count;
+		}
+
+		public static T FirstOrDefault<T> (
+			this IEnumerable<T> self)
+		{
+			return FirstOrDefault (self, i => true);
 		}
 
 		public static T FirstOrDefault<T> (
