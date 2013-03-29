@@ -53,6 +53,7 @@
     <Compile Include="EventRouter.cs" />
     <Compile Include="Helpers\Check.cs" />
     <Compile Include="Helpers\SpaceportHelper.cs" />
+    <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="Helpers\TargetHelper.cs" />
     <Compile Include="Helpers\TraceHelper.cs" />
     <Compile Include="LaunchpadPaths.cs" />
