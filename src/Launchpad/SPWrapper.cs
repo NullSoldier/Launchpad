@@ -19,7 +19,25 @@ namespace Launchpad
 			sp = new FileInfo (path);
 		}
 
-		public string ProjectDirectory { private get; set; }
+		public string ProjectDirectory { get; set; }
+
+		public string GetFirstOutput (string cmd)
+		{
+			var lines = GetOutput (cmd);
+			return lines == null ? null
+				: lines.FirstOrDefault();
+		}
+
+		public IEnumerable<string> GetOutput (string cmd)
+		{
+			var p = StartProcess (cmd, null, null, null);
+			p.WaitForExit();
+			if (p.ExitCode != SUCCESS_CODE)
+				return null;
+			return p.StandardOutput
+				.ReadToEnd()
+				.Split (Environment.NewLine);
+		}
 
 		public Process Sim (
 			Action<string> output, 
@@ -77,6 +95,7 @@ namespace Launchpad
 		}
 
 		private readonly FileInfo sp;
+		private const int SUCCESS_CODE = 0;
 
 		private Process StartProcess (string cmd,
 			Action<string> output,
@@ -97,17 +116,19 @@ namespace Launchpad
 			var process = new Process();
 			process.StartInfo = start;
 			process.EnableRaisingEvents = true;
-
-			if (output != null)
-				process.OutputDataReceived += (s, ev) => output (ev.Data);
-			if (errors != null)
-				process.ErrorDataReceived += (s, ev) => errors (ev.Data);
-			if (exited != null)
-				process.Exited += (s, ev) => exited (((Process)s).ExitCode, (Process)s);
-
 			process.Start ();
-			process.BeginOutputReadLine();
-			process.BeginErrorReadLine();
+
+			if (exited != null) {
+				process.Exited += (s, ev) => exited (((Process)s).ExitCode, (Process)s);
+			}
+			if (output != null) {
+				process.OutputDataReceived += (s, ev) => output (ev.Data);
+				process.BeginOutputReadLine();
+			}
+			if (errors != null) {
+				process.ErrorDataReceived += (s, ev) => errors (ev.Data);
+				process.BeginErrorReadLine();
+			}
 			return process;
 		}
 	}
