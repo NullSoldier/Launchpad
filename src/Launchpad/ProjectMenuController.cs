@@ -67,7 +67,8 @@ namespace Launchpad
 
 		private void ProjectSettings_Clicked (object s, EventArgs ev)
 		{
-			
+			var frmProperties = new frmProject (sp);
+			frmProperties.ShowDialog (form);
 		}
 	}
 }
