@@ -60,6 +60,8 @@
     <Compile Include="Observable\IObservable.cs" />
     <Compile Include="Observable\IObserver.cs" />
     <Compile Include="Observable\Unsubscriber.cs" />
+    <Compile Include="ProjectMenuController.cs" />
+    <Compile Include="ProjectMenu.cs" />
     <Compile Include="SPPluginEvents.cs" />
     <Compile Include="SPWrapper.cs" />
     <Compile Include="DeviceWatcher.cs" />

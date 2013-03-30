@@ -30,6 +30,7 @@ namespace Launchpad
 			sp = new SPWrapper (LaunchpadPaths.SpaceportPath);
 			watcher = new DeviceWatcher (sp);
 			spc = new SpaceportController (this, settings, watcher, VERSION);
+			pc = new ProjectMenuController (this, sp, settings);
 			deployer = new DeployListener (this, sp, settings, watcher);
 		}
 
@@ -41,6 +42,7 @@ namespace Launchpad
 
 		private SPWrapper sp;
 		private SpaceportController spc;
+		private ProjectMenuController pc;
 		private DeviceWatcher watcher;
 		private Settings settings;
 		private DeployListener deployer;
