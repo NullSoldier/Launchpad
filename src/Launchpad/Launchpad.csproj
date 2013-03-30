@@ -48,6 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\DeviceInfo.cs" />
+    <Compile Include="Config\UISettings.cs" />
     <Compile Include="DeployListener.cs" />
     <Compile Include="DiscoveryStatus.cs" />
     <Compile Include="EventRouter.cs" />
