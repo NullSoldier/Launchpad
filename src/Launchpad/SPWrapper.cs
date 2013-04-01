@@ -21,24 +21,6 @@ namespace Launchpad
 
 		public string ProjectDirectory { get; set; }
 
-		public string GetFirstOutput (string cmd)
-		{
-			var lines = GetOutput (cmd);
-			return lines == null ? null
-				: lines.FirstOrDefault();
-		}
-
-		public IEnumerable<string> GetOutput (string cmd)
-		{
-			var p = StartProcess (cmd, null, null, null);
-			p.WaitForExit();
-			if (p.ExitCode != SUCCESS_CODE)
-				return null;
-			return p.StandardOutput
-				.ReadToEnd()
-				.Split (Environment.NewLine);
-		}
-
 		public Process Sim (
 			Action<string> output, 
 			Action<string> errors,
@@ -92,6 +74,24 @@ namespace Launchpad
 				found (target, status);
 			});
 			return StartProcess ("push --list", parseDevice, null, null);
+		}
+
+		public string GetFirstOutput (string cmd)
+		{
+			var lines = GetOutput (cmd);
+			return lines == null ? null
+				: lines.FirstOrDefault();
+		}
+
+		public IEnumerable<string> GetOutput (string cmd)
+		{
+			var p = StartProcess (cmd, null, null, null);
+			p.WaitForExit();
+			if (p.ExitCode != SUCCESS_CODE)
+				return null;
+			return p.StandardOutput
+				.ReadToEnd()
+				.Split (Environment.NewLine);
 		}
 
 		private readonly FileInfo sp;
