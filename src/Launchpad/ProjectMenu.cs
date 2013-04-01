@@ -14,15 +14,27 @@ namespace Launchpad
 		public ProjectMenuEx (ProjectMenu projectMenu)
 		{
 			Check.ArgNull (projectMenu, "projectMenu");
+			this.projectMenu = projectMenu;
+
 			AppProperties = new ToolStripMenuItem ("Spaceport App Properties");
 			AppProperties.Image = Image.FromHbitmap (Resources.spaceportIcon.GetHbitmap());
-			items.Add (AppProperties);
 
-			var propertiesIndex = projectMenu.DropDownItems.IndexOf (projectMenu.Properties);
-			projectMenu.DropDownItems.Insert (propertiesIndex, AppProperties);
+			InstallToiOS = new ToolStripMenuItem ("Install to iOS");
+			InstallToAndroid = new ToolStripMenuItem ("Install To Android");
+
+			// Expand to show iOS and Android
+			var install = new ToolStripDropDownButton();
+			install.Text = "Install Project";
+			install.DropDownItems.Add (InstallToiOS);
+			install.DropDownItems.Add (InstallToAndroid);
+			
+			addItemAfter (install, projectMenu.CleanProject);
+			addItemBefore (AppProperties, projectMenu.Properties);
 		}
 
 		public readonly ToolStripMenuItem AppProperties;
+		public readonly ToolStripMenuItem InstallToiOS;
+		public readonly ToolStripMenuItem InstallToAndroid;
 
 		public bool ItemsEnabled
 		{
@@ -32,6 +44,23 @@ namespace Launchpad
 			}
 		}
 
+		private readonly ProjectMenu projectMenu;
 		private List<ToolStripItem> items = new List<ToolStripItem>();
+
+		private void addItemBefore (ToolStripItem toAdd, ToolStripMenuItem before)
+		{
+			addItem (toAdd, projectMenu.DropDownItems.IndexOf (before));
+		}
+
+		private void addItemAfter (ToolStripItem toAdd, ToolStripMenuItem after)
+		{
+			addItem (toAdd, projectMenu.DropDownItems.IndexOf (after)+1);
+		}
+
+		private void addItem (ToolStripItem toAdd, int index)
+		{
+			projectMenu.DropDownItems.Insert (index, toAdd);
+			items.Add (toAdd);
+		}
 	}
 }
