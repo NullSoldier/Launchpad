@@ -76,6 +76,23 @@ namespace Launchpad
 			return StartProcess ("push --list", parseDevice, null, null);
 		}
 
+		public Process InstallToDevice (
+			DevicePlatform platform,
+			Action<string> output,
+			Action<string> errors,
+			Action<int, Process> exited)
+		{
+			string device;
+			switch  (platform) {
+				case DevicePlatform.iOS: device = "ios"; break;
+				case DevicePlatform.Android: device = "android"; break;
+				default: throw new ArgumentOutOfRangeException ("platform");
+			}
+			var p = StartProcess ("install " + device, output, errors, exited);
+			p.StandardInput.Close();
+			return p;
+		}
+
 		public string GetFirstOutput (string cmd)
 		{
 			var lines = GetOutput (cmd);
