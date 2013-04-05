@@ -60,7 +60,7 @@ namespace Launchpad
 		private void onExited (int code, Process p)
 		{
 			started = false;
-			form.FinishInstall ();
+			form.FinishInstall();
 			
 			if (code != 0) {
 				form.LogFatal ("Install to device failed with exit code "
