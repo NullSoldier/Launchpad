@@ -63,9 +63,6 @@ namespace Launchpad
 			form.FinishInstall ();
 			
 			if (code != 0) {
-				while (lastError == null)
-					Thread.Sleep (1);
-
 				form.LogFatal ("Install to device failed with exit code "
 					+ code
 					+ Environment.NewLine
