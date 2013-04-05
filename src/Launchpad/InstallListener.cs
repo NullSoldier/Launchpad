@@ -34,6 +34,7 @@ namespace Launchpad
 		private Process installProcess;
 		private frmInstall form;
 		private string lastError;
+		private DevicePlatform installToPlatform;
 
 		private void onInstall (DataEvent de)
 		{
@@ -62,11 +63,12 @@ namespace Launchpad
 			started = false;
 			form.FinishInstall();
 			
-			if (code != 0) {
-				form.LogFatal ("Install to device failed with exit code "
-					+ code
-					+ Environment.NewLine
-					+ lastError);
+			if (code != 0)
+			{
+				var error = installToPlatform == DevicePlatform.iOS
+					? getDefaultError (lastError, code)
+					: parseAndroidError (lastError, code);
+				form.LogFatal (error);
 			}
 		}
 
@@ -74,6 +76,7 @@ namespace Launchpad
 		{
 			started = true;
 			lastError = null;
+			installToPlatform = platform;
 			installProcess = sp.InstallToDevice (
 				platform,
 				onOutput,
@@ -85,6 +88,22 @@ namespace Launchpad
 		{
 			installProcess.Kill();
 			started = false;
+		}
+
+		private string parseAndroidError (string lastError, int exitCode)
+		{
+			if (lastError.Contains ("[INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES]")) {
+				return "The project has changed in an unexpected way. "
+				+ "Uninstall your project from Android first, and then "
+				+ "try installing again.";
+			}
+			return getDefaultError (lastError, exitCode);
+		}
+
+		private string getDefaultError (string lastError, int exitCode)
+		{
+			return "Install to device failed with exit code "
+					+ exitCode + Environment.NewLine + lastError;
 		}
 	}
 }
