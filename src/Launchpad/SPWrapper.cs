@@ -83,7 +83,7 @@ namespace Launchpad
 			Action<int, Process> exited)
 		{
 			string device;
-			switch  (platform) {
+			switch (platform) {
 				case DevicePlatform.iOS: device = "ios"; break;
 				case DevicePlatform.Android: device = "android"; break;
 				default: throw new ArgumentOutOfRangeException ("platform");

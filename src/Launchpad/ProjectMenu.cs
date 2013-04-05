@@ -30,20 +30,19 @@ namespace Launchpad
 		public bool ItemsEnabled
 		{
 			set {
-				foreach (var i in items)
-					i.Enabled = value;
+				items.ForEach (i => i.Enabled = value);
 			}
 		}
 
 		private readonly ProjectMenu projectMenu;
 		private List<ToolStripItem> items = new List<ToolStripItem>();
 
-		private void addItemBefore (ToolStripItem toAdd, ToolStripMenuItem before)
+		private void addItemBefore (ToolStripItem toAdd, ToolStripItem before)
 		{
 			addItem (toAdd, projectMenu.DropDownItems.IndexOf (before));
 		}
 
-		private void addItemAfter (ToolStripItem toAdd, ToolStripMenuItem after)
+		private void addItemAfter(ToolStripItem toAdd, ToolStripItem after)
 		{
 			addItem (toAdd, projectMenu.DropDownItems.IndexOf (after)+1);
 		}
