@@ -59,6 +59,12 @@
     <Compile Include="Forms\FileSelector.Designer.cs">
       <DependentUpon>FileSelector.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmInstall.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmInstall.Designer.cs">
+      <DependentUpon>frmInstall.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmProject.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -70,6 +76,7 @@
     <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="Helpers\TargetHelper.cs" />
     <Compile Include="Helpers\TraceHelper.cs" />
+    <Compile Include="InstallListener.cs" />
     <Compile Include="LaunchpadPaths.cs" />
     <Compile Include="Observable\IObservable.cs" />
     <Compile Include="Observable\IObserver.cs" />
@@ -114,6 +121,9 @@
     <Compile Include="UpdaterHook.cs" />
     <EmbeddedResource Include="Forms\FileSelector.resx">
       <DependentUpon>FileSelector.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmInstall.resx">
+      <DependentUpon>frmInstall.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmProject.resx">
       <DependentUpon>frmProject.cs</DependentUpon>

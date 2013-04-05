@@ -32,6 +32,7 @@ namespace Launchpad
 			spc = new SpaceportController (this, settings, watcher, VERSION);
 			pc = new ProjectMenuController (this, sp, settings);
 			deployer = new DeployListener (this, sp, settings, watcher);
+			installer = new InstallListener (this, sp, settings);
 		}
 
 		public void Dispose()
@@ -46,6 +47,7 @@ namespace Launchpad
 		private DeviceWatcher watcher;
 		private Settings settings;
 		private DeployListener deployer;
+		private InstallListener installer;
 		private ILog logger;
 		private bool isEnabled;
 
