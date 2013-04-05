@@ -66,7 +66,10 @@ namespace Launchpad.Forms
 				displayConfig (config);
 
 			foreach (var kvp in fieldsToConfig) {
-				kvp.Key.Changed = () => changedFields.Add (kvp.Key, true);
+				kvp.Key.Changed = () => {
+					if (!changedFields.ContainsKey (kvp.Key))
+						changedFields.Add (kvp.Key, true);
+				};
 				if (kvp.Key.Type == SettingType.File)
 					((FileSelector)kvp.Key.Control).UseRelativePathTo = sp.ProjectDirectory;
 			}
