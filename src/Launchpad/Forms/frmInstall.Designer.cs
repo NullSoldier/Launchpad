@@ -41,11 +41,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.inLog.BackColor = System.Drawing.SystemColors.Window;
 			this.inLog.Location = new System.Drawing.Point(14, 14);
-			this.inLog.Multiline = true;
 			this.inLog.Name = "inLog";
 			this.inLog.ReadOnly = true;
 			this.inLog.Size = new System.Drawing.Size(461, 308);
 			this.inLog.TabIndex = 0;
+			this.inLog.Text = "";
 			// 
 			// btnInstalliOS
 			// 
@@ -61,7 +61,6 @@
 			// btnClose
 			// 
 			this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.btnClose.Location = new System.Drawing.Point(150, 328);
 			this.btnClose.Name = "btnClose";
 			this.btnClose.Size = new System.Drawing.Size(87, 27);
@@ -85,7 +84,6 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.CancelButton = this.btnClose;
 			this.ClientSize = new System.Drawing.Size(490, 367);
 			this.Controls.Add(this.btnInstallAndroid);
 			this.Controls.Add(this.btnClose);
@@ -97,7 +95,6 @@
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmInstall_FormClosing);
 			this.Load += new System.EventHandler(this.frmInstall_Load);
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 

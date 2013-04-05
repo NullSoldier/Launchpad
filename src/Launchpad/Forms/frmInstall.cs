@@ -18,7 +18,7 @@ namespace Launchpad.Forms
 			Check.ArgNull (stopped, "stopped");
 			this.started = started;
 			this.stopped = stopped;
-			InitializeComponent ();
+			InitializeComponent();
 		}
 
 		private void frmInstall_Load (object s, EventArgs ev)
@@ -73,7 +73,7 @@ namespace Launchpad.Forms
 			startInstall (DevicePlatform.Android);
 		}
 
-		private void btnClose_Click (object sender, EventArgs e)
+		private void btnClose_Click (object s, EventArgs e)
 		{
 			if (currentMode == InstallerMode.Installing) {
 				LogMessage ("Canceling install process.");
