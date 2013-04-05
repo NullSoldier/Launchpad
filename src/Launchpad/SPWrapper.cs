@@ -142,19 +142,7 @@ namespace Launchpad
 			process.StartInfo = start;
 			process.EnableRaisingEvents = true;
 			process.Start ();
-
-			if (exited != null) {
-				process.Exited += (s, ev) => exited (((Process)s).ExitCode, (Process)s);
-			}
-			if (output != null) {
-				process.OutputDataReceived += (s, ev) => output (ev.Data);
-				process.BeginOutputReadLine();
-			}
-			if (errors != null) {
-				process.ErrorDataReceived += (s, ev) => errors (ev.Data);
-				process.BeginErrorReadLine();
-			}
-
+			process.StartReadAsync (output, errors, exited);
 			jobs.Add (new Job (process.Handle));
 			return process;
 		}
