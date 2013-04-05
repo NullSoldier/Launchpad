@@ -52,9 +52,11 @@ namespace Launchpad.Forms
 
 		public void FinishInstall()
 		{
-			Invoke (new Action (() =>
-				setState (InstallerMode.Waiting)
-			));
+			if (currentMode == InstallerMode.Installing) {
+				Invoke (new Action (() =>
+					setState (InstallerMode.Waiting)
+				));
+			}
 		}
 
 		private readonly Action<DevicePlatform> started;
