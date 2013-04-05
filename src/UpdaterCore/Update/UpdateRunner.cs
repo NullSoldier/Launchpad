@@ -11,9 +11,10 @@ namespace UpdaterCore
 	{
 		/// <param name="updateLocation">The location to a .update file. Ex: http://domain.com/updates/update </param>
 		/// <param name="currentVersion">Look for updates later than this version</param>
-		public UpdateRunner (Uri updateLocation)
+		public UpdateRunner (Uri updateLocation, Version currentVersion)
 		{
 			this.updateLocation = updateLocation;
+			this.currentVersion = currentVersion;
 		}
 
 		public event EventHandler CheckUpdateStarted;
@@ -21,11 +22,9 @@ namespace UpdaterCore
 		public event EventHandler<UpdateCheckerEventArgs> UpdateFound;
 		public event EventHandler<UpdateCheckerEventArgs> CheckUpdateFailed;
 
-		public void Start (Version baseVersion)
+		public void Start()
 		{
-			currentVersion = baseVersion;
 			isCheckingUpdates = true;
-
 			updateThread = new Thread (updateCheckRunner);
 			updateThread.Start();
 

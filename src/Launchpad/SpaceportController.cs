@@ -29,7 +29,7 @@ namespace Launchpad
 			this.version = version;
 			this.events = events;
 			this.watcher = watcher;
-			this.updater = new UpdaterHook();
+			this.updater = new UpdaterHook (version);
 
 			Initialize();
 		}
@@ -39,16 +39,15 @@ namespace Launchpad
 			watcher.Stop();
 		}
 
-		private Settings settings;
-		private EventRouter events;
-		private DeviceWatcher watcher;
+		private readonly Settings settings;
+		private readonly EventRouter events;
+		private readonly DeviceWatcher watcher;
+		private readonly UpdaterHook updater;
+		private readonly Version version;
 		private SpaceportMenu menu;
 		private Image icon;
 		private Control mainForm;
 		private ILog logger;
-
-		private readonly UpdaterHook updater = new UpdaterHook();
-		private readonly Version version;
 
 		private void Initialize()
 		{
@@ -80,7 +79,7 @@ namespace Launchpad
 			};
 
 			if (menu.CheckUpdates.Checked)
-				updater.StartUpdateRunner (version);
+				updater.StartUpdateRunner();
 		}
 
 		private void PluginEnabled (DataEvent e)
@@ -136,8 +135,8 @@ namespace Launchpad
 		{
 			switch (menu.CheckUpdates.Checked)
 			{
-				case true: updater.StartUpdateRunner (version); break;
-				case false: updater.StopUpdateRunner (); break;
+				case true: updater.StartUpdateRunner(); break;
+				case false: updater.StopUpdateRunner(); break;
 				default:
 					throw new InvalidOperationException ();
 			}

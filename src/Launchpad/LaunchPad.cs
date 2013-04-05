@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using Launchpad.Helpers;
 using Launchpad.Properties;
 using log4net;
@@ -27,9 +28,10 @@ namespace Launchpad
 			LoadSettings();
 
 			logger = LogManager.GetLogger (typeof (LaunchPad));
+			version = Assembly.GetExecutingAssembly().GetName().Version;
 			sp = new SPWrapper (LaunchpadPaths.SpaceportPath);
 			watcher = new DeviceWatcher (sp);
-			spc = new SpaceportController (this, settings, watcher, VERSION);
+			spc = new SpaceportController (this, settings, watcher, version);
 			pc = new ProjectMenuController (this, sp, settings);
 			deployer = new DeployListener (this, sp, settings, watcher);
 			installer = new InstallListener (this, sp, settings);
@@ -42,6 +44,7 @@ namespace Launchpad
 			SaveSettings();
 		}
 
+		private Version version;
 		private SPWrapper sp;
 		private SpaceportController spc;
 		private ProjectMenuController pc;
@@ -51,8 +54,6 @@ namespace Launchpad
 		private InstallListener installer;
 		private ILog logger;
 		private bool isEnabled;
-
-		private readonly Version VERSION = new Version (0, 1);
 
 		private void ProjectChanged (DataEvent e)
 		{

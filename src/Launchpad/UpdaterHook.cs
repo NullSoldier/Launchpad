@@ -8,6 +8,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using Launchpad.Helpers;
 using UpdaterCore;
 using UpdaterCore.Update;
 using PluginCore;
@@ -21,15 +22,16 @@ namespace SpaceportUpdaterPlugin
 	[Serializable]
 	public class UpdaterHook : IDisposable
 	{
+		private readonly Version currentVersion;
 		private const string remoteUpdateDir = "http://entitygames.net/games/updates/";
 		private const string remoteUpdateFile = "http://entitygames.net/games/updates/update";
 		private const string localUpdateRelative = "Spaceport\\updatecache\\";
 		private const string localInstallerRelative = "Spaceport\\tools\\PluginInstaller.exe";
 
-		public UpdaterHook()
+		public UpdaterHook (Version currentVersion)
 		{
-			UpdaterVersion = Assembly.GetExecutingAssembly().GetName().Version;
-
+			Check.ArgNull (currentVersion, "currentVersion");
+			this.currentVersion = currentVersion;
 			init();
 		}
 
@@ -46,12 +48,6 @@ namespace SpaceportUpdaterPlugin
 		}
 
 		public UpdateRunner UpdateRunner
-		{
-			get;
-			private set;
-		}
-
-		public Version UpdaterVersion
 		{
 			get;
 			private set;
@@ -94,9 +90,9 @@ namespace SpaceportUpdaterPlugin
 		/// <summary>
 		/// Start the update runner that checks for updates
 		/// </summary>
-		public void StartUpdateRunner (Version baseVersion)
+		public void StartUpdateRunner()
 		{
-			UpdateRunner.Start (baseVersion);
+			UpdateRunner.Start();
 		}
 
 		/// <summary>
@@ -139,7 +135,7 @@ namespace SpaceportUpdaterPlugin
 
 		/// <summary>
 		/// Downloads the latest update information to FoundUpdate,
-		/// but only if WaitingUpdate hasn't been set yet
+		/// but only if FoundUpdate hasn't been set yet
 		/// </summary>
 		public void GetUpdateInformation()
 		{
@@ -148,7 +144,7 @@ namespace SpaceportUpdaterPlugin
 				return;
 
 			StopUpdateRunner();
-			UpdateRunner.TryCheckOnceForUpdate ();
+			UpdateRunner.TryCheckOnceForUpdate();
 		}
 
 		public void Dispose()
@@ -161,7 +157,7 @@ namespace SpaceportUpdaterPlugin
 
 		private void init()
 		{
-			UpdateRunner = new UpdateRunner (new Uri (remoteUpdateFile));
+			UpdateRunner = new UpdateRunner (new Uri (remoteUpdateFile), currentVersion);
 			UpdateRunner.UpdateFound += (o, e) => FoundUpdate = e.UpdateInfo;
 			
 			var dataDir = UpdaterCore.FileHelper.FlashDevelopDataDir;
