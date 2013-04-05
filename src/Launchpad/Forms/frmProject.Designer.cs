@@ -45,9 +45,6 @@
 			this.inVersion = new System.Windows.Forms.TextBox();
 			this.inID = new System.Windows.Forms.TextBox();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
-			this.fileIdentity = new Launchpad.Forms.FileSelector();
-			this.fileProvision = new Launchpad.Forms.FileSelector();
-			this.fileResourcesiOS = new Launchpad.Forms.FileSelector();
 			this.label11 = new System.Windows.Forms.Label();
 			this.inBackground = new System.Windows.Forms.CheckBox();
 			this.inGlassEffect = new System.Windows.Forms.CheckBox();
@@ -56,10 +53,6 @@
 			this.label9 = new System.Windows.Forms.Label();
 			this.label10 = new System.Windows.Forms.Label();
 			this.tabPage3 = new System.Windows.Forms.TabPage();
-			this.fileResourcesAndroid = new Launchpad.Forms.FileSelector();
-			this.fileKeyPassword = new Launchpad.Forms.FileSelector();
-			this.fileKeystorePassword = new Launchpad.Forms.FileSelector();
-			this.fileKeystore = new Launchpad.Forms.FileSelector();
 			this.label17 = new System.Windows.Forms.Label();
 			this.label16 = new System.Windows.Forms.Label();
 			this.label12 = new System.Windows.Forms.Label();
@@ -68,6 +61,13 @@
 			this.label15 = new System.Windows.Forms.Label();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.btnSave = new System.Windows.Forms.Button();
+			this.fileIdentity = new Launchpad.Forms.FileSelector();
+			this.fileProvision = new Launchpad.Forms.FileSelector();
+			this.fileResourcesiOS = new Launchpad.Forms.FileSelector();
+			this.fileResourcesAndroid = new Launchpad.Forms.FileSelector();
+			this.fileKeyPassword = new Launchpad.Forms.FileSelector();
+			this.fileKeystorePassword = new Launchpad.Forms.FileSelector();
+			this.fileKeystore = new Launchpad.Forms.FileSelector();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.tabPage2.SuspendLayout();
@@ -185,7 +185,7 @@
 			this.inDisplayName.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
 			this.inDisplayName.Name = "inDisplayName";
 			this.inDisplayName.Size = new System.Drawing.Size(316, 25);
-			this.inDisplayName.TabIndex = 6;
+			this.inDisplayName.TabIndex = 1;
 			// 
 			// inLoading
 			// 
@@ -195,7 +195,7 @@
 			this.inLoading.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
 			this.inLoading.Name = "inLoading";
 			this.inLoading.Size = new System.Drawing.Size(316, 25);
-			this.inLoading.TabIndex = 5;
+			this.inLoading.TabIndex = 4;
 			// 
 			// inAuthKey
 			// 
@@ -205,7 +205,7 @@
 			this.inAuthKey.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
 			this.inAuthKey.Name = "inAuthKey";
 			this.inAuthKey.Size = new System.Drawing.Size(316, 25);
-			this.inAuthKey.TabIndex = 4;
+			this.inAuthKey.TabIndex = 6;
 			// 
 			// cmbOrientation
 			// 
@@ -228,7 +228,7 @@
 			this.inURLSchemes.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
 			this.inURLSchemes.Name = "inURLSchemes";
 			this.inURLSchemes.Size = new System.Drawing.Size(316, 25);
-			this.inURLSchemes.TabIndex = 2;
+			this.inURLSchemes.TabIndex = 5;
 			// 
 			// inVersion
 			// 
@@ -238,7 +238,7 @@
 			this.inVersion.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
 			this.inVersion.Name = "inVersion";
 			this.inVersion.Size = new System.Drawing.Size(316, 25);
-			this.inVersion.TabIndex = 1;
+			this.inVersion.TabIndex = 2;
 			// 
 			// inID
 			// 
@@ -271,42 +271,6 @@
 			this.tabPage2.Text = "iOS";
 			this.tabPage2.UseVisualStyleBackColor = true;
 			// 
-			// fileIdentity
-			// 
-			this.fileIdentity.BackColor = System.Drawing.Color.Transparent;
-			this.fileIdentity.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.fileIdentity.Location = new System.Drawing.Point(155, 13);
-			this.fileIdentity.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-			this.fileIdentity.MinimumSize = new System.Drawing.Size(0, 25);
-			this.fileIdentity.Name = "fileIdentity";
-			this.fileIdentity.Path = "";
-			this.fileIdentity.Size = new System.Drawing.Size(313, 32);
-			this.fileIdentity.TabIndex = 39;
-			// 
-			// fileProvision
-			// 
-			this.fileProvision.BackColor = System.Drawing.Color.Transparent;
-			this.fileProvision.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.fileProvision.Location = new System.Drawing.Point(155, 47);
-			this.fileProvision.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-			this.fileProvision.MinimumSize = new System.Drawing.Size(0, 25);
-			this.fileProvision.Name = "fileProvision";
-			this.fileProvision.Path = "";
-			this.fileProvision.Size = new System.Drawing.Size(313, 32);
-			this.fileProvision.TabIndex = 38;
-			// 
-			// fileResourcesiOS
-			// 
-			this.fileResourcesiOS.BackColor = System.Drawing.Color.Transparent;
-			this.fileResourcesiOS.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.fileResourcesiOS.Location = new System.Drawing.Point(155, 79);
-			this.fileResourcesiOS.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-			this.fileResourcesiOS.MinimumSize = new System.Drawing.Size(0, 25);
-			this.fileResourcesiOS.Name = "fileResourcesiOS";
-			this.fileResourcesiOS.Path = "";
-			this.fileResourcesiOS.Size = new System.Drawing.Size(313, 32);
-			this.fileResourcesiOS.TabIndex = 37;
-			// 
 			// label11
 			// 
 			this.label11.AutoSize = true;
@@ -322,7 +286,7 @@
 			this.inBackground.Location = new System.Drawing.Point(20, 193);
 			this.inBackground.Name = "inBackground";
 			this.inBackground.Size = new System.Drawing.Size(234, 21);
-			this.inBackground.TabIndex = 32;
+			this.inBackground.TabIndex = 13;
 			this.inBackground.Text = "Run in background when minimized";
 			this.inBackground.UseVisualStyleBackColor = true;
 			// 
@@ -332,7 +296,7 @@
 			this.inGlassEffect.Location = new System.Drawing.Point(20, 163);
 			this.inGlassEffect.Name = "inGlassEffect";
 			this.inGlassEffect.Size = new System.Drawing.Size(165, 21);
-			this.inGlassEffect.TabIndex = 31;
+			this.inGlassEffect.TabIndex = 12;
 			this.inGlassEffect.Text = "Add glass effect to icon";
 			this.inGlassEffect.UseVisualStyleBackColor = true;
 			// 
@@ -346,7 +310,7 @@
 			this.cmbFamiliesiOS.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
 			this.cmbFamiliesiOS.Name = "cmbFamiliesiOS";
 			this.cmbFamiliesiOS.Size = new System.Drawing.Size(313, 25);
-			this.cmbFamiliesiOS.TabIndex = 25;
+			this.cmbFamiliesiOS.TabIndex = 11;
 			// 
 			// label8
 			// 
@@ -396,54 +360,6 @@
 			this.tabPage3.Text = "Android";
 			this.tabPage3.UseVisualStyleBackColor = true;
 			// 
-			// fileResourcesAndroid
-			// 
-			this.fileResourcesAndroid.BackColor = System.Drawing.Color.Transparent;
-			this.fileResourcesAndroid.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.fileResourcesAndroid.Location = new System.Drawing.Point(167, 148);
-			this.fileResourcesAndroid.Margin = new System.Windows.Forms.Padding(0);
-			this.fileResourcesAndroid.MinimumSize = new System.Drawing.Size(0, 29);
-			this.fileResourcesAndroid.Name = "fileResourcesAndroid";
-			this.fileResourcesAndroid.Path = "";
-			this.fileResourcesAndroid.Size = new System.Drawing.Size(292, 29);
-			this.fileResourcesAndroid.TabIndex = 58;
-			// 
-			// fileKeyPassword
-			// 
-			this.fileKeyPassword.BackColor = System.Drawing.Color.Transparent;
-			this.fileKeyPassword.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.fileKeyPassword.Location = new System.Drawing.Point(169, 113);
-			this.fileKeyPassword.Margin = new System.Windows.Forms.Padding(0);
-			this.fileKeyPassword.MinimumSize = new System.Drawing.Size(0, 29);
-			this.fileKeyPassword.Name = "fileKeyPassword";
-			this.fileKeyPassword.Path = "";
-			this.fileKeyPassword.Size = new System.Drawing.Size(292, 29);
-			this.fileKeyPassword.TabIndex = 57;
-			// 
-			// fileKeystorePassword
-			// 
-			this.fileKeystorePassword.BackColor = System.Drawing.Color.Transparent;
-			this.fileKeystorePassword.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.fileKeystorePassword.Location = new System.Drawing.Point(167, 79);
-			this.fileKeystorePassword.Margin = new System.Windows.Forms.Padding(0);
-			this.fileKeystorePassword.MinimumSize = new System.Drawing.Size(0, 29);
-			this.fileKeystorePassword.Name = "fileKeystorePassword";
-			this.fileKeystorePassword.Path = "";
-			this.fileKeystorePassword.Size = new System.Drawing.Size(292, 29);
-			this.fileKeystorePassword.TabIndex = 56;
-			// 
-			// fileKeystore
-			// 
-			this.fileKeystore.BackColor = System.Drawing.Color.Transparent;
-			this.fileKeystore.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.fileKeystore.Location = new System.Drawing.Point(167, 45);
-			this.fileKeystore.Margin = new System.Windows.Forms.Padding(0);
-			this.fileKeystore.MinimumSize = new System.Drawing.Size(0, 29);
-			this.fileKeystore.Name = "fileKeystore";
-			this.fileKeystore.Path = "";
-			this.fileKeystore.Size = new System.Drawing.Size(292, 29);
-			this.fileKeystore.TabIndex = 55;
-			// 
 			// label17
 			// 
 			this.label17.AutoSize = true;
@@ -479,7 +395,7 @@
 			this.inVersionAndroid.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
 			this.inVersionAndroid.Name = "inVersionAndroid";
 			this.inVersionAndroid.Size = new System.Drawing.Size(295, 25);
-			this.inVersionAndroid.TabIndex = 36;
+			this.inVersionAndroid.TabIndex = 14;
 			// 
 			// label13
 			// 
@@ -506,7 +422,7 @@
 			this.btnCancel.Location = new System.Drawing.Point(301, 328);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(75, 30);
-			this.btnCancel.TabIndex = 15;
+			this.btnCancel.TabIndex = 19;
 			this.btnCancel.Text = "Cancel";
 			this.btnCancel.UseVisualStyleBackColor = true;
 			// 
@@ -516,10 +432,94 @@
 			this.btnSave.Location = new System.Drawing.Point(398, 328);
 			this.btnSave.Name = "btnSave";
 			this.btnSave.Size = new System.Drawing.Size(75, 30);
-			this.btnSave.TabIndex = 14;
+			this.btnSave.TabIndex = 20;
 			this.btnSave.Text = "Save";
 			this.btnSave.UseVisualStyleBackColor = true;
 			this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+			// 
+			// fileIdentity
+			// 
+			this.fileIdentity.BackColor = System.Drawing.Color.Transparent;
+			this.fileIdentity.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.fileIdentity.Location = new System.Drawing.Point(155, 13);
+			this.fileIdentity.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+			this.fileIdentity.MinimumSize = new System.Drawing.Size(0, 25);
+			this.fileIdentity.Name = "fileIdentity";
+			this.fileIdentity.Path = "";
+			this.fileIdentity.Size = new System.Drawing.Size(313, 32);
+			this.fileIdentity.TabIndex = 8;
+			// 
+			// fileProvision
+			// 
+			this.fileProvision.BackColor = System.Drawing.Color.Transparent;
+			this.fileProvision.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.fileProvision.Location = new System.Drawing.Point(155, 47);
+			this.fileProvision.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+			this.fileProvision.MinimumSize = new System.Drawing.Size(0, 25);
+			this.fileProvision.Name = "fileProvision";
+			this.fileProvision.Path = "";
+			this.fileProvision.Size = new System.Drawing.Size(313, 32);
+			this.fileProvision.TabIndex = 9;
+			// 
+			// fileResourcesiOS
+			// 
+			this.fileResourcesiOS.BackColor = System.Drawing.Color.Transparent;
+			this.fileResourcesiOS.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.fileResourcesiOS.Location = new System.Drawing.Point(155, 79);
+			this.fileResourcesiOS.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+			this.fileResourcesiOS.MinimumSize = new System.Drawing.Size(0, 25);
+			this.fileResourcesiOS.Name = "fileResourcesiOS";
+			this.fileResourcesiOS.Path = "";
+			this.fileResourcesiOS.Size = new System.Drawing.Size(313, 32);
+			this.fileResourcesiOS.TabIndex = 10;
+			// 
+			// fileResourcesAndroid
+			// 
+			this.fileResourcesAndroid.BackColor = System.Drawing.Color.Transparent;
+			this.fileResourcesAndroid.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.fileResourcesAndroid.Location = new System.Drawing.Point(167, 148);
+			this.fileResourcesAndroid.Margin = new System.Windows.Forms.Padding(0);
+			this.fileResourcesAndroid.MinimumSize = new System.Drawing.Size(0, 29);
+			this.fileResourcesAndroid.Name = "fileResourcesAndroid";
+			this.fileResourcesAndroid.Path = "";
+			this.fileResourcesAndroid.Size = new System.Drawing.Size(292, 29);
+			this.fileResourcesAndroid.TabIndex = 18;
+			// 
+			// fileKeyPassword
+			// 
+			this.fileKeyPassword.BackColor = System.Drawing.Color.Transparent;
+			this.fileKeyPassword.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.fileKeyPassword.Location = new System.Drawing.Point(169, 113);
+			this.fileKeyPassword.Margin = new System.Windows.Forms.Padding(0);
+			this.fileKeyPassword.MinimumSize = new System.Drawing.Size(0, 29);
+			this.fileKeyPassword.Name = "fileKeyPassword";
+			this.fileKeyPassword.Path = "";
+			this.fileKeyPassword.Size = new System.Drawing.Size(292, 29);
+			this.fileKeyPassword.TabIndex = 17;
+			// 
+			// fileKeystorePassword
+			// 
+			this.fileKeystorePassword.BackColor = System.Drawing.Color.Transparent;
+			this.fileKeystorePassword.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.fileKeystorePassword.Location = new System.Drawing.Point(167, 79);
+			this.fileKeystorePassword.Margin = new System.Windows.Forms.Padding(0);
+			this.fileKeystorePassword.MinimumSize = new System.Drawing.Size(0, 29);
+			this.fileKeystorePassword.Name = "fileKeystorePassword";
+			this.fileKeystorePassword.Path = "";
+			this.fileKeystorePassword.Size = new System.Drawing.Size(292, 29);
+			this.fileKeystorePassword.TabIndex = 16;
+			// 
+			// fileKeystore
+			// 
+			this.fileKeystore.BackColor = System.Drawing.Color.Transparent;
+			this.fileKeystore.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.fileKeystore.Location = new System.Drawing.Point(167, 45);
+			this.fileKeystore.Margin = new System.Windows.Forms.Padding(0);
+			this.fileKeystore.MinimumSize = new System.Drawing.Size(0, 29);
+			this.fileKeystore.Name = "fileKeystore";
+			this.fileKeystore.Path = "";
+			this.fileKeystore.Size = new System.Drawing.Size(292, 29);
+			this.fileKeystore.TabIndex = 15;
 			// 
 			// frmProject
 			// 
