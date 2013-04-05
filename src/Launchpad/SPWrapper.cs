@@ -111,6 +111,13 @@ namespace Launchpad
 				.Split (Environment.NewLine);
 		}
 
+		public void Dispose()
+		{
+			foreach (var j in jobs)
+				j.Dispose();
+		}
+
+		private readonly List<Job> jobs = new List<Job>(); 
 		private readonly FileInfo sp;
 		private const int SUCCESS_CODE = 0;
 
@@ -147,6 +154,8 @@ namespace Launchpad
 				process.ErrorDataReceived += (s, ev) => errors (ev.Data);
 				process.BeginErrorReadLine();
 			}
+
+			jobs.Add (new Job (process.Handle));
 			return process;
 		}
 	}

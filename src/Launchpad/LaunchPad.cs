@@ -37,6 +37,7 @@ namespace Launchpad
 
 		public void Dispose()
 		{
+			sp.Dispose();
 			spc.Dispose();
 			SaveSettings();
 		}
