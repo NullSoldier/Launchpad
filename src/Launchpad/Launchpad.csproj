@@ -72,6 +72,7 @@
       <DependentUpon>frmProject.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Check.cs" />
+    <Compile Include="Helpers\ProcessHelper.cs" />
     <Compile Include="Helpers\SpaceportHelper.cs" />
     <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="Helpers\TargetHelper.cs" />
@@ -119,6 +120,7 @@
     </Compile>
     <Compile Include="Target.cs" />
     <Compile Include="TargetEventArgs.cs" />
+    <Compile Include="Tuple.cs" />
     <Compile Include="UpdaterHook.cs" />
     <EmbeddedResource Include="Forms\FileSelector.resx">
       <DependentUpon>FileSelector.cs</DependentUpon>
