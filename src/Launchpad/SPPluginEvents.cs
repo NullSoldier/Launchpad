@@ -12,5 +12,6 @@ namespace Launchpad
 		public const string ProjectClosed = "SpaceportPlugin.ProjectClosed";
 		public const string StartDeploy = "SpaceportPlugin.Deploy";
 		public const string StartBuild = "SpaceportPlugin.Build";
+		public const string StartInstall = "SpaceportPlugin.Install";
 	}
 }

@@ -16,25 +16,16 @@ namespace Launchpad
 			Check.ArgNull (projectMenu, "projectMenu");
 			this.projectMenu = projectMenu;
 
+			InstallProject = new ToolStripMenuItem ("Install Project");
 			AppProperties = new ToolStripMenuItem ("Spaceport App Properties");
 			AppProperties.Image = Image.FromHbitmap (Resources.spaceportIcon.GetHbitmap());
-
-			InstallToiOS = new ToolStripMenuItem ("Install to iOS");
-			InstallToAndroid = new ToolStripMenuItem ("Install To Android");
-
-			// Expand to show iOS and Android
-			var install = new ToolStripDropDownButton();
-			install.Text = "Install Project";
-			install.DropDownItems.Add (InstallToiOS);
-			install.DropDownItems.Add (InstallToAndroid);
 			
-			addItemAfter (install, projectMenu.CleanProject);
+			addItemAfter (InstallProject, projectMenu.CleanProject);
 			addItemBefore (AppProperties, projectMenu.Properties);
 		}
 
 		public readonly ToolStripMenuItem AppProperties;
-		public readonly ToolStripMenuItem InstallToiOS;
-		public readonly ToolStripMenuItem InstallToAndroid;
+		public readonly ToolStripMenuItem InstallProject;
 
 		public bool ItemsEnabled
 		{

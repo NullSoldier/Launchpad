@@ -5,6 +5,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Launchpad.Forms;
 using PluginCore;
+using PluginCore.Managers;
 using ProjectManager.Controls;
 using UpdaterCore;
 
@@ -41,6 +42,7 @@ namespace Launchpad
 		{
 			menu = new ProjectMenuEx (menuItem);
 			menu.AppProperties.Click += ProjectSettings_Clicked;
+			menu.InstallProject.Click += onInstall_Clicked;
 		}
 
 		private void waitForProjectMenu()
@@ -69,6 +71,14 @@ namespace Launchpad
 		{
 			var frmProperties = new frmProject (sp);
 			frmProperties.ShowDialog (form);
+		}
+
+		private void onInstall_Clicked (object s, EventArgs e)
+		{
+			var installEvent = new DataEvent (EventType.Command,
+				SPPluginEvents.StartInstall, null);
+
+			EventManager.DispatchEvent (this, installEvent);
 		}
 	}
 }
