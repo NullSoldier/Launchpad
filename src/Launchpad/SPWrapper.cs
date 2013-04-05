@@ -127,6 +127,7 @@ namespace Launchpad
 				UseShellExecute = false,
 				RedirectStandardOutput = true,
 				RedirectStandardError = true,
+				RedirectStandardInput = true,
 				Arguments = cmd
 			};
 			
