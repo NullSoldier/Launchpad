@@ -44,7 +44,7 @@ namespace Launchpad
 		private DeviceWatcher watcher;
 		private SpaceportMenu menu;
 		private Image icon;
-		private Control form;
+		private Control mainForm;
 		private ILog logger;
 
 		private readonly UpdaterHook updater = new UpdaterHook();
@@ -53,7 +53,7 @@ namespace Launchpad
 		private void Initialize()
 		{
 			//TODO: convert to Find Parent Form
-			form = PluginBase.MainForm.MenuStrip.Parent.Parent;
+			mainForm = PluginBase.MainForm.MenuStrip.Parent.Parent;
 			icon = Image.FromHbitmap (Resources.spaceportIcon.GetHbitmap ());
 			logger = LogManager.GetLogger (typeof (SpaceportController));
 
@@ -76,7 +76,7 @@ namespace Launchpad
 			updater.UpdateRunner.UpdateFound += (s, ev) => {
 				logger.Info ("Update found with version v" + ev.Version);
 				TraceManager.AddAsync ("Update found with version v" + ev.Version);
-				form.Invoke ((MethodInvoker)(() => menu.SetUpdateEnabled (true)));
+				mainForm.Invoke ((MethodInvoker)(() => menu.SetUpdateEnabled (true)));
 			};
 
 			if (menu.CheckUpdates.Checked)
@@ -122,7 +122,7 @@ namespace Launchpad
 		private void SelectTargets_Clicked (object s, EventArgs ev)
 		{
 			var f = new frmTargets (watcher, settings);
-			f.Show (form);
+			f.Show (mainForm);
 		}
 
 		private void UpdateSpaceport_Clicked (object s, EventArgs e)
