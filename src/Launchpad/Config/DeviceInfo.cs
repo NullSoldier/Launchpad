@@ -30,8 +30,7 @@ namespace Launchpad.Config
 			if (hasPortrait && hasLandscape) return Orientation.Auto;
 			if (hasPortrait) return Orientation.Portrait;
 			if (hasLandscape) return Orientation.Landscape;
-				
-			throw new ArgumentOutOfRangeException ("v");
+			return Orientation.Portrait;
 		}
 	}
 
@@ -62,8 +61,7 @@ namespace Launchpad.Config
 			if (hasPhone && hasPad) return DeviceFamily.Universal;
 			if (hasPhone) return DeviceFamily.iPhone;
 			if (hasPad) return DeviceFamily.iPad;
-				
-			throw new ArgumentOutOfRangeException ("v");
+			return DeviceFamily.Universal;
 		}
 	}
 }
