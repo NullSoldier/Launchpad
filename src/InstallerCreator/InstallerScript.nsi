@@ -5,10 +5,14 @@
 !include "WordFunc.nsh"
 
 ;--------------------------------
+SetCompress off
+SetCompressor zlib
+CRCCheck on
+RequestExecutionLevel admin
 
 ; Flash develop install path
 InstallDir "$PROGRAMFILES\FlashDevelop\"
-InstallDirRegKey HKLM "Software\FlashDevelop" ""
+InstallDirRegKey HKLM "Software\Launchpad" ""
 
 !define VERSION "1.0.0"
 !define UPDATEROOT "Update"
@@ -16,9 +20,9 @@ InstallDirRegKey HKLM "Software\FlashDevelop" ""
 !define SDK_PATH "$TOOLS\spaceport-sdk"
 
 ; NAme and window title
-Name "Launchpad ${VERSION}"
-Caption "Launchpad ${VERSION} Setup"
-UninstallCaption "Launchpad ${VERSION} Uninstaller"
+Name "Launchpad"
+Caption "Launchpad Setup"
+UninstallCaption "Launchpad Uninstaller"
 
 ; The output of this installer
 OutFile "LaunchpadInstaller.exe"
@@ -47,14 +51,38 @@ OutFile "LaunchpadInstaller.exe"
 
 Section "Launchpad" Main
 
-    SetOverwrite on
-    SetOutPath "$INSTDIR"
+	SetOverwrite on
+	SetOutPath "$INSTDIR"
 
-    ; Remove the old spaceport-SDK if it exists
-    RMDir /r "Update\Tools\spaceport-sdk"
-    
-    File /r /x Update\Plugins "Update\Tools"
-	File /r /x Update\Tools "Update\Plugins"
+	; Remove the old spaceport-SDK if it exists
+	RMDir /r "Update\Tools\spaceport-sdk"
+	File /r /x Update\Plugins /x Update/Data "Update\Tools"
+	File /r /x Update\Tools /x Update/Data "Update\Plugins"
+	
+	IfFileExists "$INSTDIR\.local" +1 0
+		SetOutPath "$LOCALAPPDATA\FlashDevelop"
+	
+	File /r /x Update\Plugins /x Update\Tools "Update\Data"
+	
+	; Create uninstaller and needed metadata.
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Launchpad" "DisplayName" "Launchpad"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Launchpad" "UninstallString" '"$INSTDIR\UninstallLaunchpad.exe"'
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Launchpad" "NoModify" 1
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Launchpad" "NoRepair" 1
+  WriteUninstaller "UninstallLaunchpad.exe"
+
+SectionEnd
+
+Section "un.Launchpad" UninstMain
+
+	RMDir /r "$INSTDIR\Tools\spaceport-sdk"
+	Delete "$INSTDIR\Plugins\Launchpad.dll"
+	
+	IfFileExists "$INSTDIR\.local" Skip 0
+		SetOutPath "$LOCALAPPDATA\FlashDevelop"
+		RMDir /r "Data\Launchpad"
+	
+	Skip:
 
 SectionEnd
 
@@ -71,11 +99,11 @@ FunctionEnd
 
 Function .onInit
 
-         Call GetFDInstDir
-         Pop $0
-         ${IF} $0 == "not_found"
-               MessageBox MB_OK|MB_ICONEXCLAMATION "You need to install FlashDevelop before you can install the Launchpad plugin for FlashDevelop"
-               Abort
-         ${EndIf}
+	Call GetFDInstDir
+	Pop $0
+	${IF} $0 == "not_found"
+			 MessageBox MB_OK|MB_ICONEXCLAMATION "You need to install FlashDevelop before you can install the Launchpad plugin for FlashDevelop"
+			 Abort
+	${EndIf}
 
 FunctionEnd
