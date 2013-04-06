@@ -177,9 +177,12 @@ namespace Updater
 
 		private void btnBrowse_Click(object sender, EventArgs e)
 		{
-			OpenFileDialog dialog = new OpenFileDialog();
-			if (dialog.ShowDialog (this) == DialogResult.OK)
-			{
+			var dialog = new OpenFileDialog();
+			dialog.CheckFileExists = true;
+			dialog.Filter = "Flash Develop (FlashDevelop.exe)";
+
+			var result = dialog.ShowDialog (this);
+			if (result == DialogResult.OK) {
 				inAssemblyPath.Text = dialog.FileName;
 				flashDevelopAssemblyPath = dialog.FileName;
 				CalculateMetaDirectories();
