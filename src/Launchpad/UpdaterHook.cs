@@ -26,7 +26,7 @@ namespace Launchpad
 		private const string remoteUpdateDir = "http://entitygames.net/games/updates/";
 		private const string remoteUpdateFile = "http://entitygames.net/games/updates/update";
 		private const string localUpdateRelative = "Launchpad\\updatecache\\";
-		private const string localInstallerRelative = "Launchpad\\tools\\updater.exe";
+		private const string localInstallerRelative = "Launchpad\\updater.exe";
 
 		public UpdaterHook (Version currentVersion)
 		{
