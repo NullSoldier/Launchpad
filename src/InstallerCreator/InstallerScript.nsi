@@ -77,6 +77,7 @@ Section "un.Launchpad" UninstMain
 
 	RMDir /r "$INSTDIR\Tools\spaceport-sdk"
 	Delete "$INSTDIR\Plugins\Launchpad.dll"
+	Delete "$INSTDIR\UninstallLaunchpad.exe"
 	
 	IfFileExists "$INSTDIR\.local" Skip 0
 		SetOutPath "$LOCALAPPDATA\FlashDevelop"
