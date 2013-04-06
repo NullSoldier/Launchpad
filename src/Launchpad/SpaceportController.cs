@@ -127,7 +127,6 @@ namespace Launchpad
 		private void UpdateSpaceport_Clicked (object s, EventArgs e)
 		{
 			frmPatch patch = new frmPatch (updater);
-			updater.GetUpdateInformation ();
 			patch.ShowDialog (PluginBase.MainForm);
 		}
 

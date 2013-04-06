@@ -37,9 +37,9 @@
 			// 
 			// inNotes
 			// 
-			this.inNotes.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.inNotes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.inNotes.Location = new System.Drawing.Point(14, 84);
 			this.inNotes.Multiline = true;
 			this.inNotes.Name = "inNotes";
@@ -47,12 +47,12 @@
 			this.inNotes.Size = new System.Drawing.Size(427, 138);
 			this.inNotes.TabIndex = 0;
 			this.inNotes.Text = "Fixes:\r\n\t- Fixed some bugs in A2J\r\n\t- Fixed a crash in the simulator\r\nEnhancement" +
-				"s:\r\n\t- Added new feature\r\n";
+    "s:\r\n\t- Added new feature\r\n";
 			// 
 			// progressBar
 			// 
-			this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.progressBar.Location = new System.Drawing.Point(14, 32);
 			this.progressBar.MarqueeAnimationSpeed = 10;
 			this.progressBar.Name = "progressBar";
@@ -62,7 +62,7 @@
 			// 
 			// btnInstall
 			// 
-			this.btnInstall.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnInstall.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnInstall.Location = new System.Drawing.Point(348, 32);
 			this.btnInstall.Name = "btnInstall";
 			this.btnInstall.Size = new System.Drawing.Size(87, 27);
@@ -74,7 +74,7 @@
 			// lblInstruction
 			// 
 			this.lblInstruction.AutoSize = true;
-			this.lblInstruction.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+			this.lblInstruction.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblInstruction.Location = new System.Drawing.Point(12, 8);
 			this.lblInstruction.Name = "lblInstruction";
 			this.lblInstruction.Size = new System.Drawing.Size(240, 21);
@@ -103,12 +103,14 @@
 			this.Controls.Add(this.btnInstall);
 			this.Controls.Add(this.progressBar);
 			this.Controls.Add(this.inNotes);
-			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-			this.MinimumSize = new System.Drawing.Size(469, 38);
+			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.MinimumSize = new System.Drawing.Size(469, 39);
 			this.Name = "frmPatch";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Patch";
-			this.Load += new System.EventHandler(this.frmPatch_Load);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.form_Closing);
+			this.Load += new System.EventHandler(this.form_Loaded);
+			this.Shown += new System.EventHandler(this.form_Shown);
 			this.Resize += new System.EventHandler(this.frmPatch_Resize);
 			this.ResumeLayout(false);
 			this.PerformLayout();

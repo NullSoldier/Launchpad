@@ -25,8 +25,8 @@ namespace Launchpad
 		private readonly Version currentVersion;
 		private const string remoteUpdateDir = "http://entitygames.net/games/updates/";
 		private const string remoteUpdateFile = "http://entitygames.net/games/updates/update";
-		private const string localUpdateRelative = "Spaceport\\updatecache\\";
-		private const string localInstallerRelative = "Spaceport\\tools\\PluginInstaller.exe";
+		private const string localUpdateRelative = "Launchpad\\updatecache\\";
+		private const string localInstallerRelative = "Launchpad\\tools\\updater.exe";
 
 		public UpdaterHook (Version currentVersion)
 		{
@@ -137,14 +137,11 @@ namespace Launchpad
 		/// Downloads the latest update information to FoundUpdate,
 		/// but only if FoundUpdate hasn't been set yet
 		/// </summary>
-		public void GetUpdateInformation()
+		/// <returns>True if update was found</returns>
+		public bool DownloadUpdateInfo()
 		{
-			// We already have update information
-			if (FoundUpdate != null)
-				return;
-
 			StopUpdateRunner();
-			UpdateRunner.TryCheckOnceForUpdate();
+			return UpdateRunner.TryCheckOnceForUpdate();
 		}
 
 		public void Dispose()
@@ -159,9 +156,8 @@ namespace Launchpad
 		{
 			UpdateRunner = new UpdateRunner (new Uri (remoteUpdateFile), currentVersion);
 			UpdateRunner.UpdateFound += (o, e) => FoundUpdate = e.UpdateInfo;
-			
-			var dataDir = UpdaterCore.FileHelper.FlashDevelopDataDir;
-			var localUpdateDir = Path.Combine (dataDir, localUpdateRelative);
+
+			var localUpdateDir = Path.Combine (PathHelper.DataDir, localUpdateRelative);
 			UpdateExtractor = new UpdateExtractor (localUpdateDir);
 			
 			UpdateDownloader = new UpdateDownloader (remoteUpdateDir, localUpdateDir);
@@ -171,19 +167,24 @@ namespace Launchpad
 		private bool startInstaller()
 		{
 			// Use URI to avoid file name formatting differences
-			var flashAssemblyUri = new Uri (Assembly.GetEntryAssembly ().CodeBase);
-			string dataDir = UpdaterCore.FileHelper.FlashDevelopDataDir;
-			string installerPath = Path.Combine (dataDir, localInstallerRelative);
+			string installerPath = Path.Combine (
+				PathHelper.DataDir,
+				localInstallerRelative);
 
-			string args = string.Format ("\"{0}\" \"{1}\"", WaitingUpdate.Version, flashAssemblyUri.LocalPath);
-
-			if (!File.Exists (installerPath))
-			{
-				logger.Error ("Updater failed to start at " + installerPath);
-				MessageBox.Show ("Updater failed to start, updater is missing." + Environment.NewLine + installerPath);
+			if (!File.Exists (installerPath)) {
+				logger.Error ("Failed to start updater at " + installerPath);
+				MessageBox.Show ("Updater failed to start, updater is missing."
+					+ Environment.NewLine
+					+ installerPath,
+					"Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
 				return false;
 			}
 
+			string args = string.Format ("\"{0}\" \"{1}\"",
+				WaitingUpdate.Version,
+				Application.ExecutablePath);
 			logger.DebugFormat ("Starting installer at {0} with arguments {1}", installerPath, args);
 			Process.Start (installerPath, args);
 			return true;
