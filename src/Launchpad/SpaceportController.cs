@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using Launchpad.Forms;
 using UpdaterCore;
 using PluginCommon;
 using PluginCore;
@@ -13,7 +14,6 @@ using Launchpad.Helpers;
 using Launchpad.Properties;
 using ProjectManager;
 using ProjectManager.Projects;
-using SpaceportUpdaterPlugin;
 using log4net;
 
 namespace Launchpad

@@ -1,4 +1,4 @@
-﻿namespace SpaceportUpdaterPlugin
+﻿namespace Launchpad.Forms
 {
 	partial class frmPatch
 	{

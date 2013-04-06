@@ -17,7 +17,7 @@ using PluginCore.Managers;
 using Updater;
 using log4net;
 
-namespace SpaceportUpdaterPlugin
+namespace Launchpad
 {
 	[Serializable]
 	public class UpdaterHook : IDisposable

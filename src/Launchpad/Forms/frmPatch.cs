@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Drawing;
+using System.Net;
 using System.Windows.Forms;
+using UpdaterCore;
 using UpdaterCore.Update;
-using PluginCore;
 
-namespace SpaceportUpdaterPlugin
+namespace Launchpad.Forms
 {
 	public partial class frmPatch : Form
 	{
