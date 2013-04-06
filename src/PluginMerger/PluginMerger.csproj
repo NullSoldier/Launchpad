@@ -1,37 +1,54 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <UsingTask TaskName="ILMerge.MSBuild.Tasks.ILMerge" AssemblyFile="ILMerge.MSBuild.Tasks.dll" />
-  <PropertyGroup>
+  
+	<PropertyGroup>
     <ProjectGuid>{76D77D8B-01D4-48E2-896D-E5E9D217FDCA}</ProjectGuid>
-    <SourceDir>..\Launchpad\bin\x86\Debug\</SourceDir>
+    <LaunchpadDir>..\Launchpad\bin\x86\Debug\</LaunchpadDir>
+		<UpdaterDir>..\Updater\bin\Debug\</UpdaterDir>
     <DestDir>bin\x86\Debug\</DestDir>
-    <OutputName>LaunchPadMerged.dll</OutputName>
+    <LaunchpadOutput>LaunchPadMerged.dll</LaunchpadOutput>
+		<UpdaterOutput>UpdaterMerged.exe</UpdaterOutput>
   </PropertyGroup>
-  <PropertyGroup>
+  
+	<PropertyGroup>
     <AssemblyName>PluginMerger</AssemblyName>
   </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Launchpad\Launchpad.csproj">
-      <Project>{7b05efcc-d6e8-49c4-85b9-85ae9e22ead9}</Project>
-      <Name>Launchpad</Name>
-    </ProjectReference>
-  </ItemGroup>
+	
+	<Target Name="Rebuild" DependsOnTargets="Build" />
+	
   <Target Name="Build">
     <MakeDir Directories="$(DestDir)" />
-    <ItemGroup>
-      <MergeAsm Include="$(SourceDir)Launchpad.dll" />
-      <MergeAsm Include="$(SourceDir)UpdaterCore.dll" />
-      <MergeAsm Include="$(SourceDir)PluginCore.dll" />
-      <MergeAsm Include="$(SourceDir)SwfOp.dll" />
-      <MergeAsm Include="$(SourceDir)ProjectManager.dll" />
-      <MergeAsm Include="$(SourceDir)log4net.dll" />
-    </ItemGroup>
-    <Message Text="Merging assemblies into $(OutputName)" />
-    <ILMerge InputAssemblies="@(MergeAsm)" OutputFile="..\$(DestDir)$(OutputName)" />
+		<CallTarget Targets="MergeLaunchpad"/>
+		<CallTarget Targets="MergeUpdater"/>
   </Target>
-  <Target Name="Clean">
+
+	<Target Name="MergeUpdater">
+		<ItemGroup>
+      <MergeAsm Include="$(UpdaterDir)Updater.exe" />
+      <MergeAsm Include="$(UpdaterDir)UpdaterCore.dll" />
+      <MergeAsm Include="$(UpdaterDir)Ionic.Zip.dll" />
+      <MergeAsm Include="$(UpdaterDir)log4net.dll" />
+    </ItemGroup>
+    <Message Text="Merging assemblies into $(UpdaterOutput)" />
+    <ILMerge InputAssemblies="@(MergeAsm)" OutputFile="..\$(DestDir)$(UpdaterOutput)" AllowDup="true" TargetKind="Exe"/>
+	</Target>
+	
+	<Target Name="MergeLaunchpad">
+		<ItemGroup>
+      <MergeAsm Include="$(LaunchpadDir)Launchpad.dll" />
+      <MergeAsm Include="$(LaunchpadDir)UpdaterCore.dll" />
+      <MergeAsm Include="$(LaunchpadDir)PluginCore.dll" />
+      <MergeAsm Include="$(LaunchpadDir)SwfOp.dll" />
+      <MergeAsm Include="$(LaunchpadDir)ProjectManager.dll" />
+      <MergeAsm Include="$(LaunchpadDir)log4net.dll" />
+    </ItemGroup>
+    <Message Text="Merging assemblies into $(LaunchpadOutput)" />
+    <ILMerge InputAssemblies="@(MergeAsm)" OutputFile="..\$(DestDir)$(LaunchpadOutput)" TargetKind="Dll" AllowDup="false"/>
+	</Target>
+  
+	<Target Name="Clean">
     <RemoveDir Directories="bin" />
     <RemoveDir Directories="obj" />
   </Target>
-  <Target Name="Rebuild" DependsOnTargets="Build" />
 </Project>
