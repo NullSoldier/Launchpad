@@ -58,8 +58,8 @@ Section "Launchpad" Main
 	RMDir /r "Update\Tools\spaceport-sdk"
 	File /r /x Update\Plugins /x Update/Data "Update\Tools"
 	File /r /x Update\Tools /x Update/Data "Update\Plugins"
-	
-	IfFileExists "$INSTDIR\.local" +1 0
+		
+	IfFileExists "$INSTDIR\.local" +2 0
 		SetOutPath "$LOCALAPPDATA\FlashDevelop"
 	
 	File /r /x Update\Plugins /x Update\Tools "Update\Data"
@@ -79,12 +79,15 @@ Section "un.Launchpad" UninstMain
 	Delete "$INSTDIR\Plugins\Launchpad.dll"
 	Delete "$INSTDIR\UninstallLaunchpad.exe"
 	
-	IfFileExists "$INSTDIR\.local" Skip 0
-		SetOutPath "$LOCALAPPDATA\FlashDevelop"
-		RMDir /r "Data\Launchpad"
-	
-	Skip:
+	;Remove from appdata if not in standalone mode
+	IfFileExists "$INSTDIR\.local" RemoveLocal 0
+		RMDir /r "$LOCALAPPDATA\FlashDevelop\Data\Launchpad"
+		Goto Finished
 
+	RemoveLocal:
+	RMDir /r "$INSTDIR\Data\Launchpad"
+	Finished:
+	
 SectionEnd
 
 Function GetFDInstDir
@@ -93,7 +96,7 @@ Function GetFDInstDir
 	ClearErrors
 	ReadRegStr $0 HKLM Software\FlashDevelop ""
 	IfErrors 0 +2
-	StrCpy $0 "not_found"
+		StrCpy $0 "not_found"
 	Exch $0
 
 FunctionEnd
