@@ -21,11 +21,14 @@
     <Message Text="Move built installer to $(OutputDir)" />
     <Move SourceFiles="LaunchpadInstaller.exe" DestinationFiles="$(OutputDir)LaunchpadInstaller.exe" />
   </Target>
+	
   <Target Name="Clean">
-    <RemoveDir Directories="bin" />
-    <RemoveDir Directories="obj" />
-    <RemoveDir Directories="update" />
     <Delete Files="Update.zip" />
+    <Delete Files="LaunchpadInstaller.exe" />
+    <Delete Files="$(OutputDir)LaunchpadInstaller.exe" />
+    <RemoveDir Directories="update" ContinueOnError="WarnAndContinue" />
+    <RemoveDir Directories="bin" ContinueOnError="WarnAndContinue" />
+    <RemoveDir Directories="obj" ContinueOnError="WarnAndContinue" />
   </Target>
   <Target Name="Rebuild" DependsOnTargets="Build" />
 </Project>
