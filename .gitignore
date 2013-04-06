@@ -5,6 +5,7 @@ obj/
 _*
 *.Cache
 *.cachefile
+Thumbs.db
 lib/FlashDevelop/
 resources/spaceport-sdk
 src/InstallerCreator/Update.zip
