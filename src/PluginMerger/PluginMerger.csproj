@@ -7,7 +7,7 @@
     <LaunchpadDir>..\Launchpad\bin\x86\Debug\</LaunchpadDir>
 		<UpdaterDir>..\Updater\bin\Debug\</UpdaterDir>
     <DestDir>bin\x86\Debug\</DestDir>
-    <LaunchpadOutput>LaunchPadMerged.dll</LaunchpadOutput>
+    <LaunchpadOutput>LaunchpadMerged.dll</LaunchpadOutput>
     <UpdaterOutput>UpdaterMerged.exe</UpdaterOutput>
   </PropertyGroup>
   
@@ -31,7 +31,8 @@
       <MergeAsm Include="$(LaunchpadDir)log4net.dll" />
     </ItemGroup>
     <Message Text="Merging assemblies into $(LaunchpadOutput)" />
-    <ILMerge InputAssemblies="@(MergeAsm)" OutputFile="..\$(DestDir)$(LaunchpadOutput)" TargetKind="Dll" AllowDup="false"/>
+    <ILMerge InputAssemblies="@(MergeAsm)" OutputFile="..\$(DestDir)Launchpad.dll" TargetKind="Dll" AllowDup="false"/>
+		<Move SourceFiles=".\$(DestDir)Launchpad.dll" DestinationFiles=".\$(DestDir)$(LaunchpadOutput)" />
 	</Target>
 	
   <Target Name="MergeUpdater">
@@ -42,7 +43,8 @@
       <MergeUpd Include="$(UpdaterDir)log4net.dll" />
     </ItemGroup>
     <Message Text="Merging assemblies into $(UpdaterOutput)" />
-    <ILMerge InputAssemblies="@(MergeUpd)" OutputFile="..\$(DestDir)$(UpdaterOutput)" AllowDup="true" TargetKind="WinExe"/>
+    <ILMerge InputAssemblies="@(MergeUpd)" OutputFile="..\$(DestDir)updater.exe" AllowDup="true" TargetKind="WinExe"/>
+		<Move SourceFiles=".\$(DestDir)updater.exe" DestinationFiles=".\$(DestDir)$(UpdaterOutput)" />
   </Target>
   
   <Target Name="Clean">
