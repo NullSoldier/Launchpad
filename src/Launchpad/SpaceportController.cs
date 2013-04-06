@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using Launchpad.Forms;
 using UpdaterCore;
-using PluginCommon;
+using Launchpad;
 using PluginCore;
 using PluginCore.Managers;
 using Launchpad.Helpers;

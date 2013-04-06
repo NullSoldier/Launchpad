@@ -4,7 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using PluginCore;
 
-namespace PluginCommon
+namespace Launchpad
 {
 	public class SpaceportMenu
 	{
