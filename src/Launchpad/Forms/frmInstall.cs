@@ -53,9 +53,12 @@ namespace Launchpad.Forms
 		public void FinishInstall()
 		{
 			if (currentMode == InstallerMode.Installing) {
-				Invoke (new Action (() =>
-					setState (InstallerMode.Waiting)
-				));
+				try {
+					Invoke (new Action (() =>
+						setState (InstallerMode.Waiting)));
+				} catch (Exception) {
+					//HACK
+				}
 			}
 		}
 
