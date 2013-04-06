@@ -27,9 +27,7 @@
 		<ItemGroup>
       <MergeAsm Include="$(LaunchpadDir)Launchpad.dll" />
       <MergeAsm Include="$(LaunchpadDir)UpdaterCore.dll" />
-      <MergeAsm Include="$(LaunchpadDir)PluginCore.dll" />
-      <MergeAsm Include="$(LaunchpadDir)SwfOp.dll" />
-      <MergeAsm Include="$(LaunchpadDir)ProjectManager.dll" />
+      <MergeAsm Include="$(LaunchpadDir)Ionic.Zip.dll" />
       <MergeAsm Include="$(LaunchpadDir)log4net.dll" />
     </ItemGroup>
     <Message Text="Merging assemblies into $(LaunchpadOutput)" />

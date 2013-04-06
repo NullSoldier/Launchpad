@@ -37,9 +37,6 @@
     <Reference Include="ProjectManager">
       <HintPath>..\..\lib\ProjectManager.dll</HintPath>
     </Reference>
-    <Reference Include="SwfOp">
-      <HintPath>..\..\lib\SwfOp.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
