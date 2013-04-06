@@ -49,8 +49,10 @@ namespace Updater
 			foreach (Process process in Process.GetProcesses())
 			{
 				string processAssemblyPath;
-				try{ processAssemblyPath = process.MainModule.FileName; }
-				catch (Win32Exception) { continue; } // We can't access 64bit processes
+				try { processAssemblyPath = process.MainModule.FileName; }
+				// We can't access 64bit or closed processes
+				catch (Win32Exception) { continue; }
+				catch (InvalidOperationException) { continue; }
 
 				//TODO: Compare to file volumes instead for reliability?
 				var assembly = new FileInfo (processAssemblyPath);
