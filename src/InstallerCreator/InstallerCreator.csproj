@@ -3,15 +3,18 @@
   <UsingTask TaskName="NSISCTask.NSISC" AssemblyFile="NSISCTask.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.Zip" AssemblyFile="MSBuild.Community.Tasks.dll" />
   <UsingTask TaskName="MSBuild.Community.Tasks.Unzip" AssemblyFile="MSBuild.Community.Tasks.dll" />
+  
   <PropertyGroup>
     <ProjectGuid>{6F443870-9519-4B25-8C0A-2C3F7C4056CE}</ProjectGuid>
     <NSISPath>"C:\Program Files (x86)\NSIS\makensis.exe"</NSISPath>
     <OutputDir>bin\x86\Debug\</OutputDir>
     <InstallScript>InstallerScript.nsi</InstallScript>
   </PropertyGroup>
+	
   <ItemGroup>
     <None Include="InstallerScript.nsi" />
   </ItemGroup>
+	
   <Target Name="Build">
     <Message Text="Copying Update package contents to Update/" />
     <Copy SourceFiles="..\UpdatePacker\bin\x86\Debug\Update.zip" DestinationFolder="." />

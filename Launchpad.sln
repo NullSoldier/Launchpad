@@ -18,6 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstallerCreator", "src\InstallerCreator\InstallerCreator.csproj", "{6F443870-9519-4B25-8C0A-2C3F7C4056CE}"
 	ProjectSection(ProjectDependencies) = postProject
+		{76D77D8B-01D4-48E2-896D-E5E9D217FDCA} = {76D77D8B-01D4-48E2-896D-E5E9D217FDCA}
 		{C636A1C0-50BF-4224-AAD4-F2283C8F4558} = {C636A1C0-50BF-4224-AAD4-F2283C8F4558}
 	EndProjectSection
 EndProject
