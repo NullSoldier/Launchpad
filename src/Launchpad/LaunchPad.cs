@@ -91,8 +91,13 @@ namespace Launchpad
 			if (!File.Exists (path)) {
 				SaveSettings();
 			} else {
-				settings = (Settings) ObjectSerializer
-					.Deserialize (path, settings);
+				try {
+					settings = (Settings) ObjectSerializer
+						.Deserialize (path, settings);
+				} catch (Exception ex) {
+					ErrorManager.ShowError ("Launchpad failed to load settings, erasing settings", ex);
+					SaveSettings();
+				}
 			}
 		}
 
