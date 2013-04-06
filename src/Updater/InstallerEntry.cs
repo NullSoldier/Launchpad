@@ -9,64 +9,101 @@ using log4net;
 
 namespace Updater
 {
-	public class InstallerEntry : IInstallerModeCallbackSet
+	public class InstallerEntry : IInstallerModeCallbacks
 	{
 		public void StartInvalidMode()
 		{
 			MessageBox.Show ("Not valid state, needs at least one parameter.");
 		}
 
-		public void StartIntermediaryMode (FileInfo updaterAssemblyPath, Version version, FileInfo flashAssemblyPath)
+		// No GUI, this launches ghost updater to allow self-updating
+		// 1. Copies self to ghost version
+		// 2. Runs that version
+		// 3. Then closes this version
+		public void StartIntermediaryMode (
+			FileInfo updaterAssemblyPath,
+			Version version,
+			FileInfo flashAssemblyPath)
 		{
-			string appDataDir = Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData);
-			string copyDestination = Path.Combine (appDataDir, "Spaceport\\" + updaterAssemblyPath.Name);
+			string appDataDir = Environment.GetFolderPath (
+				Environment.SpecialFolder.ApplicationData);
+			string copyDest = Path.Combine (appDataDir,
+				"Launchpad\\" + updaterAssemblyPath.Name);
 
-			string parentDirectory = InstallerHelper.GetFileDirectory (copyDestination);
+			// Make sure ghost updater destination folder exists
+			string parentDirectory = InstallerHelper
+				.GetFileDirectory (copyDest);
 			if (!Directory.Exists (parentDirectory))
 				Directory.CreateDirectory (parentDirectory);
 
-			logger.Debug ("Copying updater to ghost updater at " + copyDestination);
+			logger.Debug ("Copying updater to ghost updater at " + copyDest);
 			try {
-				updaterAssemblyPath.CopyTo (copyDestination, true);
-			}
-			catch (Exception ex) {
+				updaterAssemblyPath.CopyTo (copyDest, true);
+			} catch (Exception ex) {
 				failToStart ("Copying updater to ghost updater failed", ex);
 				return;
 			}
 
-			string args = string.Format ("\"{0}\" \"{1}\" \"{2}\"", version, flashAssemblyPath, updaterAssemblyPath);
+			string args = string.Format ("\"{0}\" \"{1}\" \"{2}\"",
+				version,
+				flashAssemblyPath,
+				updaterAssemblyPath);
 			logger.DebugFormat ("Starting ghost updater with arguments {0}", args);
-			Process.Start (copyDestination, args);
+			Process.Start (copyDest, args);
 		}
 
-		public void StartSetupMode (FileInfo flashDevelopAssemblyPath, DirectoryInfo updateCacheDir)
+		// GUI based installer mode
+		public void StartSetupMode (
+			FileInfo flashDevelopAssembly,
+			DirectoryInfo updateCacheDir)
 		{
-			var waitingPackage = InstallerHelper.GetLatestWaitingUpdate (updateCacheDir.FullName);
+			var waitingPackage = InstallerHelper
+				.GetLatestWaitingUpdate (updateCacheDir.FullName);
 			if (waitingPackage == null) {
-				failToStart ("Update .zip package missing from " + updateCacheDir.FullName);
+				failToStart ("Update .zip package missing from " 
+					+ updateCacheDir.FullName);
 				return;
 			}
-			string versionStr = Path.GetFileNameWithoutExtension (new FileInfo (waitingPackage).Name);
-			Version waitingVersion = new Version (versionStr);
+			var packageName = new FileInfo (waitingPackage).Name;
+			string packageVers = Path.GetFileNameWithoutExtension (packageName);
+			var version = new Version (packageVers);
 
-			startForm (waitingVersion, flashDevelopAssemblyPath, updateCacheDir, false);
+			startForm (
+				version,
+				flashDevelopAssembly,
+				updateCacheDir,
+				false);
 		}
 
-		public void StartInstallerMode (Version version, FileInfo flashAssemblyPath, FileInfo oldUpdateAssemblyPath)
+		// No Gui. Installs update packages once old UpdateAssembly closes
+		public void StartInstallerMode (
+			Version version, 
+			FileInfo flashDevelopAssembly, 
+			FileInfo oldUpdateAssemblyPath,
+			DirectoryInfo cacheDir)
 		{
-			var oldUpdateCacheDir = new DirectoryInfo (Path.Combine (flashAssemblyPath.DirectoryName, "Data\\Spaceport\\updatecache"));
-
-			AssemblyCloseDelayer.WaitForAssembliesAsync (() => startForm (version, flashAssemblyPath, oldUpdateCacheDir, true),
-				flashAssemblyPath.FullName, oldUpdateAssemblyPath.FullName);
+			AssemblyCloseDelayer.WaitForAssembliesAsync (() => 
+				startForm (
+					version,
+					flashDevelopAssembly,
+					cacheDir, 
+					true),
+				flashDevelopAssembly.FullName,
+				oldUpdateAssemblyPath.FullName);
 		}
 
 		private readonly ILog logger = LogManager.GetLogger (typeof (InstallerEntry));
 
-		private void startForm (Version versionToInstall, FileInfo flashDevelopAssembly, DirectoryInfo updateCacheDir, bool installerMode)
+		private void startForm (
+			Version versionToInstall,
+			FileInfo flashDevelopAssembly,
+			DirectoryInfo updateCacheDir,
+			bool installerMode)
 		{
 			Application.EnableVisualStyles ();
 			Application.SetCompatibleTextRenderingDefault (false);
-			frmMain installerForm = new frmMain (versionToInstall, flashDevelopAssembly.FullName, updateCacheDir.FullName);
+			frmMain installerForm = new frmMain (versionToInstall,
+				flashDevelopAssembly.FullName, updateCacheDir.FullName);
 
 			if (installerMode)
 				installerForm.RunInstaller();
@@ -79,7 +116,10 @@ namespace Updater
 		private void failToStart (string reason, Exception ex=null)
 		{
 			logger.Error (reason, ex);
-			MessageBox.Show (reason, "Update Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			MessageBox.Show (reason,
+				"Update Failed",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Error);
 			Application.Exit();
 		}
 	}

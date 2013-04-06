@@ -56,7 +56,7 @@ namespace Updater
 
 		public void RunInstaller()
 		{
-			if (!VerifyLocalUpdateExists ()) {
+			if (!VerifyLocalUpdateExists()) {
 				return;
 			}
 
@@ -73,13 +73,24 @@ namespace Updater
 			{
 				logger.DebugFormat ("Finished extracting {0} files to {1}", e.EntriesTotal, filesDir);
 				progressForm.SetInstruction ("Installing files from " + filesDir + " to " + flashDevelopDir);
-
 				Installer installer = new Installer ();
-				installer.FileInstalled += (o, ev) => LogMessage ("File installed: " + ev.FileInstalled.FullName);
-				installer.FinishedInstalling += (o, ev) => Invoke (new MethodInvoker (FinishedInstalling));
-				installer.InstallFailed += (o, ev) => MessageBox.Show ("Install failed, rolling back...");
-				installer.RollingBackFinished += (o, ev) => { MessageBox.Show ("Finished rolling back, exiting."); Application.Exit (); };
-				installer.Start (updateCacheDir, flashDevelopDir);
+				
+				installer.FileInstalled += (o, ev) => {
+					LogMessage ("File installed: " + ev.FileInstalled.FullName);
+				};
+				installer.FinishedInstalling += (o, ev) => {
+					Invoke (new Action (FinishedInstalling));
+				};
+				installer.InstallFailed += (o, ev) => {
+					invokeMessageBox ("Install failed, rolling back...");
+				};
+				installer.RollingBackFinished += (o, ev) => {
+					invokeMessageBox ("Finished rolling back, exiting.");
+					Application.Exit ();
+				};
+
+				installer.Start (updateCacheDir,
+					new FileInfo (flashDevelopAssemblyPath));
 			};
 			extractor.Unzip (versionToInstall);
 
@@ -178,6 +189,13 @@ namespace Updater
 		private void frmMain_FormClosed(object sender, FormClosedEventArgs e)
 		{
 			Application.Exit();
+		}
+
+		private void invokeMessageBox (string text)
+		{
+			Invoke (new Action (() =>
+				MessageBox.Show (this, text)
+			));
 		}
 	}
 }

@@ -37,6 +37,9 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ionic.Zip">
       <HintPath>..\..\lib\Ionic.Zip.dll</HintPath>
@@ -65,7 +68,7 @@
     <Compile Include="frmPerformAction.Designer.cs">
       <DependentUpon>frmPerformAction.cs</DependentUpon>
     </Compile>
-    <Compile Include="IInstallerModeCallbackSet.cs" />
+    <Compile Include="IInstallerModeCallbacks.cs" />
     <Compile Include="InstallerEntry.cs" />
     <Compile Include="InstallerArgsParser.cs" />
     <Compile Include="InstallerHelper.cs" />
@@ -87,6 +90,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

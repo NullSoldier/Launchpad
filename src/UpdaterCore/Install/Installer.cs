@@ -23,9 +23,13 @@ namespace UpdaterCore
 		/// And also takes the FlashDevelop directory where FlashDevelop.exe is
 		/// Ex: FlashDevelop/
 		/// </summary>
-		public void Start (string updateCacheDirectory, string flashDevelopRoot)
+		public void Start(
+			string updateCacheDirectory,
+			FileInfo flashDevelopAssembly)
 		{
-			installThread = new Thread (() => installFiles (updateCacheDirectory, flashDevelopRoot));
+			installThread = new Thread (() => installFiles (
+				updateCacheDirectory,
+				flashDevelopAssembly));
 			installThread.Name = "Install Files Thread";
 			installThread.Start();
 		}
@@ -33,10 +37,15 @@ namespace UpdaterCore
 		private Thread installThread;
 		private ILog logger = LogManager.GetLogger (typeof (Installer));
 
-		private void installFiles (string updateCacheDirectory, string flashDevelopRoot)
+		private void installFiles (
+			string updateCacheDir,
+			FileInfo flashDevelopAssembly)
 		{
-			string filesDirectory = Path.Combine (updateCacheDirectory, "files");
-			var installList = new InstallFileList (filesDirectory);
+			var dataDir = FDHelper.GetDataDir (flashDevelopAssembly);
+			var flashDevelopDir = flashDevelopAssembly.DirectoryName;
+			string filesDir = Path.Combine (updateCacheDir, "files");
+
+			var installList = new InstallFileList (filesDir);
 			var transaction = new RevertableTransaction();
 			transaction.RolledBack += onRollingBackFinished;
 
@@ -44,32 +53,43 @@ namespace UpdaterCore
 			{
 				// Take the original path and chop off the install root,
 				// then append it to the flash develop folder
-				string relativeInstallPath = installFile.File.FullName.Substring (filesDirectory.Length + 1);
-				string destinationPath = Path.Combine (flashDevelopRoot, relativeInstallPath);
+				string relativeInstallPath = installFile.File.FullName.Substring (filesDir.Length + 1);
+				var dest = hardcodeResolvePath (relativeInstallPath, flashDevelopDir, dataDir.FullName);
 
 				var fileCopyAction = new RevertableFileCopy (installFile.File.FullName,
-					destinationPath, ensureDirectoryExists:true);
-				fileCopyAction.FileCopied += (o, ev) => onFileInstalled (ev.Value);
+					dest, ensureDirectoryExists:true);
 
+				fileCopyAction.FileCopied += (o, ev) => onFileInstalled (ev.Value);
 				transaction.Do (fileCopyAction);
 			}
-
 			try {
 				transaction.Commit();
 			}
 			catch (RevertableActionFailedException ex) {
-				logger.Warn ("Installer failed on action " + ex.FailedAction, ex.Exception);
+				logger.Error ("Installer failed on action " + ex.FailedAction, ex.Exception);
 				logger.DebugFormat ("Starting rollback of {0} items." + transaction.CompletedCount);
 				OnInstallFailed (ex);
 				transaction.Rollback();
 				return;
 			}
-
 			onFinished();
 		}
 
+		private string hardcodeResolvePath (
+			string relativePath,
+			string flashDevelopDir,
+			string dataDir)
+		{
+			if (relativePath.StartsWith ("Data")) {
+				var parent = Path.Combine (dataDir, "..");
+				return Path.Combine (parent, relativePath);
+			}
+			return Path.Combine (flashDevelopDir, relativePath);
+		}
+
 		#region Event Handlers
-		private void onFinished()
+			private
+			void onFinished()
 		{
 			var handler = FinishedInstalling;
 			if (handler != null)

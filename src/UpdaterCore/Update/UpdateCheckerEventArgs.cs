@@ -12,7 +12,7 @@ namespace UpdaterCore
 			this.UpdateInfo = updateInfo;
 		}
 
-		public UpdateCheckerEventArgs (Uri checkLocation, Exception exception)
+		public UpdateCheckerEventArgs (Uri checkLocation, Exception exception=null)
 		{
 			this.CheckLocation = checkLocation;
 			this.Exception = exception;

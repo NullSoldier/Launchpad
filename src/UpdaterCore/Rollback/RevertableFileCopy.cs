@@ -8,7 +8,8 @@ namespace UpdaterCore.Rollback
 	public class RevertableFileCopy
 		: IRevertableAction
 	{
-		public RevertableFileCopy (string source, string destination, bool ensureDirectoryExists)
+		public RevertableFileCopy (string source, string destination,
+			bool ensureDirectoryExists)
 		{
 			this.source = source;
 			this.destination = destination;
@@ -26,7 +27,7 @@ namespace UpdaterCore.Rollback
 		public void Do()
 		{
 			if (ensureDirectoryExists)
-				FileHelper.EnsureFileDirExists(destination);
+				FileHelper.EnsureFileDirExists (destination);
 
 			if (File.Exists (destination))
 			{

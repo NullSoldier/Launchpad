@@ -20,12 +20,13 @@ namespace UpdaterCore
 		public event EventHandler CheckUpdateStarted;
 		public event EventHandler CheckUpdateStopped;
 		public event EventHandler<UpdateCheckerEventArgs> UpdateFound;
+		public event EventHandler<UpdateCheckerEventArgs> UpdateNotFound;
 		public event EventHandler<UpdateCheckerEventArgs> CheckUpdateFailed;
 
 		public void Start()
 		{
 			isCheckingUpdates = true;
-			updateThread = new Thread (updateCheckRunner);
+			updateThread = new Thread (runUpdateChecker);
 			updateThread.Start();
 
 			onStartCheckUpdate();
@@ -46,7 +47,7 @@ namespace UpdaterCore
 		private bool isCheckingUpdates;
 		private const int checkSleepTime = 60000;
 
-		private void updateCheckRunner()
+		private void runUpdateChecker()
 		{
 			while (isCheckingUpdates)
 			{
@@ -55,6 +56,8 @@ namespace UpdaterCore
 
 				if (TryFetchUpdate (out versionFound, out patchNotes))
 					onUpdateFound (versionFound, patchNotes);
+				else
+					onUpdateNotFound();
 
 				Thread.Sleep (checkSleepTime);
 			}
@@ -62,14 +65,19 @@ namespace UpdaterCore
 
 		public bool TryCheckOnceForUpdate()
 		{
+			if (isCheckingUpdates)
+				throw new InvalidOperationException ("Already checking for updates");
+
 			Version versionFound;
 			string patchNotes;
 
-			if (!TryFetchUpdate (out versionFound, out patchNotes))
+			if (TryFetchUpdate (out versionFound, out patchNotes)) {
+				onUpdateFound (versionFound, patchNotes);
+				return true;
+			} else {
+				onUpdateNotFound();
 				return false;
-
-			onUpdateFound (versionFound, patchNotes);
-			return true;
+			}
 		}
 
 		private bool TryFetchUpdate (out Version versionFound, out string patchNotes)
@@ -77,8 +85,7 @@ namespace UpdaterCore
 			Exception ex;
 			patchNotes = null;
 
-			if (!TryDownloadVersion (out versionFound, out ex))
-			{
+			if (!TryDownloadVersion (out versionFound, out ex)) {
 				onCheckUpdateFailed (ex);
 				return false;
 			}
@@ -125,12 +132,19 @@ namespace UpdaterCore
 		private void onUpdateFound (Version version, string patchNotes)
 		{
 			var handler = UpdateFound;
-			if (handler != null)
-			{
+			if (handler != null) {
 				var zipURI = new Uri (updateLocation, version + ".zip");
 				var updateInfo = new UpdateInformation (version, patchNotes, zipURI);
 
 				handler (this, new UpdateCheckerEventArgs (updateInfo));
+			}
+		}
+
+		private void onUpdateNotFound()
+		{
+			var handler = UpdateNotFound;
+			if (handler != null) {
+				handler (this, new UpdateCheckerEventArgs (updateLocation));
 			}
 		}
 

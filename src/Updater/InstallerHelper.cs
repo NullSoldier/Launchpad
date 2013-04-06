@@ -48,7 +48,7 @@ namespace Updater
 			}
 		}
 
-		public static string GetFileDirectory(string filePath)
+		public static string GetFileDirectory (string filePath)
 		{
 			return new FileInfo (filePath).DirectoryName;
 		}

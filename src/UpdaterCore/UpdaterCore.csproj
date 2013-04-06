@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExtensionAttribute.cs" />
+    <Compile Include="FDHelper.cs" />
     <Compile Include="FileHelper.cs" />
     <Compile Include="IEnumerableHelper.cs" />
     <Compile Include="Install\InstallFileList.cs" />

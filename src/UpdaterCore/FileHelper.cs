@@ -20,14 +20,11 @@ namespace UpdaterCore
 			EnsureFileDirExists (new FileInfo (filePath));
 		}
 
-		public static string FlashDevelopDataDir
+		public static DirectoryInfo AppendDir(this DirectoryInfo dir,
+			string relativeDir)
 		{
-			get
-			{
-				if (cachedAppDir == null)
-					cachedAppDir = Path.Combine (PathHelper.AppDir, "Data");
-				return cachedAppDir;
-			}
+			var dirPath = Path.Combine (dir.FullName, relativeDir);
+			return new DirectoryInfo (dirPath);
 		}
 
 		private static string cachedAppDir = null;

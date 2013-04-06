@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using UpdaterCore;
 using log4net;
 
 namespace Updater
@@ -14,7 +15,7 @@ namespace Updater
 		/// [2] FlashDevelop Assembly to wait for
 		/// [3] Old updater assembly to wait for
 		/// </summary>
-		public static void Parse (string[] args, IInstallerModeCallbackSet callbackSet)
+		public static void Parse (string[] args, IInstallerModeCallbacks callbacks)
 		{
 			LogArguments (args);
 
@@ -23,50 +24,54 @@ namespace Updater
 				var updateCacheDir = new DirectoryInfo (Environment.CurrentDirectory);
 
 				logger.Info ("Starting installer in GUI setup mode.");
-				callbackSet.StartSetupMode (flashDevelopAssemblyPath, updateCacheDir);
+				callbacks.StartSetupMode (
+					flashDevelopAssemblyPath,
+					updateCacheDir);
 			}
-
 			else if (args.Length == 3) {
 				var updaterAssemblyPath = new FileInfo (args[0]);
 				var versionToInstall = new Version (args[1]);
 				var flashAssemblyPath = new FileInfo (args[2]);
 
 				logger.Debug ("Starting installer in intermediary mode.");
-				callbackSet.StartIntermediaryMode (updaterAssemblyPath, versionToInstall, flashAssemblyPath);
+				callbacks.StartIntermediaryMode (
+					updaterAssemblyPath,
+					versionToInstall,
+					flashAssemblyPath);
 			}
-
 			else if (args.Length == 4) {
 				var versionToInstall = new Version (args[1]);
 				var flashAssemblyPath = new FileInfo (args[2]);
 				var updaterAssemblyPath = new FileInfo (args[3]);
 
-				logger.Info ("Starting installer in update installer mode");
-				callbackSet.StartInstallerMode (versionToInstall, flashAssemblyPath, updaterAssemblyPath);
-			}
+				var dataDir = FDHelper.GetDataDir (flashAssemblyPath);
+				var cacheDir = dataDir.AppendDir (RELATIVE_CACHE);
 
+				logger.Info ("Starting installer in update installer mode");
+				callbacks.StartInstallerMode (
+					versionToInstall,
+					flashAssemblyPath,
+					updaterAssemblyPath,
+					cacheDir);
+			}
 			else
-				callbackSet.StartInvalidMode ();
+				callbacks.StartInvalidMode ();
 		}
 
+		private const string DATA_SUBFOLDER = "Launchpad";
+		private const string RELATIVE_CACHE = DATA_SUBFOLDER + "\\updatecache";
 		private static readonly ILog logger = LogManager.GetLogger (typeof (InstallerEntry));
-
-		//TODO: get from registry?
-
-		private static string[] possibleFlashDevelopPaths = new string[] 
-		{
-			@"C:\Program Files\FlashDevelop\FlashDevelop.exe",
-			@"C:\Program Files (x86)\FlashDevelop\FlashDevelop.exe",
-			@"C:\Users\NullSoldier\Documents\Code Work Area\Projects\SpaceportPlugin\lib\FlashDevelop\FlashDevelop\Bin\Debug\FlashDevelop.exe"
-		};
 
 		private static string getFlashDevelopPath()
 		{
-			foreach (var path in possibleFlashDevelopPaths) {
-				if (File.Exists (path))
-					return path;
-			}
-
-			return possibleFlashDevelopPaths[2];
+			//TODO: get from registry
+			var possiblePaths = new[] {
+				@"C:\Program Files\FlashDevelop\FlashDevelop.exe",
+				@"C:\Program Files (x86)\FlashDevelop\FlashDevelop.exe",
+				@"C:\Users\Jason\Desktop\LaunchpadDebug\src\FlashDevelop\FlashDevelop\Bin\Debug\FlashDevelop.exe"
+			};
+			var path = possiblePaths.FirstOrDefault (File.Exists);
+			return path ?? possiblePaths[2];
 		}
 
 		private static void LogArguments (string[] args)
