@@ -108,20 +108,9 @@ namespace Launchpad
 		/// </summary>
 		public bool DownloadUpdate (Version version)
 		{
-			TraceManager.AddAsync ("Preparing to download version v" + version);
-
-			Version versionOnDisk;
-			UpdateDownloader.TryGetWaitingPatchOnDisk (out versionOnDisk);
-			
-			// Make sure we actually need to download the update
-			if (versionOnDisk == null || versionOnDisk < version)
-			{
-				UpdateDownloader.Download (version);
-				return true;
-			}
-
-			WaitingUpdate = FoundUpdate;
-			return false;
+			TraceManager.AddAsync ("Preparing to download Launchpad update with version v" + version);
+			UpdateDownloader.Download (version);
+			return true;
 		}
 
 		/// <summary>
