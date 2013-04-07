@@ -17,7 +17,9 @@ namespace Updater
 {
 	public partial class frmMain : Form
 	{
-		public frmMain (Version versionToInstall, string flashDevelopAssemblyPath, string updateCacheDir)
+		public frmMain (Version versionToInstall,
+			string flashDevelopAssemblyPath,
+			string updateCacheDir)
 		{
 			InitializeComponent();
 
@@ -89,7 +91,8 @@ namespace Updater
 					Application.Exit ();
 				};
 
-				installer.Start (updateCacheDir,
+				installer.Start (
+					new DirectoryInfo (updateCacheDir),
 					new FileInfo (flashDevelopAssemblyPath));
 			};
 			extractor.Unzip (versionToInstall);

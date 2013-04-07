@@ -24,7 +24,7 @@ namespace UpdaterCore
 		/// Ex: FlashDevelop/
 		/// </summary>
 		public void Start(
-			string updateCacheDirectory,
+			DirectoryInfo updateCacheDirectory,
 			FileInfo flashDevelopAssembly)
 		{
 			installThread = new Thread (() => installFiles (
@@ -38,16 +38,19 @@ namespace UpdaterCore
 		private ILog logger = LogManager.GetLogger (typeof (Installer));
 
 		private void installFiles (
-			string updateCacheDir,
+			DirectoryInfo updateCacheDir,
 			FileInfo flashDevelopAssembly)
 		{
 			var dataDir = FDHelper.GetDataDir (flashDevelopAssembly);
 			var flashDevelopDir = flashDevelopAssembly.DirectoryName;
-			string filesDir = Path.Combine (updateCacheDir, "files");
+			string filesDir = updateCacheDir.AppendDir ("files").FullName ;
 
 			var installList = new InstallFileList (filesDir);
 			var transaction = new RevertableTransaction();
 			transaction.RolledBack += onRollingBackFinished;
+
+			// Makes sure we have a fresh updateCacheDir
+			recreateFilesDir (filesDir);
 
 			foreach (InstallerFile installFile in installList.Files)
 			{
@@ -73,6 +76,20 @@ namespace UpdaterCore
 				return;
 			}
 			onFinished();
+		}
+
+		private void recreateFilesDir(string filesDir)
+		{
+			var dir = new DirectoryInfo (filesDir);
+			try {
+				if (dir.Exists)
+					dir.Delete (true);
+				dir.Create ();
+			} catch (Exception ex) {
+				logger.Error ("Installer failed to recreate updatecache/files dir at " + filesDir, ex);
+				OnInstallFailed (ex);
+				return;
+			}
 		}
 
 		private string hardcodeResolvePath (

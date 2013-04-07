@@ -80,13 +80,13 @@ namespace Updater
 			Version version, 
 			FileInfo flashDevelopAssembly, 
 			FileInfo oldUpdateAssemblyPath,
-			DirectoryInfo cacheDir)
+			DirectoryInfo updateCacheDir)
 		{
 			AssemblyCloseDelayer.WaitForAssembliesAsync (() => 
 				startForm (
 					version,
 					flashDevelopAssembly,
-					cacheDir, 
+					updateCacheDir, 
 					true),
 				flashDevelopAssembly.FullName,
 				oldUpdateAssemblyPath.FullName);
