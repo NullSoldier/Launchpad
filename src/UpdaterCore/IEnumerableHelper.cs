@@ -41,6 +41,9 @@ namespace UpdaterCore
 
 		public static T[] ToArray<T> (this IEnumerable<T> self)
 		{
+			if (self is T[])
+				return (T[])self;
+
 			var length = self.Count();
 			var result = new T[length];
 
