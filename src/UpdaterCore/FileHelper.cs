@@ -26,7 +26,5 @@ namespace UpdaterCore
 			var dirPath = Path.Combine (dir.FullName, relativeDir);
 			return new DirectoryInfo (dirPath);
 		}
-
-		private static string cachedAppDir = null;
 	}
 }
