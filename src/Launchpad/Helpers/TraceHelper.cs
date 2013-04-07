@@ -38,10 +38,13 @@ namespace Launchpad.Helpers
 			Trace (msg, TraceType.ProcessEnd);
 		}
 
-		public static void TraceProcessError (string name, Process p)
+		public static void TraceProcessError (string name, Process p, string error=null)
 		{
 			var msg = String.Format ("{0} process ({1}) terminated with code {2}.",
 				name, p.Id, p.ExitCode);
+			if (error != null) {
+				msg += Environment.NewLine + error;
+			}
 			Trace (msg, TraceType.ProcessError);
 		}
 	}
