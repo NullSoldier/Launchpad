@@ -75,7 +75,6 @@ namespace Launchpad
 
 		public void OnError()
 		{
-			throw new NotImplementedException ();
 		}
 
 		private void setTargetEnabled(Target t, bool enabled)

@@ -60,7 +60,9 @@ namespace Launchpad
 		}
 
 		public Process StartGetDevicesNames (
-			Action<Target, DiscoveryStatus> found)
+			Action<Target, DiscoveryStatus> found,
+			Action<string> errors,
+			Action<int, Process> exited)
 		{
 			var parseDevice = new Action<string> (o => {
 				if (o == null) {
@@ -73,7 +75,7 @@ namespace Launchpad
 					DiscoveryStatus.LOST;
 				found (target, status);
 			});
-			return StartProcess ("push --list", parseDevice, null, null);
+			return StartProcess ("push --list", parseDevice, errors, exited);
 		}
 
 		public Process InstallToDevice (
