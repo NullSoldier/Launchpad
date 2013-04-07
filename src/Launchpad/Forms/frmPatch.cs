@@ -125,7 +125,7 @@ namespace Launchpad.Forms
 					progressBar.Style = ProgressBarStyle.Continuous;
 					break;
 				case PatchFormState.WaitingInstall:
-					inNotes.Text = waitingUpdate.PatchNotes.Replace ("\n", Environment.NewLine);
+					setPatchNotes (waitingUpdate.PatchNotes);
 					lblInstruction.Text = string.Format (PREPARING_FORMAT, waitingUpdate.Version);
 					lnkNotes.Visible = true;
 					btnInstall.Enabled = true;
@@ -168,6 +168,14 @@ namespace Launchpad.Forms
 			Size = new Size (Size.Width, fullHeight);
 			SizeGripStyle = SizeGripStyle.Show;
 			lnkNotes.Text = "Hide patch notes...";
+		}
+
+		private void setPatchNotes(string notes)
+		{
+			if (notes.StartsWith ("{\\rtf"))
+				inNotes.Rtf = notes;
+			else
+				inNotes.Text = notes.Replace ("\n", Environment.NewLine);
 		}
 
 		private enum PatchFormState

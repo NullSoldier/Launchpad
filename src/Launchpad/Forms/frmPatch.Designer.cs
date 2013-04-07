@@ -28,7 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.inNotes = new System.Windows.Forms.TextBox();
+			this.inNotes = new System.Windows.Forms.RichTextBox();
 			this.progressBar = new System.Windows.Forms.ProgressBar();
 			this.btnInstall = new System.Windows.Forms.Button();
 			this.lblInstruction = new System.Windows.Forms.Label();
@@ -40,10 +40,12 @@
 			this.inNotes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.inNotes.BackColor = System.Drawing.SystemColors.Window;
 			this.inNotes.Location = new System.Drawing.Point(14, 84);
 			this.inNotes.Multiline = true;
 			this.inNotes.Name = "inNotes";
 			this.inNotes.ReadOnly = true;
+			this.inNotes.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.inNotes.Size = new System.Drawing.Size(427, 138);
 			this.inNotes.TabIndex = 0;
 			this.inNotes.Text = "Fixes:\r\n\t- Fixed some bugs in A2J\r\n\t- Fixed a crash in the simulator\r\nEnhancement" +
@@ -119,7 +121,7 @@
 
 		#endregion
 
-		private System.Windows.Forms.TextBox inNotes;
+		private System.Windows.Forms.RichTextBox inNotes;
 		private System.Windows.Forms.ProgressBar progressBar;
 		private System.Windows.Forms.Button btnInstall;
 		private System.Windows.Forms.Label lblInstruction;
