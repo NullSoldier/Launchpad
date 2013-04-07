@@ -62,15 +62,26 @@ namespace Launchpad
 				TraceManager.AddAsync ("Spaceport switching to new project at " + p.Directory);
 				sp.ProjectDirectory = p.Directory;
 				EnablePlugin (enabled:true);
+				EnableProject (enabled:true);
 			} else {
 				EnablePlugin (enabled:false);
+				EnableProject (enabled:false);
 			}
+		}
+
+		private void EnableProject (bool enabled)
+		{
+			var eventType = enabled
+				? SPPluginEvents.ProjectOpened
+				: SPPluginEvents.ProjectClosed;
+			var dataEvent = new DataEvent (EventType.Command,
+				eventType, enabled);
+			EventManager.DispatchEvent (this, dataEvent);
 		}
 
 		private void EnablePlugin (bool enabled)
 		{
-			if (isEnabled != enabled) // Ignore duplicate statuses, review
-			{
+			if (isEnabled != enabled) { // Ignore duplicate statuses, review
 				isEnabled = enabled;
 				TraceManager.AddAsync ((enabled ? "Enabling" : "Disabling")
 					+ " Spaceport plugin");

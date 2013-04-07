@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Launchpad.Forms;
 using PluginCore;
 using PluginCore.Managers;
+using ProjectManager;
 using ProjectManager.Controls;
 using UpdaterCore;
 
@@ -21,6 +22,9 @@ namespace Launchpad
 			this.settings = settings;
 			this.form = PluginBase.MainForm.MenuStrip.Parent.Parent;
 
+			events.SubDataEvent (SPPluginEvents.ProjectOpened, projectOpened);
+			events.SubDataEvent (SPPluginEvents.ProjectClosed, projectClosed);
+			
 			waitingThread = new Thread (waitForProjectMenu);
 			waitingThread.Name = "Waiting for Project Menu Thread";
 			waitingThread.Start();
@@ -37,6 +41,16 @@ namespace Launchpad
 		private ProjectMenuEx menu;
 		private Thread waitingThread;
 		private Control form;
+
+		private void projectOpened (DataEvent dataEvent)
+		{
+			menu.ItemsEnabled = true;
+		}
+
+		private void projectClosed (DataEvent obj)
+		{
+			menu.ItemsEnabled = false;
+		}
 
 		private void loadMenu (ProjectMenu menuItem)
 		{
