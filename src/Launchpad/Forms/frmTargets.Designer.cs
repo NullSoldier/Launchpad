@@ -32,6 +32,7 @@
 			this.colDeviceName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.colOS = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.btnOk = new System.Windows.Forms.Button();
+			this.lblCloseNote = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// listTargets
@@ -73,12 +74,23 @@
 			this.btnOk.UseVisualStyleBackColor = true;
 			this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
 			// 
+			// lblCloseNote
+			// 
+			this.lblCloseNote.AutoSize = true;
+			this.lblCloseNote.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblCloseNote.Location = new System.Drawing.Point(15, 341);
+			this.lblCloseNote.Name = "lblCloseNote";
+			this.lblCloseNote.Size = new System.Drawing.Size(327, 15);
+			this.lblCloseNote.TabIndex = 3;
+			this.lblCloseNote.Text = "This list updates automatically. There is no need to reopen it.";
+			// 
 			// frmTargets
 			// 
 			this.AcceptButton = this.btnOk;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(473, 372);
+			this.Controls.Add(this.lblCloseNote);
 			this.Controls.Add(this.btnOk);
 			this.Controls.Add(this.listTargets);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -88,6 +100,7 @@
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ClosingForm);
 			this.Load += new System.EventHandler(this.LoadingForm);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -97,5 +110,6 @@
 		private System.Windows.Forms.ColumnHeader colDeviceName;
 		private System.Windows.Forms.ColumnHeader colOS;
 		private System.Windows.Forms.Button btnOk;
+		private System.Windows.Forms.Label lblCloseNote;
 	}
 }
