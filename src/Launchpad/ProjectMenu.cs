@@ -29,7 +29,7 @@ namespace Launchpad
 		public readonly ToolStripMenuItem AppProperties;
 		public readonly ToolStripMenuItem InstallProject;
 
-		public bool ItemsEnabled
+		public bool ProjectItemsEnabled
 		{
 			set {
 				items.ForEach (i => i.Enabled = value);

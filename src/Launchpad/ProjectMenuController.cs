@@ -21,9 +21,6 @@ namespace Launchpad
 			this.sp = sp;
 			this.settings = settings;
 			this.form = PluginBase.MainForm.MenuStrip.Parent.Parent;
-
-			events.SubDataEvent (SPPluginEvents.ProjectOpened, projectOpened);
-			events.SubDataEvent (SPPluginEvents.ProjectClosed, projectClosed);
 			
 			waitingThread = new Thread (waitForProjectMenu);
 			waitingThread.Name = "Waiting for Project Menu Thread";
@@ -44,19 +41,23 @@ namespace Launchpad
 
 		private void projectOpened (DataEvent dataEvent)
 		{
-			menu.ItemsEnabled = true;
+			menu.ProjectItemsEnabled = true;
 		}
 
 		private void projectClosed (DataEvent obj)
 		{
-			menu.ItemsEnabled = false;
+			menu.ProjectItemsEnabled = false;
 		}
 
 		private void loadMenu (ProjectMenu menuItem)
 		{
 			menu = new ProjectMenuEx (menuItem);
+			menu.ProjectItemsEnabled = false;
 			menu.AppProperties.Click += ProjectSettings_Clicked;
 			menu.InstallProject.Click += onInstall_Clicked;
+
+			events.SubDataEvent (SPPluginEvents.ProjectOpened, projectOpened);
+			events.SubDataEvent (SPPluginEvents.ProjectClosed, projectClosed);
 		}
 
 		private void waitForProjectMenu()
