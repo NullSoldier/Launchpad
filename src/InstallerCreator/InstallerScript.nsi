@@ -5,7 +5,7 @@
 !include "WordFunc.nsh"
 
 ;--------------------------------
-SetCompress off
+;SetCompress off
 SetCompressor zlib
 CRCCheck on
 RequestExecutionLevel admin
