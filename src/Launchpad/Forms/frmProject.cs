@@ -80,18 +80,23 @@ namespace Launchpad.Forms
 
 		private void btnSave_Click (object s, EventArgs ev)
 		{
-			if (saveConfig()) {
+			string error;
+			if (trySaveConfig (out error)) {
 				Close();
 			} else {
-				MessageBox.Show ("Failed to save configuration for unknown reason.");
+				MessageBox.Show ("Failed to save configuration:"
+					+ Environment.NewLine
+					+ error);
 			}
 		}
 
 		private Dictionary<string, string> loadConfig()
 		{
-			var lines = sp.GetOutput ("config --show");
-			if (lines == null) {
-				MessageBox.Show ("Failed to load configuration for unknown reason");
+			IEnumerable<string> lines;
+			if (!sp.TryGetOutput ("config --project --show", out lines)) {
+				MessageBox.Show ("Failed to load configuration:"
+					+ Environment.NewLine
+					+ String.Join (Environment.NewLine, lines.ToArray()));
 				return null;
 			}
 			var config = new Dictionary<string, string>();
@@ -102,17 +107,18 @@ namespace Launchpad.Forms
 			return config;
 		}
 
-		private bool saveConfig()
+		private bool trySaveConfig (out string error)
 		{
 			foreach (Setting tup in changedFields.Keys) {
 				var key = fieldsToConfig [tup];
 				var value = tup.Value;
 
-				var cmd = String.Format ("config {0} {1}", key, value);
-				if (sp.GetOutput (cmd) == null)
+				var cmd = String.Format ("config --project {0} {1}", key, value);
+				if (!sp.TryExecuteCmd (cmd, out error))
 					return false;
 			}
 			changedFields.Clear();
+			error = null;
 			return true;
 		}
 

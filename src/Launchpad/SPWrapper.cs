@@ -97,20 +97,23 @@ namespace Launchpad
 
 		public string GetFirstOutput (string cmd)
 		{
-			var lines = GetOutput (cmd);
-			return lines == null ? null
-				: lines.FirstOrDefault();
+			IEnumerable<string> lines;
+			return TryGetOutput (cmd, out lines)
+				? lines.FirstOrDefault()
+				: null;
 		}
 
-		public IEnumerable<string> GetOutput (string cmd)
+		public bool TryGetOutput (string cmd,
+			out IEnumerable<string> lines)
 		{
 			var p = StartProcess (cmd, null, null, null);
 			p.WaitForExit();
-			if (p.ExitCode != SUCCESS_CODE)
-				return null;
-			return p.StandardOutput
-				.ReadToEnd()
-				.Split (Environment.NewLine);
+			if (p.ExitCode != SUCCESS_CODE) {
+				lines = p.StandardError.ReadLinesToEnd();
+				return false;
+			}
+			lines = p.StandardOutput.ReadLinesToEnd();
+			return true;
 		}
 
 		public void Dispose()

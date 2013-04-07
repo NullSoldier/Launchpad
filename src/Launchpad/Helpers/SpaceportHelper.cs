@@ -8,7 +8,23 @@ namespace Launchpad.Helpers
 {
 	public static class SpaceportHelper
 	{
-		public static Process RunOnTarget (this SPWrapper self, Target t,
+		public static bool TryExecuteCmd (
+			this SPWrapper self,
+			string cmd,
+			out string error)
+		{
+			IEnumerable<String> lines;
+			if (self.TryGetOutput (cmd, out lines)) {
+				error = null;
+				return true;
+			}
+			error = string.Join (Environment.NewLine, lines.ToArray());
+			return false;
+		}
+
+		public static Process RunOnTarget (
+			this SPWrapper self,
+			Target t,
 			Action<string> output, 
 			Action<string> errors,
 			Action<int, Process> exited)
@@ -24,7 +40,8 @@ namespace Launchpad.Helpers
 			}
 		}
 
-		public static Process RunOnTargets (this SPWrapper self,
+		public static Process RunOnTargets (
+			this SPWrapper self,
 			IEnumerable<Target> ts,
 			Action<string> output, 
 			Action<string> errors,

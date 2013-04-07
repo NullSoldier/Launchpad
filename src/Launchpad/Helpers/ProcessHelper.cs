@@ -11,6 +11,14 @@ namespace Launchpad.Helpers
 {
 	public static class ProcessHelper
 	{
+		public static IEnumerable<string> ReadLinesToEnd (
+			this StreamReader reader)
+		{
+			return reader
+				.ReadToEnd()
+				.Split (Environment.NewLine);
+		}
+
 		public static void StartReadAsync (this Process p,
 			Action<string> output,
 			Action<string> errors,
