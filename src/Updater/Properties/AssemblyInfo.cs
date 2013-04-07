@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle ("SpaceportPluginInstaller")]
-[assembly: AssemblyDescription ("An updater installer.")]
+[assembly: AssemblyTitle ("LaunchpadUpdater")]
+[assembly: AssemblyDescription ("An updater installer for Launchpad.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany ("Entity Games")]
-[assembly: AssemblyProduct ("LaunchpadInstaller")]
-[assembly: AssemblyCopyright("Copyright © 2012")]
+[assembly: AssemblyProduct ("Launchpad")]
+[assembly: AssemblyCopyright ("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
