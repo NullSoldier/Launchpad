@@ -62,6 +62,7 @@ namespace Launchpad
 			menu = new SpaceportMenu (PluginBase.MainForm.MenuStrip);
 			menu.SelectTargets.Click += SelectTargets_Clicked;
 			menu.About.Click += About_Clicked;
+			menu.SpaceportWebsite.Click += SpaceportWebsite_Clicked;
 			menu.UpdateNow.Click += UpdateSpaceport_Clicked;
 			menu.CheckUpdates.CheckedChanged += CheckUpdates_CheckChanged;
 
@@ -142,6 +143,11 @@ namespace Launchpad
 		}
 
 		private void About_Clicked (object s, EventArgs ev)
+		{
+			Process.Start ("http://entitygames.net/index.php?v=launchpad");
+		}
+
+		private void SpaceportWebsite_Clicked (object s, EventArgs ev)
 		{
 			Process.Start ("http://spaceport.io");
 		}
