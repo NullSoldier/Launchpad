@@ -33,6 +33,8 @@
 			this.colOS = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.btnOk = new System.Windows.Forms.Button();
 			this.lblCloseNote = new System.Windows.Forms.Label();
+			this.lblError = new System.Windows.Forms.Label();
+			this.lnkError = new System.Windows.Forms.LinkLabel();
 			this.SuspendLayout();
 			// 
 			// listTargets
@@ -84,12 +86,36 @@
 			this.lblCloseNote.TabIndex = 3;
 			this.lblCloseNote.Text = "This list updates automatically. There is no need to reopen it.";
 			// 
+			// lblError
+			// 
+			this.lblError.AutoSize = true;
+			this.lblError.Location = new System.Drawing.Point(14, 341);
+			this.lblError.Name = "lblError";
+			this.lblError.Size = new System.Drawing.Size(261, 15);
+			this.lblError.TabIndex = 4;
+			this.lblError.Text = "Failed to get devices. List will refresh when fixed,";
+			this.lblError.Visible = false;
+			// 
+			// lnkError
+			// 
+			this.lnkError.AutoSize = true;
+			this.lnkError.Location = new System.Drawing.Point(275, 341);
+			this.lnkError.Name = "lnkError";
+			this.lnkError.Size = new System.Drawing.Size(101, 15);
+			this.lnkError.TabIndex = 5;
+			this.lnkError.TabStop = true;
+			this.lnkError.Text = "more information";
+			this.lnkError.Visible = false;
+			this.lnkError.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.onErrorClicked);
+			// 
 			// frmTargets
 			// 
 			this.AcceptButton = this.btnOk;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(473, 372);
+			this.Controls.Add(this.lnkError);
+			this.Controls.Add(this.lblError);
 			this.Controls.Add(this.lblCloseNote);
 			this.Controls.Add(this.btnOk);
 			this.Controls.Add(this.listTargets);
@@ -98,7 +124,7 @@
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Select devices to run on";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ClosingForm);
-			this.Load += new System.EventHandler(this.LoadingForm);
+			this.Load += new System.EventHandler(this.formLoaded);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -111,5 +137,7 @@
 		private System.Windows.Forms.ColumnHeader colOS;
 		private System.Windows.Forms.Button btnOk;
 		private System.Windows.Forms.Label lblCloseNote;
+		private System.Windows.Forms.Label lblError;
+		private System.Windows.Forms.LinkLabel lnkError;
 	}
 }

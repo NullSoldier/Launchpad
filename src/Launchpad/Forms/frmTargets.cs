@@ -25,20 +25,35 @@ namespace Launchpad
 		private DeviceWatcher watcher;
 		private IDisposable unsub;
 
-		private void LoadingForm (object s, EventArgs e)
+		private void formLoaded (object s, EventArgs e)
 		{
+			if (!watcher.IsWorking) {
+				lblError.Visible = true;
+				lnkError.Visible = true;
+				lblCloseNote.Visible = false;
+			}
+			
 			var images = new ImageList ();
 			images.Images.Add (DevicePlatform.Sim,			Resources.simIcon);
 			images.Images.Add (DevicePlatform.FlashPlayer,	Resources.flashIcon);
 			images.Images.Add (DevicePlatform.iOS,			Resources.appleIcon);
 			images.Images.Add (DevicePlatform.Android,		Resources.androidIcon);
 			listTargets.SmallImageList = images;
-			
+
 			addBuiltInTargets();
 
 			// Subscribe to device added/removed notifications
 			unsub = watcher.Subscribe (this);
 			listTargets.ItemChecked += onTargetChecked;
+		}
+
+		private void onErrorClicked (object s, LinkLabelLinkClickedEventArgs e)
+		{
+			MessageBox.Show (this,
+				watcher.LastError,
+				"Error Getting Devices",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Error);
 		}
 
 		private void onTargetChecked (object s, ItemCheckedEventArgs e)
