@@ -109,6 +109,7 @@ namespace Launchpad
 			shownError = false;
 			IsWorking = true;
 			TraceHelper.TraceProcessStart ("device watcher", p);
+			subs.ForEach (s => s.OnStart());
 		}
 
 		private void onExited (int i, Process p)

@@ -10,5 +10,6 @@ namespace Launchpad.Observable
 		void NotifyRemoved (T item);
 		void OnComplete();
 		void OnError();
+		void OnStart();
 	}
 }

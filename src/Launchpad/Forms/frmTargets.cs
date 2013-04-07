@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using Launchpad.Helpers;
 using Launchpad.Observable;
 using Launchpad.Properties;
+using UpdaterCore;
 
 namespace Launchpad
 {
@@ -27,12 +28,6 @@ namespace Launchpad
 
 		private void formLoaded (object s, EventArgs e)
 		{
-			if (!watcher.IsWorking) {
-				lblError.Visible = true;
-				lnkError.Visible = true;
-				lblCloseNote.Visible = false;
-			}
-			
 			var images = new ImageList ();
 			images.Images.Add (DevicePlatform.Sim,			Resources.simIcon);
 			images.Images.Add (DevicePlatform.FlashPlayer,	Resources.flashIcon);
@@ -41,6 +36,7 @@ namespace Launchpad
 			listTargets.SmallImageList = images;
 
 			addBuiltInTargets();
+			showErrorLink (!watcher.IsWorking);
 
 			// Subscribe to device added/removed notifications
 			unsub = watcher.Subscribe (this);
@@ -90,6 +86,12 @@ namespace Launchpad
 
 		public void OnError()
 		{
+			showErrorLink (true);
+		}
+
+		public void OnStart()
+		{
+			showErrorLink (false);
 		}
 
 		private void setTargetEnabled(Target t, bool enabled)
@@ -129,6 +131,15 @@ namespace Launchpad
 
 			var s = new Target ("sim", "Spaceport Simulator", DevicePlatform.Sim);
 			addTargetItem (s, settings.DeploySim);
+		}
+
+		private void showErrorLink (bool show)
+		{
+			Invoke (new Action (() => {
+				lblError.Visible = show;
+				lnkError.Visible = show;
+				lblCloseNote.Visible = !show;
+			}));
 		}
 	}
 }
