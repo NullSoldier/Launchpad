@@ -131,7 +131,7 @@ namespace Launchpad
 			patch.ShowDialog (PluginBase.MainForm);
 		}
 
-		private void CheckUpdates_CheckChanged(object sender, EventArgs e)
+		private void CheckUpdates_CheckChanged (object sender, EventArgs e)
 		{
 			switch (menu.CheckUpdates.Checked)
 			{

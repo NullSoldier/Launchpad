@@ -17,7 +17,6 @@ namespace Launchpad
 		public frmTargets (DeviceWatcher watcher, Settings settings)
 		{
 			InitializeComponent();
-
 			this.settings = settings;
 			this.watcher = watcher;
 		}
