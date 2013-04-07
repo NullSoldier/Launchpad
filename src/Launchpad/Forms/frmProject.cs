@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Launchpad.Config;
 using Launchpad.Helpers;
+using Launchpad.Properties;
 using UpdaterCore;
 using Orientation = Launchpad.Config.Orientation;
 
@@ -61,6 +62,8 @@ namespace Launchpad.Forms
 		
 		private void onLoaded (object s, EventArgs ev)
 		{
+			Icon = Icon.FromHandle (Resources.spaceportIcon.GetHicon ());
+
 			var config = loadConfig();
 			if (config != null)
 				displayConfig (config);

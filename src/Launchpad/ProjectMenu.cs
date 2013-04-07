@@ -16,9 +16,11 @@ namespace Launchpad
 			Check.ArgNull (projectMenu, "projectMenu");
 			this.projectMenu = projectMenu;
 
-			InstallProject = new ToolStripMenuItem ("Install Project");
+			InstallProject = new ToolStripMenuItem ("Install to Device");
+			InstallProject.Image = Icons.DownArrow.Img;
+
 			AppProperties = new ToolStripMenuItem ("Spaceport App Properties");
-			AppProperties.Image = Image.FromHbitmap (Resources.spaceportIcon.GetHbitmap());
+			AppProperties.Image = Image.FromHbitmap (Resources.spaceportIcon.GetHbitmap ());
 			
 			addItemAfter (InstallProject, projectMenu.CleanProject);
 			addItemBefore (AppProperties, projectMenu.Properties);

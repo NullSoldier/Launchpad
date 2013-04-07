@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Net;
 using System.Windows.Forms;
+using Launchpad.Properties;
 using UpdaterCore;
 using UpdaterCore.Update;
 
@@ -23,6 +24,8 @@ namespace Launchpad.Forms
 
 		private void form_Loaded (object s, EventArgs e)
 		{
+			Icon = Icon.FromHandle (Resources.spaceportIcon.GetHicon ());
+
 			fullHeight = Size.Height;
 			MinimumSize = new Size (MinimumSize.Width, fullHeight - inNotes.Height);
 			hidePatchNotes();

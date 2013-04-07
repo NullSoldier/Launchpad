@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Launchpad.Helpers;
+using Launchpad.Properties;
 using UpdaterCore;
 
 namespace Launchpad.Forms
@@ -23,6 +24,8 @@ namespace Launchpad.Forms
 
 		private void frmInstall_Load (object s, EventArgs ev)
 		{
+			Icon = Icon.FromHandle (Resources.spaceportIcon.GetHicon());
+
 			setState (InstallerMode.Waiting);
 			btnInstalliOS.Focus();
 		}

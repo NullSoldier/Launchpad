@@ -28,6 +28,8 @@ namespace Launchpad
 
 		private void formLoaded (object s, EventArgs e)
 		{
+			Icon = Icon.FromHandle (Resources.spaceportIcon.GetHicon());
+
 			var images = new ImageList ();
 			images.Images.Add (DevicePlatform.Sim,			Resources.simIcon);
 			images.Images.Add (DevicePlatform.FlashPlayer,	Resources.flashIcon);
