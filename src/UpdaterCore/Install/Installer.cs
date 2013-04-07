@@ -49,9 +49,6 @@ namespace UpdaterCore
 			var transaction = new RevertableTransaction();
 			transaction.RolledBack += onRollingBackFinished;
 
-			// Makes sure we have a fresh updateCacheDir
-			recreateFilesDir (filesDir);
-
 			foreach (InstallerFile installFile in installList.Files)
 			{
 				// Take the original path and chop off the install root,
@@ -76,20 +73,6 @@ namespace UpdaterCore
 				return;
 			}
 			onFinished();
-		}
-
-		private void recreateFilesDir(string filesDir)
-		{
-			var dir = new DirectoryInfo (filesDir);
-			try {
-				if (dir.Exists)
-					dir.Delete (true);
-				dir.Create ();
-			} catch (Exception ex) {
-				logger.Error ("Installer failed to recreate updatecache/files dir at " + filesDir, ex);
-				OnInstallFailed (ex);
-				return;
-			}
 		}
 
 		private string hardcodeResolvePath (

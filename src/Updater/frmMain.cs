@@ -58,9 +58,10 @@ namespace Updater
 
 		public void RunInstaller()
 		{
-			if (!VerifyLocalUpdateExists()) {
+			if (!VerifyLocalUpdateExists())
 				return;
-			}
+			if (!RecreateFilesDir (filesDir))
+				return;
 
 			UpdateExtractor extractor = new UpdateExtractor (updateCacheDir);
 			extractor.ProgressChanged += (s, e) =>
@@ -73,7 +74,7 @@ namespace Updater
 			};
 			extractor.Finished += (s, e) =>
 			{
-				logger.DebugFormat ("Finished extracting {0} files to {1}", e.EntriesTotal, filesDir);
+				logger.DebugFormat ("Finished extracting files to {1}", filesDir);
 				progressForm.SetInstruction ("Installing files from " + filesDir + " to " + flashDevelopDir);
 				Installer installer = new Installer ();
 				
@@ -153,6 +154,21 @@ namespace Updater
 			Close();
 			Application.Exit ();
 			return false;
+		}
+
+		private bool RecreateFilesDir (string filesDir)
+		{
+			var dir = new DirectoryInfo (filesDir);
+			try {
+				if (dir.Exists)
+					dir.Delete (true);
+				dir.Create ();
+			} catch (Exception ex) {
+				logger.Error ("Installer failed to recreate updatecache/files dir at " + filesDir, ex);
+				invokeMessageBox ("Install failed, couldn't recreate updatecache/files");
+				return false;
+			}
+			return true;
 		}
 
 		private void btnInstall_Click(object sender, EventArgs e)
