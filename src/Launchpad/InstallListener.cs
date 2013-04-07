@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using Launchpad.Forms;
+using Launchpad.Helpers;
 using PluginCore;
 using UpdaterCore;
 
@@ -82,6 +83,7 @@ namespace Launchpad
 				onOutput,
 				onError,
 				onExited);
+			TraceHelper.TraceProcessStart ("spaceport install", installProcess);
 		}
 
 		private void onStopped()

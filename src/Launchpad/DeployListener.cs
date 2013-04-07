@@ -54,14 +54,14 @@ namespace Launchpad
 				TraceHelper.TraceError,
 				(exitCode, process) => {
 					if (exitCode != 0) {
-						TraceHelper.TraceError ("Push process ("+process.Id+") terminated for with exit code " + exitCode);
+						TraceHelper.TraceProcessError ("Push", process);
 					}
 					pushes.Remove (process.Id);
 				});
 			// Did it start successfully?
 			if (p != null) {
 				pushes.Add (p.Id, p);
-				TraceHelper.Trace ("Deploy to devices " + targets.Count() + " process ("+p.Id+") started", TraceType.ProcessStart);
+				TraceHelper.TraceProcessStart ("Deploy to devices " + targets.Count(), p);
 			} else {
 				TraceHelper.TraceError ("Push to devices failed");
 			}
@@ -86,7 +86,7 @@ namespace Launchpad
 				processBuildOutput,
 				(exitCode, process) => processBuildResult (exitCode, finished));
 
-			TraceHelper.Trace ("Build process ("+build.Id+") started.", TraceType.ProcessStart);
+			TraceHelper.TraceProcessStart ("Build", build);
 		}
 
 		private void processBuildResult (int exitCode, Action success)

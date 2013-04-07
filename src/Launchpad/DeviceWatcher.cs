@@ -74,7 +74,7 @@ namespace Launchpad
 		{
 			Active.Clear();
 			var p = sp.StartGetDevicesNames (processDevice);
-			TraceHelper.Trace ("Started device watcher process ("+p.Id+")", TraceType.ProcessStart);
+			TraceHelper.TraceProcessStart ("device watcher", p);
 			return p;
 		}
 	}
