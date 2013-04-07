@@ -26,7 +26,7 @@ namespace Updater
 			FileInfo flashAssemblyPath)
 		{
 			string appDataDir = Environment.GetFolderPath (
-				Environment.SpecialFolder.ApplicationData);
+				Environment.SpecialFolder.LocalApplicationData);
 			string copyDest = Path.Combine (appDataDir,
 				"Launchpad\\" + updaterAssemblyPath.Name);
 
