@@ -92,20 +92,26 @@ namespace Launchpad
 			started = false;
 		}
 
-		private string parseAndroidError (string lastError, int exitCode)
+		private string parseAndroidError (string error, int exitCode)
 		{
-			if (lastError.Contains ("[INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES]")) {
+			if (error == null) {
+				return getDefaultError (error, exitCode);
+			}
+			if (error.Contains ("[INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES]"))
+			{
 				return "The project has changed in an unexpected way. "
 				+ "Uninstall your project from Android first, and then "
 				+ "try installing again.";
 			}
-			return getDefaultError (lastError, exitCode);
+			return getDefaultError (error, exitCode);
 		}
 
-		private string getDefaultError (string lastError, int exitCode)
+		private string getDefaultError (string error, int exitCode)
 		{
-			return "Install to device failed with exit code "
-					+ exitCode + Environment.NewLine + lastError;
+			var msg = "Install to device failed with exit code " + exitCode;
+			if (error != null)
+				msg += Environment.NewLine + error;
+			return msg;
 		}
 	}
 }
