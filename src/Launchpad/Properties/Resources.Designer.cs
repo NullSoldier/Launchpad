@@ -143,7 +143,7 @@ namespace Launchpad.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://spaceport.io.
+        ///   Looks up a localized string similar to http://entitygames.net.
         /// </summary>
         internal static string PluginHelp {
             get {

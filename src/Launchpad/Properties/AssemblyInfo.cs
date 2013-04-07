@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information About an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle ("SpaceportPluginEntry")]
-[assembly: AssemblyDescription ("")]
+[assembly: AssemblyTitle ("Launchpad")]
+[assembly: AssemblyDescription ("FlashDevelop plugin for Spaceport support")]
 [assembly: AssemblyConfiguration ("")]
-[assembly: AssemblyCompany ("")]
-[assembly: AssemblyProduct ("SpaceportPluginEntry")]
+[assembly: AssemblyCompany ("Entity Games")]
+[assembly: AssemblyProduct ("Launchpad")]
 [assembly: AssemblyCopyright ("Copyright ©  2012")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion ("0.0.9.0")]
-[assembly: AssemblyFileVersion ("0.0.9.0")]
+[assembly: AssemblyVersion ("0.0.9.1")]
+[assembly: AssemblyFileVersion ("0.0.9.1")]
