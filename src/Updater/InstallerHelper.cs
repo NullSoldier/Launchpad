@@ -32,7 +32,7 @@ namespace Updater
 		/// <summary>
 		/// 
 		/// </summary>
-		public static void LogInstallFiles (string filesDirectory, Action<string> LogMessage)
+		public static void LogInstallFiles (DirectoryInfo filesDirectory, Action<string> LogMessage)
 		{
 			var installList = new InstallFileList (filesDirectory);
 

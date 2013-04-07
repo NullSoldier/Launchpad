@@ -43,9 +43,11 @@ namespace UpdaterCore
 		{
 			var dataDir = FDHelper.GetDataDir (flashDevelopAssembly);
 			var flashDevelopDir = flashDevelopAssembly.DirectoryName;
-			string filesDir = updateCacheDir.AppendDir ("files").FullName ;
+			var updateDir = updateCacheDir
+				.AppendDir ("files")
+				.AppendDir ("update");
 
-			var installList = new InstallFileList (filesDir);
+			var installList = new InstallFileList (updateDir);
 			var transaction = new RevertableTransaction();
 			transaction.RolledBack += onRollingBackFinished;
 
@@ -53,11 +55,18 @@ namespace UpdaterCore
 			{
 				// Take the original path and chop off the install root,
 				// then append it to the flash develop folder
-				string relativeInstallPath = installFile.File.FullName.Substring (filesDir.Length + 1);
-				var dest = hardcodeResolvePath (relativeInstallPath, flashDevelopDir, dataDir.FullName);
+				string relativeInstallPath = installFile.File.FullName
+					.Substring (updateDir.FullName.Length + 1);
+				
+				string dest = hardcodeResolvePath (
+					relativeInstallPath,
+					flashDevelopDir,
+					dataDir.FullName);
 
-				var fileCopyAction = new RevertableFileCopy (installFile.File.FullName,
-					dest, ensureDirectoryExists:true);
+				var fileCopyAction = new RevertableFileCopy (
+					installFile.File.FullName,
+					dest,
+					ensureDirectoryExists:true);
 
 				fileCopyAction.FileCopied += (o, ev) => onFileInstalled (ev.Value);
 				transaction.Do (fileCopyAction);

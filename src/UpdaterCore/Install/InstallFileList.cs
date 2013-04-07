@@ -14,9 +14,9 @@ namespace Updater
 		/// Takes a path to a files directory where files have been extracted
 		/// Ex: FlashDevelop/Data/updatecache/files
 		/// </summary>
-		public InstallFileList (string filesDir)
+		public InstallFileList (DirectoryInfo dirInfo)
 		{
-			this.filesDir = filesDir;
+			this.dirInfo = dirInfo.FullName;
 		}
 
 		public int Count
@@ -38,16 +38,16 @@ namespace Updater
 			}
 		}
 
-		private readonly string filesDir;
+		private readonly string dirInfo;
 		private int fileCount;
 		private IEnumerable<InstallerFile> fileCache;
 
 		private IEnumerable<InstallerFile> buildFileList()
 		{
-			if (!Directory.Exists (filesDir))
-				throw new FileNotFoundException ("Install file list doesn't exist at " + Environment.NewLine + filesDir);
+			if (!Directory.Exists (dirInfo))
+				throw new FileNotFoundException ("Install file list doesn't exist at " + Environment.NewLine + dirInfo);
 
-			foreach (string filePath in Directory.GetFiles (filesDir, "*", SearchOption.AllDirectories))
+			foreach (string filePath in Directory.GetFiles (dirInfo, "*", SearchOption.AllDirectories))
 			{
 				// Prevent lazy loading issues
 				if (!File.Exists (filePath))
