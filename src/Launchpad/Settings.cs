@@ -28,8 +28,15 @@ namespace Launchpad
 			set { deploySim = value; }
 		}
 
+		public bool CheckForUpdates
+		{
+			get { return checkUpdates; }
+			set { checkUpdates = value; }
+		}
+
 		private List<Target> targets = new List<Target>();
 		private bool deployDefault = true;
 		private bool deploySim = false;
+		private bool checkUpdates = false;
 	}
 }

@@ -60,6 +60,7 @@ namespace Launchpad
 			events.SubDataEvent (SPPluginEvents.Disabled, PluginDisabled);
 
 			menu = new SpaceportMenu (PluginBase.MainForm.MenuStrip);
+			menu.CheckUpdates.Checked = settings.CheckForUpdates;
 			menu.SelectTargets.Click += SelectTargets_Clicked;
 			menu.About.Click += About_Clicked;
 			menu.SpaceportWebsite.Click += SpaceportWebsite_Clicked;
@@ -67,8 +68,10 @@ namespace Launchpad
 			menu.CheckUpdates.CheckedChanged += CheckUpdates_CheckChanged;
 
 			// Subscribe to updater hooks for the UI
-			updater.UpdateRunner.CheckUpdateStarted += (s, ev) =>
+			updater.UpdateRunner.CheckUpdateStarted += (s, ev) => {
+				TraceHelper.TraceInfo ("Started checking for updates automatically");
 				logger.Info ("Spaceport updater runner started");
+			};
 			updater.UpdateRunner.CheckUpdateStopped += (s, ev) =>
 				logger.Info ("Spaceport updater runner stopped");
 			updater.UpdateRunner.CheckUpdateFailed += (s, ev) =>
@@ -79,8 +82,11 @@ namespace Launchpad
 				mainForm.Invoke ((MethodInvoker)(() => menu.SetUpdateEnabled (true)));
 			};
 
-			if (menu.CheckUpdates.Checked)
-				updater.StartUpdateRunner();
+			// Hack: We want to do this once it's visible
+			mainForm.VisibleChanged += (s, a) => {
+				if (menu.CheckUpdates.Checked)
+					updater.StartUpdateRunner ();
+			};
 		}
 
 		private void PluginEnabled (DataEvent e)
@@ -119,6 +125,14 @@ namespace Launchpad
 				e.Handled = true;
 		}
 
+		private void EnableAutoUpdate (bool enabled)
+		{
+			switch (settings.CheckForUpdates = enabled) {
+				case true: updater.StartUpdateRunner (); break;
+				case false: updater.StopUpdateRunner (); break;
+			}
+		}
+
 		private void SelectTargets_Clicked (object s, EventArgs ev)
 		{
 			var f = new frmTargets (watcher, settings);
@@ -127,19 +141,13 @@ namespace Launchpad
 
 		private void UpdateSpaceport_Clicked (object s, EventArgs e)
 		{
-			frmPatch patch = new frmPatch (updater);
+			var patch = new frmPatch (updater);
 			patch.ShowDialog (PluginBase.MainForm);
 		}
 
 		private void CheckUpdates_CheckChanged (object sender, EventArgs e)
 		{
-			switch (menu.CheckUpdates.Checked)
-			{
-				case true: updater.StartUpdateRunner(); break;
-				case false: updater.StopUpdateRunner(); break;
-				default:
-					throw new InvalidOperationException ();
-			}
+			EnableAutoUpdate (menu.CheckUpdates.Checked);
 		}
 
 		private void About_Clicked (object s, EventArgs ev)

@@ -27,6 +27,7 @@ namespace UpdaterCore
 		{
 			isCheckingUpdates = true;
 			updateThread = new Thread (runUpdateChecker);
+			updateThread.Name = "Check for updates thread";
 			updateThread.Start();
 
 			onStartCheckUpdate();
