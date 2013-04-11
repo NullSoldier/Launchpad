@@ -27,6 +27,7 @@ namespace UpdaterCore
 		{
 			isCheckingUpdates = true;
 			updateThread = new Thread (runUpdateChecker);
+			updateThread.IsBackground = false;
 			updateThread.Name = "Check for updates thread";
 			updateThread.Start();
 
@@ -37,7 +38,8 @@ namespace UpdaterCore
 		{
 			if (!isCheckingUpdates)
 				return;
-			
+
+			updateThread.Abort();
 			isCheckingUpdates = false;
 			onStopCheckUpdate();
 		}

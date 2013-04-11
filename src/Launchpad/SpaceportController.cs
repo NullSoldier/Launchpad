@@ -36,6 +36,7 @@ namespace Launchpad
 
 		public void Dispose()
 		{
+			updater.StopUpdateRunner();
 			watcher.Stop();
 		}
 
