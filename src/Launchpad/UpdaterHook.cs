@@ -77,9 +77,8 @@ namespace Launchpad
 			set { installOnClose = value; }
 		}
 
-		/// <summary>
-		/// Starts the update installer, and attempts to close FlashDevelop
-		/// </summary>
+		/// <summary>Starts the update installer, and attempts to
+		/// close FlashDevelop</summary>
 		public void RestartForUpdate()
 		{
 			installOnClose = true;
@@ -87,25 +86,20 @@ namespace Launchpad
 				PluginBase.MainForm.CallCommand ("Exit", String.Empty);
 		}
 
-		/// <summary>
-		/// Start the update runner that checks for updates
-		/// </summary>
+		/// <summary>Start checking for available updates</summary>
 		public void StartUpdateRunner()
 		{
 			UpdateRunner.Start();
 		}
 
-		/// <summary>
-		/// Stop the update runner that checks for updates
-		/// </summary>
+		/// <summary>Stop checking for available updates</summary>
 		public void StopUpdateRunner()
 		{
 			UpdateRunner.Stop();
 		}
 
-		/// <summary>
-		/// Downloads an update from the web with the specified version
-		/// </summary>
+		/// <summary>Downloads an update from the web with
+		/// the specified version</summary>
 		public bool DownloadUpdate (Version version)
 		{
 			TraceManager.AddAsync ("Preparing to download Launchpad update with version v" + version);
@@ -113,19 +107,15 @@ namespace Launchpad
 			return true;
 		}
 
-		/// <summary>
-		/// Extracts an update located in updatecache with the
-		/// specified version to updatecache/files
-		/// </summary>
+		/// <summary>Extracts an update located in updatecache with
+		/// the specified version to updatecache/files</summary>
 		public void ExtractVersion (Version version)
 		{
 			UpdateExtractor.Unzip (version);
 		}
 
-		/// <summary>
-		/// Downloads the latest update information to FoundUpdate,
-		/// but only if FoundUpdate hasn't been set yet
-		/// </summary>
+		/// <summary>Downloads the latest update information to FoundUpdate,
+		/// but only if FoundUpdate hasn't been set yet</summary>
 		/// <returns>True if update was found</returns>
 		public bool DownloadUpdateInfo()
 		{

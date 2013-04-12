@@ -9,8 +9,12 @@ namespace UpdaterCore
 {
 	public class UpdateRunner
 	{
-		/// <param name="updateLocation">The location to a .update file. Ex: http://domain.com/updates/update </param>
-		/// <param name="currentVersion">Look for updates later than this version</param>
+		/// <param name="updateLocation">
+		///		The location to a .update file. EX: http://domain.com/updates/update
+		/// </param>
+		/// <param name="currentVersion">
+		///		Look for updates later than this version
+		/// </param>
 		public UpdateRunner (Uri updateLocation, Version currentVersion)
 		{
 			this.updateLocation = updateLocation;
