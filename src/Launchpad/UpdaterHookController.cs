@@ -30,8 +30,8 @@ namespace Launchpad
 
 		private static void onUpdateFound (object s, UpdateCheckerEventArgs ev)
 		{
-			logger.Info ("Update found with version v" + ev.Version);
 			TraceManager.AddAsync ("Update found with version v" + ev.Version); 
+			logger.Info ("Update found with version v" + ev.Version);
 			mainForm.Invoke (new Action (() => menu.SetUpdateEnabled (true)));
 		}
 
