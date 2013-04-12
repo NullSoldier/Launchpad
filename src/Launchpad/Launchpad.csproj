@@ -119,6 +119,7 @@
     <Compile Include="TargetEventArgs.cs" />
     <Compile Include="Tuple.cs" />
     <Compile Include="UpdaterHook.cs" />
+    <Compile Include="UpdaterHookController.cs" />
     <EmbeddedResource Include="Forms\FileSelector.resx">
       <DependentUpon>FileSelector.cs</DependentUpon>
     </EmbeddedResource>

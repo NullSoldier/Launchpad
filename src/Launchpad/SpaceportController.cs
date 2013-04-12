@@ -69,19 +69,7 @@ namespace Launchpad
 			menu.CheckUpdates.CheckedChanged += CheckUpdates_CheckChanged;
 
 			// Subscribe to updater hooks for the UI
-			updater.UpdateRunner.CheckUpdateStarted += (s, ev) => {
-				TraceHelper.TraceInfo ("Started checking for updates automatically");
-				logger.Info ("Spaceport updater runner started");
-			};
-			updater.UpdateRunner.CheckUpdateStopped += (s, ev) =>
-				logger.Info ("Spaceport updater runner stopped");
-			updater.UpdateRunner.CheckUpdateFailed += (s, ev) =>
-				logger.Error ("Failed to get update from " + ev.CheckLocation, ev.Exception);
-			updater.UpdateRunner.UpdateFound += (s, ev) => {
-				logger.Info ("Update found with version v" + ev.Version);
-				TraceManager.AddAsync ("Update found with version v" + ev.Version);
-				mainForm.Invoke ((MethodInvoker)(() => menu.SetUpdateEnabled (true)));
-			};
+			UpdaterHookController.Attach (updater, mainForm, menu, logger);
 
 			// Hack: We want to do this once it's visible
 			mainForm.VisibleChanged += (s, a) => {

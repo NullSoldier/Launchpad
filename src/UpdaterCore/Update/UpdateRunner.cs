@@ -26,7 +26,7 @@ namespace UpdaterCore
 		public void Start()
 		{
 			isCheckingUpdates = true;
-			updateThread = new Thread (runUpdateChecker);
+			updateThread = new Thread (RunUpdateChecker);
 			updateThread.IsBackground = false;
 			updateThread.Name = "Check for updates thread";
 			updateThread.Start();
@@ -50,14 +50,14 @@ namespace UpdaterCore
 		private bool isCheckingUpdates;
 		private const int checkSleepTime = 60000;
 
-		private void runUpdateChecker()
+		private void RunUpdateChecker()
 		{
 			while (isCheckingUpdates)
 			{
 				Version versionFound;
 				string patchNotes;
 
-				if (TryFetchUpdate (out versionFound, out patchNotes))
+				if (TryFetchUpdateInfo (out versionFound, out patchNotes))
 					onUpdateFound (versionFound, patchNotes);
 				else
 					onUpdateNotFound();
@@ -66,7 +66,7 @@ namespace UpdaterCore
 			}
 		}
 
-		public bool TryCheckOnceForUpdate()
+		public bool TryCheckForUpdate()
 		{
 			if (isCheckingUpdates)
 				throw new InvalidOperationException ("Already checking for updates");
@@ -74,7 +74,7 @@ namespace UpdaterCore
 			Version versionFound;
 			string patchNotes;
 
-			if (TryFetchUpdate (out versionFound, out patchNotes)) {
+			if (TryFetchUpdateInfo (out versionFound, out patchNotes)) {
 				onUpdateFound (versionFound, patchNotes);
 				return true;
 			} else {
@@ -83,7 +83,7 @@ namespace UpdaterCore
 			}
 		}
 
-		private bool TryFetchUpdate (out Version versionFound, out string patchNotes)
+		private bool TryFetchUpdateInfo (out Version versionFound, out string patchNotes)
 		{
 			Exception ex;
 			patchNotes = null;

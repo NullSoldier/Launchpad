@@ -130,7 +130,7 @@ namespace Launchpad
 		public bool DownloadUpdateInfo()
 		{
 			StopUpdateRunner();
-			return UpdateRunner.TryCheckOnceForUpdate();
+			return UpdateRunner.TryCheckForUpdate();
 		}
 
 		public void Dispose()
