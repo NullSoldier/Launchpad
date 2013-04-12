@@ -62,6 +62,8 @@ namespace Launchpad
 
 			menu = new SpaceportMenu (PluginBase.MainForm.MenuStrip);
 			menu.CheckUpdates.Checked = settings.CheckForUpdates;
+
+			// Subscribe to UI hooks
 			menu.SelectTargets.Click += SelectTargets_Clicked;
 			menu.About.Click += About_Clicked;
 			menu.SpaceportWebsite.Click += SpaceportWebsite_Clicked;
@@ -95,9 +97,9 @@ namespace Launchpad
 		private void TestProject (DataEvent e)
 		{
 			var clearEvent = new DataEvent (EventType.Command, "ResultsPanel.ClearResults", null);
-			var testEvent = new DataEvent (EventType.Command, SPPluginEvents.StartDeploy, null);
+			var deployEvent = new DataEvent (EventType.Command, SPPluginEvents.StartDeploy, null);
 			EventManager.DispatchEvent (this, clearEvent);
-			EventManager.DispatchEvent (this, testEvent);
+			EventManager.DispatchEvent (this, deployEvent);
 
 			if (!settings.DeployDefault)
 				e.Handled = true;
@@ -147,11 +149,6 @@ namespace Launchpad
 		private void SpaceportWebsite_Clicked (object s, EventArgs ev)
 		{
 			Process.Start ("http://spaceport.io");
-		}
-
-		private void onOutput (string o)
-		{
-			TraceManager.AddAsync ("Spaceport: " + o);
 		}
 	}
 }
