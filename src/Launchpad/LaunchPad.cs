@@ -59,7 +59,6 @@ namespace Launchpad
 		{
 			var proj = e.Data as AS3Project;
 			if (proj != null) {
-				proj.Save(); //TODO: Hack to write needed nodes
 				TraceManager.AddAsync ("Spaceport switching to new project at " + proj.Directory);
 				sp.ProjectDirectory = proj.Directory;
 				EnablePlugin (enabled:true);
