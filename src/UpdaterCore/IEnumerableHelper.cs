@@ -39,6 +39,17 @@ namespace UpdaterCore
 			}
 		}
 
+		public static List<T> ToList<T>(this IEnumerable<T> self)
+		{
+			if (self is List<T>)
+				return (List<T>)self;
+
+			var result = new List<T>();
+			foreach (var i in self)
+				result.Add (i);
+			return result;
+		}
+
 		public static T[] ToArray<T> (this IEnumerable<T> self)
 		{
 			if (self is T[])
