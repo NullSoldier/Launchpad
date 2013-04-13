@@ -7,11 +7,11 @@ namespace UpdaterCore
 {
 	public class InstallerFile
 	{
-		public InstallerFile(DirectoryInfo dir, FileInfo file, string version)
+		public InstallerFile(DirectoryInfo dir, FileInfo file, Version version)
 		{
 			this.Directory = dir;
 			this.File = file;
-			this.Version = new Version (version);
+			this.Version = version;
 		}
 
 		public DirectoryInfo Directory

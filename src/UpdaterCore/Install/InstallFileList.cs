@@ -28,12 +28,10 @@ namespace Updater
 		{
 			get
 			{
-				if (fileCache == null)
-				{
+				if (fileCache == null) {
 					fileCache = buildFileList();
 					fileCount = fileCache.Count();
 				}
-				
 				return fileCache;
 			}
 		}
@@ -53,12 +51,31 @@ namespace Updater
 				if (!File.Exists (filePath))
 					continue;
 
-				var file = new FileInfo (filePath);
-				var fileDir = new FileInfo (filePath).Directory;
-				string version = FileVersionInfo.GetVersionInfo (filePath).FileVersion ?? "0.0.0.0";
-
+				Version version;
+				if (!TryGetVersion (filePath, out version))
+					version = new Version (0, 0, 0, 0);
+				
 				fileCount++;
-				yield return new InstallerFile (fileDir, file, version);
+				yield return new InstallerFile (
+					new FileInfo (filePath).Directory,
+					new FileInfo (filePath),
+					version);
+			}
+		}
+
+		private bool TryGetVersion(string filePath, out Version v)
+		{
+			try {
+				var info = FileVersionInfo.GetVersionInfo (filePath);
+				v = new Version (
+					info.FileMajorPart,
+					info.FileMinorPart,
+					info.FileBuildPart);
+				return true;
+			}
+			catch (Exception) {
+				v = null;
+				return false;
 			}
 		}
 	}

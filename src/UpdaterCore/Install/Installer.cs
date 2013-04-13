@@ -27,9 +27,17 @@ namespace UpdaterCore
 			DirectoryInfo updateCacheDirectory,
 			FileInfo flashDevelopAssembly)
 		{
-			installThread = new Thread (() => installFiles (
-				updateCacheDirectory,
-				flashDevelopAssembly));
+			installThread = new Thread (() => {
+				try {
+					installFiles (
+						updateCacheDirectory,
+						flashDevelopAssembly);
+				}
+				catch (Exception ex) {
+					logger.Error ("Installer failed " + ex.Message, ex);
+					OnInstallFailed (ex);
+				}
+			});
 			installThread.Name = "Install Files Thread";
 			installThread.Start();
 		}
