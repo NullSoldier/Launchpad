@@ -15,6 +15,8 @@ namespace LaunchPad
 {
 	public class Launchpad : EventRouter, IPlugin
 	{
+		public static Analytics A { get; private set; }
+
 		public void Initialize()
 		{
 			AppDomain.CurrentDomain.UnhandledException += (s, e) => {
@@ -29,6 +31,7 @@ namespace LaunchPad
 
 			logger = LogManager.GetLogger (typeof (Launchpad));
 			version = Assembly.GetExecutingAssembly ().GetName ().Version;
+			A = new Analytics (version);
 			sp = new SPWrapper (LaunchpadPaths.SpaceportPath);
 			watcher = new DeviceWatcher (sp);
 			spc = new SpaceportController (this, settings, watcher, version);

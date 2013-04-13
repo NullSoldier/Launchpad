@@ -28,6 +28,9 @@
     <OutputPath>bin\x86\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GaDotNet.Common">
+      <HintPath>..\..\lib\GaDotNet.Common.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\lib\log4net.dll</HintPath>
     </Reference>
@@ -41,10 +44,12 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analytics.cs" />
     <Compile Include="Config\DeviceInfo.cs" />
     <Compile Include="Config\UISettings.cs" />
     <Compile Include="DeployListener.cs" />
