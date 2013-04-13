@@ -13,7 +13,7 @@ using ProjectManager.Projects.AS3;
 
 namespace LaunchPad
 {
-	public class LaunchPad : EventRouter, IPlugin
+	public class Launchpad : EventRouter, IPlugin
 	{
 		public void Initialize()
 		{
@@ -27,8 +27,8 @@ namespace LaunchPad
 			SubDataEvent (ProjectManagerEvents.Project, ProjectChanged);
 			LoadSettings();
 
-			logger = LogManager.GetLogger (typeof (LaunchPad));
-			version = Assembly.GetExecutingAssembly().GetName().Version;
+			logger = LogManager.GetLogger (typeof (Launchpad));
+			version = Assembly.GetExecutingAssembly ().GetName ().Version;
 			sp = new SPWrapper (LaunchpadPaths.SpaceportPath);
 			watcher = new DeviceWatcher (sp);
 			spc = new SpaceportController (this, settings, watcher, version);

@@ -108,7 +108,7 @@
     <Compile Include="Settings.cs" />
     <Compile Include="SpaceportController.cs" />
     <Compile Include="SpaceportMenu.cs" />
-    <Compile Include="LaunchPad.cs" />
+    <Compile Include="Launchpad.cs" />
     <Compile Include="Forms\frmPatch.cs">
       <SubType>Form</SubType>
     </Compile>
