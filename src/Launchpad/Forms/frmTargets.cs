@@ -21,9 +21,9 @@ namespace LaunchPad
 			this.watcher = watcher;
 		}
 
-		private Settings settings;
-		private DeviceWatcher watcher;
 		private IDisposable unsub;
+		private readonly Settings settings;
+		private readonly DeviceWatcher watcher;
 
 		private void formLoaded (object s, EventArgs e)
 		{
