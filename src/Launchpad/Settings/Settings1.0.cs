@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
-using PluginCore.Localization;
+using DevicePlatform = LaunchPad.DevicePlatform;
 
-namespace LaunchPad
+namespace Launchpad
 {
 	[Serializable]
 	public class Settings
@@ -16,38 +15,49 @@ namespace LaunchPad
 			set { targets = value; }
 		}
 
-		[DisplayName ("Deploy To Flash")]
 		public bool DeployDefault
 		{
 			get { return deployDefault; }
 			set { deployDefault = value; }
 		}
 
-		[DisplayName ("Deploy To Simulator")]
 		public bool DeploySim
 		{
 			get { return deploySim; }
 			set { deploySim = value; }
 		}
 
-		[DisplayName ("Check Updates Automatically")]
 		public bool CheckForUpdates
 		{
 			get { return checkUpdates; }
 			set { checkUpdates = value; }
 		}
 
-		[DisplayName ("Settings Version")]
-		public Version SettingsVersion
-		{
-			get { return settingsVersion; }
-			set { settingsVersion = value; }
-		}
-
 		private List<Target> targets = new List<Target>();
 		private bool deployDefault = true;
 		private bool deploySim = false;
 		private bool checkUpdates = false;
-		private Version settingsVersion;
+	}
+
+	[Serializable]
+	public class Target
+	{
+		public Target()
+		{
+		}
+
+		public Target(string id, DevicePlatform platform)
+			: this (id, string.Empty, platform)
+		{
+		}
+
+		public Target(string id, string name, DevicePlatform platform)
+		{
+			
+		}
+
+		public readonly string Name;
+		public readonly string ID;
+		public readonly DevicePlatform Platform;
 	}
 }

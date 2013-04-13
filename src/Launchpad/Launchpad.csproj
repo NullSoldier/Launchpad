@@ -82,6 +82,7 @@
     <Compile Include="Observable\Unsubscriber.cs" />
     <Compile Include="ProjectMenuController.cs" />
     <Compile Include="ProjectMenu.cs" />
+    <Compile Include="Settings\SettingsUpgrader.cs" />
     <Compile Include="SPPluginEvents.cs" />
     <Compile Include="SPWrapper.cs" />
     <Compile Include="DeviceWatcher.cs" />
@@ -151,6 +152,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Settings\Settings1.0.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\spaceportIcon.png" />

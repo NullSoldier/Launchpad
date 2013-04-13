@@ -97,14 +97,15 @@ namespace LaunchPad
 		private void LoadSettings()
 		{
 			settings = new Settings();
+			settings.SettingsVersion = version;
 
 			var path = LaunchpadPaths.SettingsPath;
 			if (!File.Exists (path)) {
 				SaveSettings();
 			} else {
 				try {
-					settings = (Settings) ObjectSerializer
-						.Deserialize (path, settings);
+					settings = SettingsUpgrader.Convert (ObjectSerializer
+						.Deserialize (path, settings));
 				} catch (Exception ex) {
 					ErrorManager.ShowError ("Launchpad failed to load settings, erasing settings", ex);
 					SaveSettings();
