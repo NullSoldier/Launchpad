@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using UpdaterCore;
 
-namespace Launchpad
+namespace LaunchPad
 {
 	public static class FileHelper
 	{

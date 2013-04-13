@@ -5,7 +5,7 @@ using System.Text;
 using PluginCore;
 using PluginCore.Managers;
 
-namespace Launchpad.Helpers
+namespace LaunchPad.Helpers
 {
 	public static class TraceHelper
 	{

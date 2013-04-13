@@ -8,7 +8,7 @@
     <ProjectGuid>{C93B6254-CDE3-4619-B386-29E1BF5E2BE5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Launchpad</RootNamespace>
+    <RootNamespace>LaunchPad</RootNamespace>
     <AssemblyName>Launchpad</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>

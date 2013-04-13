@@ -4,7 +4,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Text;
 
-namespace Launchpad.Helpers
+namespace LaunchPad.Helpers
 {
 	public static class Check
 	{

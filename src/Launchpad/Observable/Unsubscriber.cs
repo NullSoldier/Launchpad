@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Launchpad.Observable
+namespace LaunchPad.Observable
 {
 	public class Unsubscriber<T> : IDisposable
 	{

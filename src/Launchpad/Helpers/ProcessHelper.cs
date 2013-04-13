@@ -7,7 +7,7 @@ using System.Threading;
 using PluginCore.Managers;
 using UpdaterCore;
 
-namespace Launchpad.Helpers
+namespace LaunchPad.Helpers
 {
 	public static class ProcessHelper
 	{

@@ -5,12 +5,12 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using Launchpad.Helpers;
-using Launchpad.Observable;
-using Launchpad.Properties;
+using LaunchPad.Observable;
+using LaunchPad.Properties;
+using LaunchPad.Helpers;
 using UpdaterCore;
 
-namespace Launchpad
+namespace LaunchPad
 {
 	public partial class frmTargets : Form, IObserver<Target>
 	{

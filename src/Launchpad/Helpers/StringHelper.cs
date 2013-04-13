@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Launchpad.Helpers
+namespace LaunchPad.Helpers
 {
 	public static class StringHelper
 	{

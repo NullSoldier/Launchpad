@@ -4,12 +4,12 @@ using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using Launchpad.Forms;
-using Launchpad.Helpers;
+using LaunchPad.Forms;
+using LaunchPad.Helpers;
 using PluginCore;
 using UpdaterCore;
 
-namespace Launchpad
+namespace LaunchPad
 {
 	public class InstallListener
 	{

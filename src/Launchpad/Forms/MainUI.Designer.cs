@@ -1,4 +1,4 @@
-﻿namespace Launchpad
+﻿namespace LaunchPad
 {
 	partial class MainUI
 	{

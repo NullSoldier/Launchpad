@@ -7,7 +7,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Launchpad
+namespace LaunchPad
 {
 	public partial class MainUI : UserControl
 	{

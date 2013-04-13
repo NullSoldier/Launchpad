@@ -5,12 +5,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading;
+using LaunchPad.Helpers;
 using UpdaterCore;
 using PluginCore.Managers;
-using Launchpad.Helpers;
-using Launchpad.Properties;
+using LaunchPad.Properties;
 
-namespace Launchpad
+namespace LaunchPad
 {
 	public class SPWrapper
 	{

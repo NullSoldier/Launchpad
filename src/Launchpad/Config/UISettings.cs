@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
-using Launchpad.Forms;
+using LaunchPad.Forms;
 using UpdaterCore;
 
-namespace Launchpad
+namespace LaunchPad
 {
 	public class ComboSetting<T> : Setting
 	{

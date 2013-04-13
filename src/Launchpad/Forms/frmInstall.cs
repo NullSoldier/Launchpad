@@ -5,11 +5,11 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using Launchpad.Helpers;
-using Launchpad.Properties;
+using LaunchPad.Helpers;
+using LaunchPad.Properties;
 using UpdaterCore;
 
-namespace Launchpad.Forms
+namespace LaunchPad.Forms
 {
 	public partial class frmInstall : Form
 	{

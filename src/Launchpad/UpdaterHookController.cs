@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
-using Launchpad.Helpers;
+using LaunchPad.Helpers;
 using PluginCore.Managers;
 using UpdaterCore;
 using log4net;
 
-namespace Launchpad
+namespace LaunchPad
 {
 	public class UpdaterHookController
 	{

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
-using Launchpad.Properties;
+using LaunchPad.Properties;
 using log4net;
 using log4net.Config;
 using log4net.Core;
 
-namespace Launchpad.Helpers
+namespace LaunchPad.Helpers
 {
 	public static class Log4NetHelper
 	{

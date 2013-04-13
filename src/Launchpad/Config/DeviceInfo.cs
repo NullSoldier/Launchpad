@@ -1,7 +1,7 @@
 ﻿using System;
 using UpdaterCore;
 
-namespace Launchpad.Config
+namespace LaunchPad.Config
 {
 	public enum Orientation
 	{

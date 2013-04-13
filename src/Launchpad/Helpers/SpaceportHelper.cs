@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Text;
 using UpdaterCore;
 
-namespace Launchpad.Helpers
+namespace LaunchPad.Helpers
 {
 	public static class SpaceportHelper
 	{

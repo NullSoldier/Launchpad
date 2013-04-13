@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using Launchpad.Helpers;
-using Launchpad.Properties;
+using LaunchPad.Helpers;
+using LaunchPad.Properties;
 using log4net;
 using PluginCore;
 using PluginCore.Helpers;
@@ -11,7 +11,7 @@ using PluginCore.Utilities;
 using ProjectManager;
 using ProjectManager.Projects.AS3;
 
-namespace Launchpad
+namespace LaunchPad
 {
 	public class LaunchPad : EventRouter, IPlugin
 	{

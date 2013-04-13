@@ -2,11 +2,11 @@
 using System.Drawing;
 using System.Net;
 using System.Windows.Forms;
-using Launchpad.Properties;
+using LaunchPad.Properties;
 using UpdaterCore;
 using UpdaterCore.Update;
 
-namespace Launchpad.Forms
+namespace LaunchPad.Forms
 {
 	public partial class frmPatch : Form
 	{

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using Launchpad.Helpers;
-using Launchpad.Properties;
+using LaunchPad.Helpers;
+using LaunchPad.Properties;
 using ProjectManager.Controls;
 
-namespace Launchpad
+namespace LaunchPad
 {
 	public class ProjectMenuEx
 	{

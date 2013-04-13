@@ -8,13 +8,13 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using Launchpad.Config;
-using Launchpad.Helpers;
-using Launchpad.Properties;
+using LaunchPad.Config;
+using LaunchPad.Helpers;
+using LaunchPad.Properties;
 using UpdaterCore;
-using Orientation = Launchpad.Config.Orientation;
+using Orientation = LaunchPad.Config.Orientation;
 
-namespace Launchpad.Forms
+namespace LaunchPad.Forms
 {
 	public partial class frmProject : Form
 	{

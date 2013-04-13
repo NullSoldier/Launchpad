@@ -1,4 +1,4 @@
-﻿namespace Launchpad.Forms
+﻿namespace LaunchPad.Forms
 {
 	partial class frmProject
 	{
@@ -61,13 +61,13 @@
 			this.label15 = new System.Windows.Forms.Label();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.btnSave = new System.Windows.Forms.Button();
-			this.fileIdentity = new Launchpad.Forms.FileSelector();
-			this.fileProvision = new Launchpad.Forms.FileSelector();
-			this.fileResourcesiOS = new Launchpad.Forms.FileSelector();
-			this.fileResourcesAndroid = new Launchpad.Forms.FileSelector();
-			this.fileKeyPassword = new Launchpad.Forms.FileSelector();
-			this.fileKeystorePassword = new Launchpad.Forms.FileSelector();
-			this.fileKeystore = new Launchpad.Forms.FileSelector();
+			this.fileIdentity = new global::LaunchPad.Forms.FileSelector();
+			this.fileProvision = new global::LaunchPad.Forms.FileSelector();
+			this.fileResourcesiOS = new global::LaunchPad.Forms.FileSelector();
+			this.fileResourcesAndroid = new global::LaunchPad.Forms.FileSelector();
+			this.fileKeyPassword = new global::LaunchPad.Forms.FileSelector();
+			this.fileKeystorePassword = new global::LaunchPad.Forms.FileSelector();
+			this.fileKeystore = new global::LaunchPad.Forms.FileSelector();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.tabPage2.SuspendLayout();

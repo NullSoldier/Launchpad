@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Launchpad
+namespace LaunchPad
 {
 	public class Tuple<T1, T2>
 	{

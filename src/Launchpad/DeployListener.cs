@@ -3,11 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
-using Launchpad.Helpers;
+using LaunchPad.Helpers;
 using PluginCore;
 using UpdaterCore;
 
-namespace Launchpad
+namespace LaunchPad
 {
 	public class DeployListener
 	{

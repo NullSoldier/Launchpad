@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using PluginCore;
 
-namespace Launchpad
+namespace LaunchPad
 {
 	public class EventRouter : IEventHandler
 	{

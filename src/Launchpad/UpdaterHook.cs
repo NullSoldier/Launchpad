@@ -8,7 +8,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using Launchpad.Helpers;
+using LaunchPad.Helpers;
 using UpdaterCore;
 using UpdaterCore.Update;
 using PluginCore;
@@ -17,7 +17,7 @@ using PluginCore.Managers;
 using Updater;
 using log4net;
 
-namespace Launchpad
+namespace LaunchPad
 {
 	[Serializable]
 	public class UpdaterHook : IDisposable

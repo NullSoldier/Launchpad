@@ -5,13 +5,13 @@ using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using System.Timers;
-using Launchpad.Helpers;
-using Launchpad.Observable;
+using LaunchPad.Helpers;
+using LaunchPad.Observable;
 using PluginCore;
 using PluginCore.Managers;
 using Timer = System.Timers.Timer;
 
-namespace Launchpad
+namespace LaunchPad
 {
 	public class DeviceWatcher
 		: IObservable<Target>

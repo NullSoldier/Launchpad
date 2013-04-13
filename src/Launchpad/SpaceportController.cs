@@ -5,18 +5,18 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using Launchpad.Forms;
+using LaunchPad.Forms;
+using LaunchPad.Properties;
 using UpdaterCore;
-using Launchpad;
+using LaunchPad;
 using PluginCore;
 using PluginCore.Managers;
-using Launchpad.Helpers;
-using Launchpad.Properties;
+using LaunchPad.Helpers;
 using ProjectManager;
 using ProjectManager.Projects;
 using log4net;
 
-namespace Launchpad
+namespace LaunchPad
 {
 	public class SpaceportController
 		: IDisposable

@@ -6,7 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Launchpad.Forms
+namespace LaunchPad.Forms
 {
 	public partial class FileSelector : UserControl
 	{

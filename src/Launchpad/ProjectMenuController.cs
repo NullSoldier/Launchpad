@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using Launchpad.Forms;
+using LaunchPad.Forms;
 using PluginCore;
 using PluginCore.Managers;
 using ProjectManager;
 using ProjectManager.Controls;
 using UpdaterCore;
 
-namespace Launchpad
+namespace LaunchPad
 {
 	public class ProjectMenuController : IDisposable
 	{

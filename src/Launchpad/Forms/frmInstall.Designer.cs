@@ -1,4 +1,4 @@
-﻿namespace Launchpad.Forms
+﻿namespace LaunchPad.Forms
 {
 	partial class frmInstall
 	{

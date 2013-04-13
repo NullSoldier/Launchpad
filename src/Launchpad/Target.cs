@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Launchpad
+namespace LaunchPad
 {
 	[Serializable]
 	public class Target

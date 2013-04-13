@@ -2,7 +2,7 @@
 using System.IO;
 using PluginCore.Helpers;
 
-namespace Launchpad
+namespace LaunchPad
 {
 	public static class LaunchpadPaths
 	{
