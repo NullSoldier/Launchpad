@@ -27,7 +27,7 @@ namespace LaunchPad.Helpers
 
 		public static void TraceProcessStart (string name, Process p)
 		{
-			var msg = String.Format ("Started {0} process ({1}).", name, p.Id);
+			var msg = String.Format ("{0} process ({1}) started.", name, p.Id);
 			Trace (msg, TraceType.ProcessStart);
 		}
 
