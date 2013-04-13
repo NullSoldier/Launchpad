@@ -24,6 +24,7 @@ namespace LaunchPad.Forms
 
 		private void form_Loaded (object s, EventArgs e)
 		{
+			Launchpad.A.UpdateWindowOpened();
 			Icon = Icon.FromHandle (Resources.spaceportIcon.GetHicon ());
 
 			fullHeight = Size.Height;

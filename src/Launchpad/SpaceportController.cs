@@ -144,11 +144,13 @@ namespace LaunchPad
 		private void About_Clicked (object s, EventArgs ev)
 		{
 			Process.Start ("http://entitygames.net/index.php?v=launchpad");
+			Launchpad.A.AboutUs();
 		}
 
 		private void SpaceportWebsite_Clicked (object s, EventArgs ev)
 		{
 			Process.Start ("http://spaceport.io");
+			Launchpad.A.SpaceportWebsite();
 		}
 	}
 }

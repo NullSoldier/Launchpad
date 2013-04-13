@@ -62,6 +62,7 @@ namespace LaunchPad.Forms
 		
 		private void onLoaded (object s, EventArgs ev)
 		{
+			Launchpad.A.PropertiesOpened();
 			Icon = Icon.FromHandle (Resources.spaceportIcon.GetHicon ());
 
 			var config = loadConfig();

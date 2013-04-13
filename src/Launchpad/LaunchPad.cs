@@ -38,6 +38,8 @@ namespace LaunchPad
 			pc = new ProjectMenuController (this, sp, settings);
 			deployer = new DeployListener (this, sp, settings, watcher);
 			installer = new InstallListener (this, sp, settings);
+
+			A.OnStarted();
 		}
 
 		public void Dispose()

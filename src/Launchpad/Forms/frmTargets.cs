@@ -27,6 +27,7 @@ namespace LaunchPad
 
 		private void formLoaded (object s, EventArgs e)
 		{
+			Launchpad.A.TargetScreenOpened();
 			Icon = Icon.FromHandle (Resources.spaceportIcon.GetHicon());
 
 			var images = new ImageList ();
@@ -46,6 +47,7 @@ namespace LaunchPad
 
 		private void onErrorClicked (object s, LinkLabelLinkClickedEventArgs e)
 		{
+			Launchpad.A.TargetErrorOpened();
 			MessageBox.Show (this,
 				watcher.LastError,
 				"Error Getting Devices",
