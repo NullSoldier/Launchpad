@@ -57,7 +57,6 @@ namespace UpdaterCore
 
 			var length = self.Count();
 			var result = new T[length];
-
 			int i = 0;
 			foreach (var t in self) {
 				result[i] = t;
