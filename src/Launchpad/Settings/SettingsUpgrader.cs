@@ -12,29 +12,27 @@ namespace LaunchPad
 		public static Settings Convert (object settings)
 		{
 			Settings converted = null;
-			Version version;
 
 			if (settings is Settings_1_0)
-				From_1_0 ((Settings_1_0)settings, out version, out converted);
+				v1_0_0_0v1_0_1_0 ((Settings_1_0)settings, out converted);
 
 			return converted ?? (Settings)settings;
 		}
 
 		private static ILog logger = LogManager.GetLogger (typeof (Settings));
 
-		private static void From_1_0 (Settings_1_0 s,
-			out Version v, out Settings c)
+		private static void v1_0_0_0v1_0_1_0 (Settings_1_0 s, out Settings c)
 		{
-			v = new Version (1, 0, 1);
 			c = new Settings {
 				CheckForUpdates = s.CheckForUpdates,
 				DeployDefault = s.DeployDefault,
 				DeploySim = s.DeploySim,
+				SettingsVersion = new Version (1, 0, 1)
 			};
-			c.DeviceTargets = s.DeviceTargets.Select<Target_1_0, Target> (t =>
+			c.DeviceTargets = s.DeviceTargets.Select (t =>
 				new Target (t.Name, t.Name, t.Platform)).ToList();
 
-			logger.Info ("Upgraded settings to " + v);
+			logger.Info ("Upgraded settings to " + c.SettingsVersion);
 		}
 	}
 }
