@@ -29,6 +29,7 @@ namespace LaunchPad
 		private static SPWrapper sp;
 		private static Dictionary<int, Process> pushes = new Dictionary<int, Process> ();
 		private static Regex errorRegex = new Regex ("(?<file>.*?):(?<line>[0-9]*):(?<col>[0-9]*):\\s?(?<type>(Error)?(Warning)?):(?<msg>.*\t?)", RegexOptions.Compiled);
+		private static Regex oldVersionRegex = new Regex ("Manifest specifies platform version (?<new>.+), but actual platform version is (?<old>.+).", RegexOptions.Compiled);
 
 		private static void startDeploy()
 		{
@@ -51,7 +52,7 @@ namespace LaunchPad
 
 			var p = sp.RunOnTargets (targets,
 				onPushOutput,
-				TraceHelper.TraceError,
+				onPushError,
 				(exitCode, process) => {
 					if (exitCode != 0) {
 						TraceHelper.TraceProcessError ("Push", process);
@@ -61,7 +62,7 @@ namespace LaunchPad
 			// Did it start successfully?
 			if (p != null) {
 				pushes.Add (p.Id, p);
-				TraceHelper.TraceProcessStart ("Deploy to devices " + targets.Count(), p);
+				TraceHelper.TraceProcessStart ("Deploy to " + targets.Count() + " devices", p);
 			} else {
 				TraceHelper.TraceError ("Push to devices failed");
 			}
@@ -105,8 +106,26 @@ namespace LaunchPad
 
 		private static void onPushOutput (String o)
 		{
-			if (o != null && !o.StartsWith ("Javascript:"))
-				TraceHelper.Trace (o, TraceType.Debug);
+			if (o == null || o.StartsWith ("Javascript:"))
+				return;
+
+			var match = oldVersionRegex.Match (o);
+			if (match.Success) {
+				TraceHelper.TraceError (
+					"You cannot push to an older version of Spaceport. "
+					+ "You have " + match.Groups["new"]
+					+ " while the version installed to your phone is "
+					+ match.Groups["old"]);
+				return;
+			}
+
+			TraceHelper.Trace (o, TraceType.Debug);
+		}
+
+		private static void onPushError (String o)
+		{
+			if (o != null)
+				TraceHelper.TraceError (o);
 		}
 
 		private static void onBuildOutput (String o)
