@@ -102,8 +102,7 @@ namespace LaunchPad
 		private void OnProjectChanged(DataEvent e)
 		{
 			var proj = e.Data as AS3Project;
-			if (proj != null)
-			{
+			if (proj != null) {
 				TraceManager.AddAsync ("Spaceport switching to new project at " + proj.Directory);
 				sp.ProjectDirectory = proj.Directory;
 				EnablePlugin (enabled:true);
@@ -118,14 +117,14 @@ namespace LaunchPad
 		{
 			SubDataEvent (ProjectManagerEvents.TestProject, OnTestProject);
 			SubDataEvent (ProjectManagerEvents.BuildProject, OnBuildProject);
-			watcher.Start ();
+			watcher.Start();
 		}
 
 		private void OnPluginDisabled (DataEvent e)
 		{
 			UnsubDataEvent (ProjectManagerEvents.TestProject, OnTestProject);
 			UnsubDataEvent (ProjectManagerEvents.BuildProject, OnBuildProject);
-			watcher.Stop ();
+			watcher.Stop();
 		}
 
 		private void OnTestProject (DataEvent e)
