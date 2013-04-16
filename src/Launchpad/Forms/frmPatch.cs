@@ -30,8 +30,8 @@ namespace LaunchPad.Forms
 
 		private void form_Shown (object sender, EventArgs e)
 		{
-			updater.UpdateDownloader.Started += onDownloadStarted;
-			updater.UpdateDownloader.Finished += onDownloadFinished;
+			updater.UpdateDownloader.Started += OnDownloadStarted;
+			updater.UpdateDownloader.Finished += OnDownloadFinished;
 			updater.UpdateDownloader.ProgressChanged += onDownloadProgress;
 
 			setFormState (PatchFormState.Waiting);
@@ -46,8 +46,8 @@ namespace LaunchPad.Forms
 			updater.UpdateChecker.UpdateFound -= onUpdateFound;
 			updater.UpdateChecker.UpdateNotFound -= onUpdateNotFound;
 			updater.UpdateChecker.CheckUpdateFailed -= onCheckUpdateFailed;
-			updater.UpdateDownloader.Started -= onDownloadStarted;
-			updater.UpdateDownloader.Finished -= onDownloadFinished;
+			updater.UpdateDownloader.Started -= OnDownloadStarted;
+			updater.UpdateDownloader.Finished -= OnDownloadFinished;
 			updater.UpdateDownloader.ProgressChanged -= onDownloadProgress;
 		}
 
@@ -189,12 +189,12 @@ namespace LaunchPad.Forms
 		}
 
 		#region Update handlers
-		private void onDownloadStarted (object s, EventArgs e)
+		private void OnDownloadStarted (object s, EventArgs e)
 		{
 			setFormState (PatchFormState.Downloading);
 		}
 
-		private void onDownloadFinished (object s, EventArgs e)
+		private void OnDownloadFinished (object s, EventArgs e)
 		{
 			onDownloadFinished ();
 		}

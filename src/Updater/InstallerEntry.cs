@@ -82,7 +82,6 @@ namespace Updater
 			FileInfo oldUpdateAssemblyPath,
 			DirectoryInfo updateCacheDir)
 		{
-			MessageBox.Show ("DEBUG");
 			AssemblyCloseDelayer.WaitForAssembliesAsync (() => 
 				startForm (
 					version,
