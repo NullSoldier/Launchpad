@@ -96,7 +96,8 @@ namespace UpdaterCore
 				patchNotes = "No patch notes available.";
 
 			var patchZipUri = remoteManifestUri.Append (manifest.ProductVersion + ".zip");
-			updateInfo = new UpdateInformation (manifest, patchZipUri, patchNotes);
+			var updateUri = remoteManifestUri.Append ("updater." + manifest.UpdaterVersion + ".exe");
+			updateInfo = new UpdateInformation (manifest, patchZipUri, updateUri, patchNotes);
 			return true;
 		}
 

@@ -9,16 +9,20 @@ namespace UpdaterCore.Update
 	{
 		public UpdateInformation (
 			UpdateManifest manifest,
-			Uri patchZipURI,
+			Uri patchZipUri,
+			Uri updaterUri,
 			string patchNotes)
 		{
 			Manifest = manifest;
+			PatchZipUri = patchZipUri;
+			UpdaterUri = updaterUri;
 			PatchNotes = patchNotes;
-			PatchZipURI = patchZipURI;
+
 		}
 
 		public readonly UpdateManifest Manifest;
-		public readonly Uri PatchZipURI;
+		public readonly Uri PatchZipUri;
+		public readonly Uri UpdaterUri;
 		public readonly string PatchNotes;
 	}
 }

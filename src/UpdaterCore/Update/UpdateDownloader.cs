@@ -12,39 +12,49 @@ namespace UpdaterCore
 {
 	public class UpdateDownloader
 	{
-		/// <param name="updateCacheDir">The data relative local dir updatecache where to download the updatepackage
+		/// <param name="updateCacheDir">The data relative local dir
+		/// updatecache where to download the updatepackage
 		/// Ex: FlashDevelop/Data/[Launchpad/updatecache] </param>
-		public UpdateDownloader (string updateCacheDir)
+		public UpdateDownloader (string updaterPath, string updateCacheDir)
 		{
+			this.updaterPath = updaterPath;
 			this.updateCacheDir = updateCacheDir;
 		}
-		
+
 		public event EventHandler Started;
 		public event EventHandler Finished;
 		public event EventHandler<UnhandledExceptionEventArgs> Failed;
 		public event EventHandler<DownloadProgressChangedEventArgs> ProgressChanged;
 
-		public void Download (UpdateInformation updateInfo)
+		public void Download (UpdateInformation updateInfo, bool downloadUpdater)
 		{
-			var localDest = Path.Combine (updateCacheDir,
-				Path.GetFileName (updateInfo.PatchZipURI.LocalPath));
-			DownloadUpdatePack (updateInfo.PatchZipURI, localDest);
+			var patchDest = Path.Combine (updateCacheDir,
+				Path.GetFileName (updateInfo.PatchZipUri.LocalPath));
+
+			if (downloadUpdater) {
+				DownloadFile (updateInfo.UpdaterUri, updaterPath,
+					(s, e) => DownloadFile (updateInfo.PatchZipUri, patchDest));
+				return;
+			}
+			DownloadFile (updateInfo.PatchZipUri, patchDest);
 		}
 
+		private readonly string updaterPath;
 		private readonly string updateCacheDir;
 		private readonly ILog logger = LogManager.GetLogger (typeof (UpdateDownloader));
 
-		private void DownloadUpdatePack (Uri remotePatchUri, string localDest)
+		private void DownloadFile (Uri remoteUri, string localDest,
+			AsyncCompletedEventHandler finished=null)
 		{
 			using (var downloadClient = new WebClient ()) {
 				try {
 					FileHelper.EnsureFileDirExists (localDest);
 					logger.DebugFormat ("Downloading file from {0} to {1}",
-						remotePatchUri, localDest);
-					
-					downloadClient.DownloadFileCompleted += onFileDownloaded;
+						remoteUri, localDest);
+
 					downloadClient.DownloadProgressChanged += onProgressChanged;
-					downloadClient.DownloadFileAsync (remotePatchUri, localDest);
+					downloadClient.DownloadFileCompleted += finished ?? onFileDownloaded;
+					downloadClient.DownloadFileAsync (remoteUri, localDest);
 					onDownloadStarted();
 				}
 				catch (Exception ex) {

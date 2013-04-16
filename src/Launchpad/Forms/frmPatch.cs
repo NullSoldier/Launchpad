@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Net;
 using System.Windows.Forms;
 using LaunchPad.Properties;
+using PluginCore.Managers;
 using UpdaterCore;
 using UpdaterCore.Update;
 
@@ -94,6 +95,9 @@ namespace LaunchPad.Forms
 
 		private void btnInstall_Click (object sender, EventArgs e)
 		{
+			TraceManager.AddAsync ("Preparing to download Launchpad update with version v"
+				+ waitingUpdate.Manifest.ProductVersion);
+
 			btnInstall.Enabled = false;
 			updater.DownloadUpdate (waitingUpdate);
 		}

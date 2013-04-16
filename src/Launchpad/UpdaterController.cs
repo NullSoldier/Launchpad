@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 using LaunchPad.Forms;
 using LaunchPad.Helpers;
@@ -28,11 +29,12 @@ namespace LaunchPad
 			this.mainForm = mainForm;
 			this.settings = settings;
 
+			updaterPath = Path.Combine (PathHelper.DataDir, LOCAL_UPDATER_FILE);
 			var remoteManifestUri = new Uri (REMOTE_MANIFEST_URI);
 			var localUpdateCacheDir = Path.Combine (PathHelper.DataDir, LOCAL_UPDATECACHE_DIR);
 
 			UpdateChecker = new UpdateChecker (remoteManifestUri, pluginVersion);
-			UpdateDownloader = new UpdateDownloader (localUpdateCacheDir);
+			UpdateDownloader = new UpdateDownloader (updaterPath, localUpdateCacheDir);
 			LoadListeners();
 
 			if (menu.CheckUpdates.Checked)
@@ -54,9 +56,10 @@ namespace LaunchPad
 
 		public void DownloadUpdate (UpdateInformation updateInfo)
 		{
-			TraceManager.AddAsync ("Preparing to download Launchpad update with version v"
-				+ updateInfo.Manifest.ProductVersion);
-			UpdateDownloader.Download (updateInfo);
+			var getUpdater = GetUpdaterVersion()
+				< updateInfo.Manifest.UpdaterVersion;
+
+			UpdateDownloader.Download (updateInfo, getUpdater);
 		}
 
 		public void StartUpdating(Version version, bool closeNow)
@@ -69,6 +72,7 @@ namespace LaunchPad
 		private readonly Control mainForm;
 		private readonly Settings settings;
 		private readonly ILog logger = LogManager.GetLogger (typeof (UpdaterController));
+		private readonly string updaterPath;
 
 		private void LoadListeners()
 		{
@@ -111,14 +115,10 @@ namespace LaunchPad
 
 		private bool StartInstaller (Version version)
 		{
-			// Use URI to avoid file name formatting differences
-			var installerPath = Path.Combine (
-				PathHelper.DataDir, LOCAL_UPDATER_FILE);
-
-			if (!File.Exists (installerPath)) {
-				logger.Error ("Updater missing at " + installerPath);
+			if (!File.Exists (updaterPath)) {
+				logger.Error ("Updater missing at " + updaterPath);
 				MessageBox.Show ("Updater failed to start, updater is missing."
-					+ Environment.NewLine + installerPath,
+					+ Environment.NewLine + updaterPath,
 					"Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error);
@@ -126,11 +126,22 @@ namespace LaunchPad
 			}
 
 			var args = string.Format ("\"{0}\" \"{1}\"",
-				version,
-				Application.ExecutablePath);
-			logger.DebugFormat ("Starting installer at {0} with arguments {1}", installerPath, args);
-			Process.Start (installerPath, args);
+				version, Application.ExecutablePath);
+			logger.DebugFormat ("Starting installer at {0} with arguments {1}",
+				updaterPath, args);
+			Process.Start (updaterPath, args);
 			return true;
+		}
+
+		private Version GetUpdaterVersion()
+		{
+			var updaterPath = Path.Combine (PathHelper.DataDir,
+				LOCAL_UPDATER_FILE);
+			try {
+				return AssemblyName.GetAssemblyName (updaterPath).Version;
+			} catch (Exception) {
+				return new Version (0, 0, 0);
+			}
 		}
 	}
 }
