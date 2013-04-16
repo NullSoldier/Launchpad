@@ -74,7 +74,7 @@ namespace Updater
 			};
 			extractor.Finished += (s, e) =>
 			{
-				logger.DebugFormat ("Finished extracting files to {1}", filesDir);
+				logger.DebugFormat ("Finished extracting files to {0}", filesDir);
 				progressForm.SetInstruction ("Installing files from " + filesDir + " to " + flashDevelopDir);
 				Installer installer = new Installer ();
 				

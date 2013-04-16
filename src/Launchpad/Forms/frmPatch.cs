@@ -10,49 +10,41 @@ namespace LaunchPad.Forms
 {
 	public partial class frmPatch : Form
 	{
-		public frmPatch (UpdaterHook updater)
+		public frmPatch (UpdaterController updateController)
 		{
-			this.updater = updater;
+			updater = updateController;
 			InitializeComponent ();
-		}
-
-		private readonly UpdaterHook updater;
-		private UpdateInformation waitingUpdate;
-		private PatchFormState currentState;
-		private int fullHeight;
-		private const string PREPARING_FORMAT = "Preparing to install version v{0}";
-
-		private void form_Loaded (object s, EventArgs e)
-		{
-			Launchpad.A.UpdateWindowOpened();
-			Icon = Icon.FromHandle (Resources.spaceportIcon.GetHicon ());
 
 			fullHeight = Size.Height;
 			MinimumSize = new Size (MinimumSize.Width, fullHeight - inNotes.Height);
-			hidePatchNotes();
+			Icon = Icon.FromHandle (Resources.spaceportIcon.GetHicon ());
+
+			Launchpad.A.UpdateWindowOpened ();
+			hidePatchNotes ();
 		}
+
+		private UpdateInformation waitingUpdate;
+		private int fullHeight;
+		private readonly UpdaterController updater;
 
 		private void form_Shown (object sender, EventArgs e)
 		{
-			// Is there an update already? show it!
-			if (updater.FoundUpdate != null) {
-				updateFound (updater.FoundUpdate);
-			} else {
-				setFormState (PatchFormState.Waiting);
-				updater.UpdateRunner.UpdateFound += onUpdateFound;
-				updater.UpdateRunner.UpdateNotFound += onUpdateNotFound;
-				updater.DownloadUpdateInfo();
-			}
-
 			updater.UpdateDownloader.Started += onDownloadStarted;
 			updater.UpdateDownloader.Finished += onDownloadFinished;
 			updater.UpdateDownloader.ProgressChanged += onDownloadProgress;
+
+			setFormState (PatchFormState.Waiting);
+			updater.UpdateChecker.UpdateFound += onUpdateFound;
+			updater.UpdateChecker.UpdateNotFound += onUpdateNotFound;
+			updater.UpdateChecker.CheckUpdateFailed += onCheckUpdateFailed;
+			updater.DownloadUpdateManifest ();
 		}
 
 		private void form_Closing (object sender, FormClosingEventArgs e)
 		{
-			updater.UpdateRunner.UpdateFound -= onUpdateFound;
-			updater.UpdateRunner.UpdateNotFound -= onUpdateNotFound;
+			updater.UpdateChecker.UpdateFound -= onUpdateFound;
+			updater.UpdateChecker.UpdateNotFound -= onUpdateNotFound;
+			updater.UpdateChecker.CheckUpdateFailed -= onCheckUpdateFailed;
 			updater.UpdateDownloader.Started -= onDownloadStarted;
 			updater.UpdateDownloader.Finished -= onDownloadFinished;
 			updater.UpdateDownloader.ProgressChanged -= onDownloadProgress;
@@ -68,27 +60,24 @@ namespace LaunchPad.Forms
 		private void updateNotFound()
 		{
 			setFormState (PatchFormState.NoUpdate);
-			MessageBox.Show ("There are no updates to download. " +
-				"You have the latest version");
+			MessageBox.Show ("There are no updates to download. You have the latest version");
 		}
 
 		private void onDownloadFinished()
 		{
+			setDownloadProgress (100);
 			setFormState (PatchFormState.Unzipping);
 
-			//TODO: do verification that it downloaded successfully here
-			var dialogResult = MessageBox.Show ("Restart now to finish installing?", "Restart", MessageBoxButtons.YesNo,
-				MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+			var result = MessageBox.Show (
+				"Restart now to finish installing?",
+				"Restart",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Question,
+				MessageBoxDefaultButton.Button1);
 
-			if (dialogResult != DialogResult.Yes)
-			{
-				updater.InstallOnClose = true;
-				Close();
-				return;
-			}
-			
+			bool closeNow = result == DialogResult.Yes;
+			updater.StartUpdating (waitingUpdate.Manifest.ProductVersion, closeNow);
 			Close();
-			updater.RestartForUpdate();
 		}
 
 		private void lnkNotes_LinkClicked (object sender, LinkLabelLinkClickedEventArgs e)
@@ -106,11 +95,10 @@ namespace LaunchPad.Forms
 		private void btnInstall_Click (object sender, EventArgs e)
 		{
 			btnInstall.Enabled = false;
-			if (!updater.DownloadUpdate (updater.FoundUpdate.Version))
-				onDownloadFinished ();
+			updater.DownloadUpdate (waitingUpdate);
 		}
 
-		private void setFormState(PatchFormState state)
+		private void setFormState (PatchFormState state)
 		{
 			switch (state)
 			{
@@ -127,7 +115,7 @@ namespace LaunchPad.Forms
 					break;
 				case PatchFormState.WaitingInstall:
 					setPatchNotes (waitingUpdate.PatchNotes);
-					lblInstruction.Text = string.Format (PREPARING_FORMAT, waitingUpdate.Version);
+					lblInstruction.Text = "Preparing to install version v" + waitingUpdate.Manifest.ProductVersion;
 					lnkNotes.Visible = true;
 					btnInstall.Enabled = true;
 					progressBar.Style = ProgressBarStyle.Continuous;
@@ -146,11 +134,19 @@ namespace LaunchPad.Forms
 			}
 		}
 
-		private void setDownloadProgress(float percentage)
+		private void setDownloadProgress (float percentage)
 		{
 			int range = progressBar.Maximum - progressBar.Minimum;
-			int value = range * (int)(percentage/100);
+			int value = (int)(range * (percentage/100f));
 			progressBar.Value = value + progressBar.Minimum;
+
+			// Hack to get responsive progress bars on Windows 7
+			if (progressBar.Value > progressBar.Minimum
+				&& progressBar.Value <= progressBar.Maximum)
+			{
+				progressBar.Value -= 1;
+				progressBar.Value += 1;
+			}
 		}
 
 		private void hidePatchNotes()
@@ -207,6 +203,18 @@ namespace LaunchPad.Forms
 		private void onUpdateNotFound (object sender, UpdateCheckerEventArgs e)
 		{
 			updateNotFound ();
+		}
+
+		private void onCheckUpdateFailed (object sender, UpdateCheckerEventArgs e)
+		{
+			MessageBox.Show (this, "Failed to get update from "
+					+ e.CheckLocation
+					+ Environment.NewLine
+					+ Environment.NewLine
+					+ e.Exception.Message,
+				"Error",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Error);
 		}
 
 		private void onUpdateFound (object sender, UpdateCheckerEventArgs e)

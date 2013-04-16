@@ -18,27 +18,8 @@ namespace UpdaterCore
 			this.Exception = exception;
 		}
 
-		public UpdateInformation UpdateInfo
-		{
-			get;
-			private set;
-		}
-
-		public Version Version
-		{
-			get { return UpdateInfo.Version; }
-		}
-
-		public Uri CheckLocation
-		{
-			get;
-			private set;
-		}
-
-		public Exception Exception
-		{
-			get;
-			private set;
-		}
+		public readonly UpdateInformation UpdateInfo;
+		public readonly Uri CheckLocation;
+		public readonly Exception Exception;
 	}
 }

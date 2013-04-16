@@ -13,19 +13,16 @@ namespace Updater
 {
 	public static class AssemblyCloseDelayer
 	{
-		public static void WaitForAssembliesAsync (Action processesClosed, params string[] assemblyPaths)
+		public static void WaitForAssembliesAsync (Action closed, params string[] assemblyPaths)
 		{
-			var thread = new Thread(() =>
-			{
-				var processesToWaitFor = GetProcessesByNameAssemblyNames (assemblyPaths);
+			var thread = new Thread(() => {
+				var waitFor = GetProcessesByNameAssemblyNames (assemblyPaths);
 
-				foreach (var process in processesToWaitFor)
-				{
-					logger.Debug ("Waiting for process to close " + process.ProcessName);
+				foreach (var process in waitFor) {
+					logger.Debug ("Waiting for process to close: " + process.ProcessName);
 					process.WaitForExit();
 				}
-
-				processesClosed();
+				closed();
 			});
 			thread.Name = "Waiting on processes thread";
 			thread.Start();
@@ -33,16 +30,16 @@ namespace Updater
 
 		private static readonly ILog logger = LogManager.GetLogger (typeof (AssemblyCloseDelayer));
 
-		private static IEnumerable<Process> GetProcessesByNameAssemblyNames (string[] assemblyNames)
+		private static IEnumerable<Process> GetProcessesByNameAssemblyNames (
+			IEnumerable<string> assemblyNames)
 		{
-			foreach (string assemblyPath in assemblyNames)
-			{
+			foreach (string assemblyPath in assemblyNames) {
 				foreach (Process process in GetProcessByAssemblyPath (assemblyPath))
 					yield return process;
 			}
 		}
 
-		private static IEnumerable<Process> GetProcessByAssemblyPath(string assemblyPath)
+		private static IEnumerable<Process> GetProcessByAssemblyPath (string assemblyPath)
 		{
 			string knownPath = assemblyPath.ToLower();
 

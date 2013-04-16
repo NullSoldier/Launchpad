@@ -1,34 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Resources;
 using System.Text;
 
 namespace UpdaterCore.Update
 {
 	public class UpdateInformation
 	{
-		public UpdateInformation (Version version, string patchNotes, Uri patchZipURI)
+		public UpdateInformation (
+			UpdateManifest manifest,
+			Uri patchZipURI,
+			string patchNotes)
 		{
-			this.Version = version;
-			this.PatchNotes = patchNotes;
-			this.PatchZipURI = patchZipURI;
+			Manifest = manifest;
+			PatchNotes = patchNotes;
+			PatchZipURI = patchZipURI;
 		}
 
-		public Version Version
-		{
-			get;
-			private set;
-		}
-
-		public string PatchNotes
-		{
-			get;
-			private set;
-		}
-
-		public Uri PatchZipURI
-		{
-			get;
-			private set;
-		}
+		public readonly UpdateManifest Manifest;
+		public readonly Uri PatchZipURI;
+		public readonly string PatchNotes;
 	}
 }

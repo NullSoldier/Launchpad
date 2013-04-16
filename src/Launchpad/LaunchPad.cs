@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Windows.Forms;
 using LaunchPad.Helpers;
 using LaunchPad.Properties;
 using log4net;
@@ -26,7 +27,9 @@ namespace LaunchPad
 
 			EventManager.AddEventHandler (this, EventType.Command);
 			Log4NetHelper.ConfigureFromXML (Resources.log4net);
-			SubDataEvent (ProjectManagerEvents.Project, ProjectChanged);
+			SubDataEvent (SPPluginEvents.Enabled, OnPluginEnabled);
+			SubDataEvent (SPPluginEvents.Disabled, OnPluginDisabled);
+			SubDataEvent (ProjectManagerEvents.Project, OnProjectChanged);
 			LoadSettings();
 
 			logger = LogManager.GetLogger (typeof (Launchpad));
@@ -34,36 +37,73 @@ namespace LaunchPad
 			A = new Analytics (version);
 			sp = new SPWrapper (LaunchpadPaths.SpaceportPath);
 			watcher = new DeviceWatcher (sp);
-			spc = new SpaceportController (this, settings, watcher, version);
+
+			var mainForm = PluginBase.MainForm.MenuStrip.Parent.Parent;
+			var menu = new SpaceportMenu (PluginBase.MainForm.MenuStrip);
+
 			pc = new ProjectMenuController (this, sp, settings);
-			deployer = new DeployListener (this, sp, settings, watcher);
-			installer = new InstallListener (this, sp, settings);
+			uc = new UpdaterController (menu, mainForm, version, settings);
+			spc = new SpaceportMenuController (menu, mainForm, version,
+				this, settings, watcher);
+			
+			DeployListener.Listen (this, sp, settings, watcher);
+			InstallListener.Listen (this, sp, settings);
 
 			A.OnStarted();
 		}
 
 		public void Dispose()
 		{
+			watcher.Stop();
+			uc.Dispose();
 			sp.Dispose();
-			spc.Dispose();
 			SaveSettings();
 		}
 
 		private Version version;
 		private SPWrapper sp;
-		private SpaceportController spc;
+		
+		private UpdaterController uc;
+		private SpaceportMenuController spc;
 		private ProjectMenuController pc;
+
 		private DeviceWatcher watcher;
 		private Settings settings;
-		private DeployListener deployer;
-		private InstallListener installer;
 		private ILog logger;
 		private bool isEnabled;
 
-		private void ProjectChanged (DataEvent e)
+		private void EnableProject (bool enabled)
+		{
+			var eventType = enabled
+				? SPPluginEvents.ProjectOpened
+				: SPPluginEvents.ProjectClosed;
+			var dataEvent = new DataEvent (EventType.Command,
+				eventType, null);
+			EventManager.DispatchEvent (this, dataEvent);
+		}
+
+		private void EnablePlugin (bool enabled)
+		{
+			// Ignore duplicate statuses, review
+			if (isEnabled == enabled)
+				return;
+
+			var eventType = isEnabled
+				? SPPluginEvents.Enabled
+				: SPPluginEvents.Disabled;
+			var dataEvent = new DataEvent (EventType.Command,
+				eventType, null);
+
+			isEnabled = enabled;
+			TraceManager.AddAsync ((enabled ? "Enabling" : "Disabling") + " Spaceport plugin");
+			EventManager.DispatchEvent (this, dataEvent);
+		}
+
+		private void OnProjectChanged(DataEvent e)
 		{
 			var proj = e.Data as AS3Project;
-			if (proj != null) {
+			if (proj != null)
+			{
 				TraceManager.AddAsync ("Spaceport switching to new project at " + proj.Directory);
 				sp.ProjectDirectory = proj.Directory;
 				EnablePlugin (enabled:true);
@@ -74,29 +114,40 @@ namespace LaunchPad
 			}
 		}
 
-		private void EnableProject (bool enabled)
+		private void OnPluginEnabled (DataEvent e)
 		{
-			var eventType = enabled
-				? SPPluginEvents.ProjectOpened
-				: SPPluginEvents.ProjectClosed;
-			var dataEvent = new DataEvent (EventType.Command,
-				eventType, enabled);
-			EventManager.DispatchEvent (this, dataEvent);
+			SubDataEvent (ProjectManagerEvents.TestProject, OnTestProject);
+			SubDataEvent (ProjectManagerEvents.BuildProject, OnBuildProject);
+			watcher.Start ();
 		}
 
-		private void EnablePlugin (bool enabled)
+		private void OnPluginDisabled (DataEvent e)
 		{
-			if (isEnabled != enabled) { // Ignore duplicate statuses, review
-				isEnabled = enabled;
-				TraceManager.AddAsync ((enabled ? "Enabling" : "Disabling")
-					+ " Spaceport plugin");
+			UnsubDataEvent (ProjectManagerEvents.TestProject, OnTestProject);
+			UnsubDataEvent (ProjectManagerEvents.BuildProject, OnBuildProject);
+			watcher.Stop ();
+		}
 
-				var eventType = isEnabled
-					? SPPluginEvents.Enabled
-					: SPPluginEvents.Disabled;
-				var e = new DataEvent (EventType.Command, eventType, enabled);
-				EventManager.DispatchEvent (this, e);
-			}
+		private void OnTestProject (DataEvent e)
+		{
+			var clearEvent = new DataEvent (EventType.Command, "ResultsPanel.ClearResults", null);
+			var deployEvent = new DataEvent (EventType.Command, SPPluginEvents.StartDeploy, null);
+			EventManager.DispatchEvent (this, clearEvent);
+			EventManager.DispatchEvent (this, deployEvent);
+
+			if (!settings.DeployDefault)
+				e.Handled = true;
+		}
+
+		private void OnBuildProject (DataEvent e)
+		{
+			var clearEvent = new DataEvent (EventType.Command, "ResultsPanel.ClearResults", null);
+			var buildEvent = new DataEvent (EventType.Command, SPPluginEvents.StartBuild, null);
+			EventManager.DispatchEvent (this, clearEvent);
+			EventManager.DispatchEvent (this, buildEvent);
+
+			if (!settings.DeployDefault)
+				e.Handled = true;
 		}
 
 		private void LoadSettings()

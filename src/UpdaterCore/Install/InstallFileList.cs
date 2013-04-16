@@ -14,68 +14,22 @@ namespace Updater
 		/// Takes a path to a files directory where files have been extracted
 		/// Ex: FlashDevelop/Data/updatecache/files
 		/// </summary>
-		public InstallFileList (DirectoryInfo dirInfo)
+		public static IEnumerable<InstallerFile> BuildFileList (DirectoryInfo rootDir)
 		{
-			this.dirInfo = dirInfo.FullName;
-		}
+			if (!rootDir.Exists)
+				throw new FileNotFoundException ("Install file dir doesn't exist at " + Environment.NewLine + rootDir);
 
-		public int Count
-		{
-			get { return fileCount; }
-		}
+			string[] files = Directory.GetFiles (rootDir.FullName,
+				"*", SearchOption.AllDirectories);
 
-		public IEnumerable<InstallerFile> Files
-		{
-			get
-			{
-				if (fileCache == null) {
-					fileCache = buildFileList();
-					fileCount = fileCache.Count();
-				}
-				return fileCache;
-			}
-		}
-
-		private readonly string dirInfo;
-		private int fileCount;
-		private IEnumerable<InstallerFile> fileCache;
-
-		private IEnumerable<InstallerFile> buildFileList()
-		{
-			if (!Directory.Exists (dirInfo))
-				throw new FileNotFoundException ("Install file list doesn't exist at " + Environment.NewLine + dirInfo);
-
-			foreach (string filePath in Directory.GetFiles (dirInfo, "*", SearchOption.AllDirectories))
-			{
-				// Prevent lazy loading issues
+			foreach (string filePath in files) {
+				// Prevent lazy loading issues <-- wtf?
 				if (!File.Exists (filePath))
 					continue;
 
-				Version version;
-				if (!TryGetVersion (filePath, out version))
-					version = new Version (0, 0, 0, 0);
-				
-				fileCount++;
 				yield return new InstallerFile (
 					new FileInfo (filePath).Directory,
-					new FileInfo (filePath),
-					version);
-			}
-		}
-
-		private bool TryGetVersion(string filePath, out Version v)
-		{
-			try {
-				var info = FileVersionInfo.GetVersionInfo (filePath);
-				v = new Version (
-					info.FileMajorPart,
-					info.FileMinorPart,
-					info.FileBuildPart);
-				return true;
-			}
-			catch (Exception) {
-				v = null;
-				return false;
+					new FileInfo (filePath));
 			}
 		}
 	}

@@ -35,9 +35,5 @@ namespace LaunchPad
 		public readonly ToolStripMenuItem CheckUpdates;
 		public readonly ToolStripItem SpaceportWebsite;
 		public readonly ToolStripItem About;
-		
-		public void SetUpdateEnabled (bool isEnabled)
-		{
-		}
 	}
 }

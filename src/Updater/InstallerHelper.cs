@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using UpdaterCore;
 
 namespace Updater
 {
@@ -27,25 +26,6 @@ namespace Updater
 			}
 
 			return latestPath;
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public static void LogInstallFiles (DirectoryInfo filesDirectory, Action<string> LogMessage)
-		{
-			var installList = new InstallFileList (filesDirectory);
-
-			LogMessage ("Preparing to install: " + installList.Count + " files.");
-
-			foreach (InstallerFile installerFile in installList.Files)
-			{
-				var file = installerFile.File;
-				var filesDirIndex = file.FullName.IndexOf ("files") + 5;
-				var filesRelativePath = file.FullName.Substring (filesDirIndex);
-
-				LogMessage (string.Format ("* {0} ({1})", filesRelativePath, installerFile.Version));
-			}
 		}
 
 		public static string GetFileDirectory (string filePath)

@@ -11,33 +11,33 @@ using UpdaterCore;
 
 namespace LaunchPad
 {
-	public class InstallListener
+	public static class InstallListener
 	{
-		public InstallListener (
+		public static void Listen(
 			EventRouter events, SPWrapper sp,
 			Settings settings)
 		{
-			this.events = events;
-			this.sp = sp;
-			this.settings = settings;
+			InstallListener.events = events;
+			InstallListener.sp = sp;
+			InstallListener.settings = settings;
 
 			//TODO: convert to Find Parent Form
 			mainForm = PluginBase.MainForm.MenuStrip.Parent.Parent;
 			events.SubDataEvent (SPPluginEvents.StartInstall, onInstall);
 		}
 
-		private readonly EventRouter events;
-		private readonly SPWrapper sp;
-		private readonly Settings settings;
-		private readonly Control mainForm;
+		private static bool started = false;
+		private static Process installProcess;
+		private static frmInstall form;
+		private static string lastError;
+		private static DevicePlatform installToPlatform;
 
-		private bool started = false;
-		private Process installProcess;
-		private frmInstall form;
-		private string lastError;
-		private DevicePlatform installToPlatform;
+		private static EventRouter events;
+		private static SPWrapper sp;
+		private static Settings settings;
+		private static Control mainForm;
 
-		private void onInstall (DataEvent de)
+		private static void onInstall (DataEvent de)
 		{
 			if (started)
 				throw new InvalidOperationException();
@@ -46,12 +46,12 @@ namespace LaunchPad
 			form.ShowDialog (mainForm);
 		}
 
-		private void onOutput (string o)
+		private static void onOutput (string o)
 		{
 			form.LogMessage (o);
 		}
 
-		private void onError (string o)
+		private static void onError (string o)
 		{
 			form.LogMessage (o);
 			if (o != null) {
@@ -59,7 +59,7 @@ namespace LaunchPad
 			}
 		}
 
-		private void onExited (int code, Process p)
+		private static void onExited (int code, Process p)
 		{
 			started = false;
 			form.FinishInstall();
@@ -73,7 +73,7 @@ namespace LaunchPad
 			}
 		}
 
-		private void onStarted (DevicePlatform platform)
+		private static void onStarted (DevicePlatform platform)
 		{
 			started = true;
 			lastError = null;
@@ -86,13 +86,13 @@ namespace LaunchPad
 			TraceHelper.TraceProcessStart ("spaceport install", installProcess);
 		}
 
-		private void onStopped()
+		private static void onStopped()
 		{
 			installProcess.Kill();
 			started = false;
 		}
 
-		private string parseAndroidError (string error, int exitCode)
+		private static string parseAndroidError (string error, int exitCode)
 		{
 			if (error == null) {
 				return getDefaultError (error, exitCode);
@@ -106,7 +106,7 @@ namespace LaunchPad
 			return getDefaultError (error, exitCode);
 		}
 
-		private string getDefaultError (string error, int exitCode)
+		private static string getDefaultError (string error, int exitCode)
 		{
 			var msg = "Install to device failed with exit code " + exitCode;
 			if (error != null)

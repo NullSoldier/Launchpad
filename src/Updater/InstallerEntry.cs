@@ -75,13 +75,14 @@ namespace Updater
 				false);
 		}
 
-		// No Gui. Installs update packages once old UpdateAssembly closes
+		// No Gui. Ghost mode installs update packages once old UpdateAssembly closes
 		public void StartInstallerMode (
 			Version version, 
 			FileInfo flashDevelopAssembly, 
 			FileInfo oldUpdateAssemblyPath,
 			DirectoryInfo updateCacheDir)
 		{
+			MessageBox.Show ("DEBUG");
 			AssemblyCloseDelayer.WaitForAssembliesAsync (() => 
 				startForm (
 					version,

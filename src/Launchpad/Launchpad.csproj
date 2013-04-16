@@ -76,7 +76,6 @@
     <Compile Include="Helpers\Check.cs" />
     <Compile Include="Helpers\ProcessHelper.cs" />
     <Compile Include="Helpers\SpaceportHelper.cs" />
-    <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="Helpers\TargetHelper.cs" />
     <Compile Include="Helpers\TraceHelper.cs" />
     <Compile Include="InstallListener.cs" />
@@ -87,6 +86,11 @@
     <Compile Include="Observable\Unsubscriber.cs" />
     <Compile Include="ProjectMenuController.cs" />
     <Compile Include="ProjectMenu.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Settings\SettingsUpgrader.cs" />
     <Compile Include="SPPluginEvents.cs" />
     <Compile Include="SPWrapper.cs" />
@@ -98,21 +102,10 @@
     <Compile Include="Forms\frmTargets.Designer.cs">
       <DependentUpon>frmTargets.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\MainUI.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Forms\MainUI.Designer.cs">
-      <DependentUpon>MainUI.cs</DependentUpon>
-    </Compile>
     <Compile Include="Helpers\Log4NetHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Settings.cs" />
-    <Compile Include="SpaceportController.cs" />
+    <Compile Include="SpaceportMenuController.cs" />
     <Compile Include="SpaceportMenu.cs" />
     <Compile Include="Launchpad.cs" />
     <Compile Include="Forms\frmPatch.cs">
@@ -124,22 +117,19 @@
     <Compile Include="Target.cs" />
     <Compile Include="TargetEventArgs.cs" />
     <Compile Include="Tuple.cs" />
-    <Compile Include="UpdaterHook.cs" />
-    <Compile Include="UpdaterHookController.cs" />
+    <Compile Include="UpdaterController.cs" />
     <EmbeddedResource Include="Forms\FileSelector.resx">
       <DependentUpon>FileSelector.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmInstall.resx">
       <DependentUpon>frmInstall.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmProject.resx">
       <DependentUpon>frmProject.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmTargets.resx">
       <DependentUpon>frmTargets.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MainUI.resx">
-      <DependentUpon>MainUI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -195,8 +185,7 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>CALL "$(SolutionDir)tools\CopyPlugins.bat" "$(SolutionDir)tools"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

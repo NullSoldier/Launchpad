@@ -11,7 +11,7 @@ namespace Updater
 	{
 		/// <summary>
 		/// [0] Self Assembly
-		/// [1] Version
+		/// [1] ProductVersion
 		/// [2] FlashDevelop Assembly to wait for
 		/// [3] Old updater assembly to wait for
 		/// </summary>

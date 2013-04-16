@@ -12,8 +12,8 @@ namespace UpdaterCore
 {
 	public class Installer
 	{
-		public event EventHandler FinishedInstalling;
 		public event EventHandler<InstallerEventArgs> FileInstalled;
+		public event EventHandler FinishedInstalling;
 		public event EventHandler InstallFailed;
 		public event EventHandler RollingBackFinished;
 
@@ -55,18 +55,18 @@ namespace UpdaterCore
 				.AppendDir ("files")
 				.AppendDir ("update");
 
-			var installList = new InstallFileList (updateDir);
 			var transaction = new RevertableTransaction();
 			transaction.RolledBack += onRollingBackFinished;
 
-			foreach (InstallerFile installFile in installList.Files)
+			var installList = InstallFileList.BuildFileList (updateDir);
+			foreach (InstallerFile installFile in installList)
 			{
 				// Take the original path and chop off the install root,
 				// then append it to the flash develop folder
 				string relativeInstallPath = installFile.File.FullName
 					.Substring (updateDir.FullName.Length + 1);
 				
-				string dest = hardcodeResolvePath (
+				string dest = ResolvePathHACK (
 					relativeInstallPath,
 					flashDevelopDir,
 					dataDir.FullName);
@@ -79,12 +79,13 @@ namespace UpdaterCore
 				fileCopyAction.FileCopied += (o, ev) => onFileInstalled (ev.Value);
 				transaction.Do (fileCopyAction);
 			}
+
 			try {
 				transaction.Commit();
 			}
 			catch (RevertableActionFailedException ex) {
 				logger.Error ("Installer failed on action " + ex.FailedAction, ex.Exception);
-				logger.DebugFormat ("Starting rollback of {0} items." + transaction.CompletedCount);
+				logger.DebugFormat ("Starting rollback of {0} items.", transaction.CompletedCount);
 				OnInstallFailed (ex);
 				transaction.Rollback();
 				return;
@@ -92,21 +93,22 @@ namespace UpdaterCore
 			onFinished();
 		}
 
-		private string hardcodeResolvePath (
+		private string ResolvePathHACK (
 			string relativePath,
 			string flashDevelopDir,
 			string dataDir)
 		{
+			// Redirect data to correct directory
 			if (relativePath.StartsWith ("Data")) {
 				var parent = Path.Combine (dataDir, "..");
 				return Path.Combine (parent, relativePath);
 			}
+			// Everything else goes in FlashDevelop dir
 			return Path.Combine (flashDevelopDir, relativePath);
 		}
 
 		#region Event Handlers
-			private
-			void onFinished()
+		private void onFinished()
 		{
 			var handler = FinishedInstalling;
 			if (handler != null)
@@ -122,14 +124,14 @@ namespace UpdaterCore
 				handler (this, new InstallerEventArgs (installedInfo));
 		}
 
-		public void OnInstallFailed (Exception ex)
+		private void OnInstallFailed (Exception ex)
 		{
 			var handler = InstallFailed;
 			if (handler != null)
 				handler (this, new UnhandledExceptionEventArgs (ex, false));
 		}
 
-		public void onRollingBackFinished (object sender, EventArgs e)
+		private void onRollingBackFinished (object sender, EventArgs e)
 		{
 			var handler = RollingBackFinished;
 			if (handler != null)

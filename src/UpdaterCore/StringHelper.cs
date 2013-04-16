@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LaunchPad.Helpers
+namespace UpdaterCore
 {
 	public static class StringHelper
 	{
-		public static string[] Split (this string self, string split)
+		public static string[] Split(this string self, string split)
 		{
 			return self.Split (new[] { split },
 				StringSplitOptions.RemoveEmptyEntries);

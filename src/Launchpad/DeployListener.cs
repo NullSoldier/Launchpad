@@ -9,28 +9,28 @@ using UpdaterCore;
 
 namespace LaunchPad
 {
-	public class DeployListener
+	public static class DeployListener
 	{
-		public DeployListener (
+		public static void Listen (
 			EventRouter events, SPWrapper sp,
 			Settings settings, DeviceWatcher watcher)
 		{
-			this.sp = sp;
-			this.settings = settings;
-			this.watcher = watcher;
+			DeployListener.sp = sp;
+			DeployListener.settings = settings;
+			DeployListener.watcher = watcher;
 			
 			events.SubDataEvent (SPPluginEvents.StartDeploy, de => startDeploy());
 			events.SubDataEvent (SPPluginEvents.StartBuild, de => startBuild());
 		}
 
-		private readonly Regex errorRegex = new Regex ("(?<file>.*?):(?<line>[0-9]*):(?<col>[0-9]*):\\s?(?<type>(Error)?(Warning)?):(?<msg>.*\t?)", RegexOptions.Compiled);
-		private readonly DeviceWatcher watcher;
-		private readonly Settings settings;
-		private readonly SPWrapper sp;
-		private Process build;
-		private Dictionary<int, Process> pushes = new Dictionary<int, Process>(); 
+		private static Process build;
+		private static DeviceWatcher watcher;
+		private static Settings settings;
+		private static SPWrapper sp;
+		private static Dictionary<int, Process> pushes = new Dictionary<int, Process> ();
+		private static Regex errorRegex = new Regex ("(?<file>.*?):(?<line>[0-9]*):(?<col>[0-9]*):\\s?(?<type>(Error)?(Warning)?):(?<msg>.*\t?)", RegexOptions.Compiled);
 
-		private void startDeploy()
+		private static void startDeploy()
 		{
 			var targets = watcher.Active
 				.Intersect (settings.DeviceTargets)
@@ -45,12 +45,12 @@ namespace LaunchPad
 			}
 		}
 		
-		private void startPush (IEnumerable<Target> targets)
+		private static void startPush (IEnumerable<Target> targets)
 		{
 			cancelPushes();
 
 			var p = sp.RunOnTargets (targets,
-				processPushOutput,
+				onPushOutput,
 				TraceHelper.TraceError,
 				(exitCode, process) => {
 					if (exitCode != 0) {
@@ -67,29 +67,29 @@ namespace LaunchPad
 			}
 		}
 
-		private void startBuild ()
+		private static void startBuild ()
 		{
-			var target = this.watcher.Active
-				.Intersect (this.settings.DeviceTargets)
+			var target = watcher.Active
+				.Intersect (settings.DeviceTargets)
 				.FirstOrDefault(t => t.Platform != DevicePlatform.FlashPlayer);
 
 			if (target != null || settings.DeploySim)
 				buildProject (null);
 		}
 
-		private void buildProject (Action finished)
+		private static void buildProject (Action finished)
 		{
 			cancelBuild();
 			
 			build = sp.Build (
 				TraceHelper.TraceInfo,
-				processBuildOutput,
-				(exitCode, process) => processBuildResult (exitCode, finished));
+				onBuildOutput,
+				(exitCode, process) => onBuildResult (exitCode, finished));
 
 			TraceHelper.TraceProcessStart ("Build", build);
 		}
 
-		private void processBuildResult (int exitCode, Action success)
+		private static void onBuildResult (int exitCode, Action success)
 		{
 			switch (exitCode) {
 				case 0:
@@ -103,13 +103,13 @@ namespace LaunchPad
 			}
 		}
 
-		private void processPushOutput (String o)
+		private static void onPushOutput (String o)
 		{
 			if (o != null && !o.StartsWith ("Javascript:"))
 				TraceHelper.Trace (o, TraceType.Debug);
 		}
 
-		private void processBuildOutput (String o)
+		private static void onBuildOutput (String o)
 		{
 			if (o == null)
 				return;
@@ -128,7 +128,7 @@ namespace LaunchPad
 			}
 		}
 
-		private void cancelBuild()
+		private static void cancelBuild()
 		{
 			var buildRunning = build != null && !build.HasExited;
 			if (buildRunning) {
@@ -138,7 +138,7 @@ namespace LaunchPad
 			}
 		}
 
-		private void cancelPushes()
+		private static void cancelPushes()
 		{
 			if (pushes.Count > 0)
 				TraceHelper.TraceInfo ("Canceling previous push request(s)");

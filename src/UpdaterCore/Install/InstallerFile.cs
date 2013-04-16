@@ -7,29 +7,13 @@ namespace UpdaterCore
 {
 	public class InstallerFile
 	{
-		public InstallerFile(DirectoryInfo dir, FileInfo file, Version version)
+		public InstallerFile(DirectoryInfo dir, FileInfo file)
 		{
-			this.Directory = dir;
-			this.File = file;
-			this.Version = version;
+			Directory = dir;
+			File = file;
 		}
 
-		public DirectoryInfo Directory
-		{
-			get;
-			private set;
-		}
-
-		public FileInfo File
-		{
-			get;
-			private set;
-		}
-
-		public Version Version
-		{
-			get;
-			private set;
-		}
+		public readonly DirectoryInfo Directory;
+		public readonly FileInfo File;
 	}
 }

@@ -111,7 +111,6 @@
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Patch";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.form_Closing);
-			this.Load += new System.EventHandler(this.form_Loaded);
 			this.Shown += new System.EventHandler(this.form_Shown);
 			this.Resize += new System.EventHandler(this.frmPatch_Resize);
 			this.ResumeLayout(false);
