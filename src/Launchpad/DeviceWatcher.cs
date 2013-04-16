@@ -25,11 +25,12 @@ namespace LaunchPad
 		}
 
 		public readonly List<Target> Active = new List<Target>();
-		public bool IsWorking { get; private set; }
+		public WatcherState State { get; private set; }
 		public string LastError { get; private set; }
 
 		public void Start()
 		{
+			startListProcessAsync ();
 			timer.Start();
 		}
 
@@ -81,7 +82,7 @@ namespace LaunchPad
 
 		private void onTimerElapsed (object s, ElapsedEventArgs ev)
 		{
-			if (starting || IsWorking)
+			if (starting || State == WatcherState.Started)
 				return;
 
 			startListProcessAsync();
@@ -107,7 +108,7 @@ namespace LaunchPad
 		{
 			starting = false;
 			shownError = false;
-			IsWorking = true;
+			State = WatcherState.Started;
 			TraceHelper.TraceProcessStart ("device watcher", p);
 			subs.ForEach (s => s.OnStart());
 		}
@@ -119,8 +120,10 @@ namespace LaunchPad
 			startingThread = null;
 			listProcess = null;
 			starting = false;
-			IsWorking = false;
 			LastError = workingError.ToString();
+			State = (i == 0)
+				? WatcherState.NotStarted
+				: WatcherState.FailedToStart;
 
 			if (i != 0 && !shownError) {
 				shownError = true;
@@ -133,6 +136,13 @@ namespace LaunchPad
 		{
 			if (s != null)
 				workingError.Append (s + Environment.NewLine);
+		}
+
+		public enum WatcherState
+		{
+			NotStarted,
+			Started,
+			FailedToStart,
 		}
 	}
 }

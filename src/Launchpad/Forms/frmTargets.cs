@@ -38,7 +38,7 @@ namespace LaunchPad
 			listTargets.SmallImageList = images;
 
 			addBuiltInTargets();
-			showErrorLink (!watcher.IsWorking);
+			showErrorLink (watcher.State == DeviceWatcher.WatcherState.FailedToStart);
 
 			// Subscribe to device added/removed notifications
 			unsub = watcher.Subscribe (this);
