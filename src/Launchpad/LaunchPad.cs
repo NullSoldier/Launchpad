@@ -88,7 +88,7 @@ namespace LaunchPad
 			if (isEnabled == enabled)
 				return;
 
-			var eventType = isEnabled
+			var eventType = enabled
 				? SPPluginEvents.Enabled
 				: SPPluginEvents.Disabled;
 			var dataEvent = new DataEvent (EventType.Command,
