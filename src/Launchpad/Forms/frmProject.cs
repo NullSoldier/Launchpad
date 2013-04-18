@@ -102,7 +102,7 @@ namespace LaunchPad.Forms
 			}
 			var config = new Dictionary<string, string>();
 			foreach (var line in lines) {
-				var parts = line.Split (" = ");
+				var parts = line.Split (" = ", StringSplitOptions.None);
 				config.Add (parts[0], parts[1]);
 			}
 			return config;
@@ -114,7 +114,7 @@ namespace LaunchPad.Forms
 				var key = fieldsToConfig [tup];
 				var value = tup.Value;
 
-				var cmd = String.Format ("config --project {0} {1}", key, value);
+				var cmd = String.Format ("config --project {0} \"{1}\"", key, value);
 				if (!sp.TryExecuteCmd (cmd, out error))
 					return false;
 			}
