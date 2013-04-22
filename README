@@ -1,13 +1,26 @@
-The FlashDevelop plugin for Spaceport has all the functionality to build and test games using the Spaceport platform.
+You can download the fully built version of Launchpad from http://entitygames.net/?v=launchpad
 
-Steps to test the updater process
-* Add the merged Installer to the update package EX: 0.0.3.0.zip
-* Upload the ZIP to the update directory
-* Delete the plugins form the FlashDevelop/Plugins folder
- - InstallerCore.dll
- - SpaceportPlugin.dll
- - SpaceportUpdaterPlugin.dll
- - PluginCommon.dll
-* Delete the Spaceport folder from  FlashDevelop/Data
-* Run the installer in GUI mode with the latest update package
-* Once installed successfully, run through the update process completely
+The FlashDevelop plugin for Spaceport has all the functionality to build and test games using the Spaceport platform. It uses .NET 2.0 because that's what FlashDevelop demands for plugins.
+
+To build and installer:
+The SLN contains all of the projects neccessary to build an installer, and update package. All you need to do is add a folder called "spaceport-sdk" to the resources folder. The README in the resources folder also explains this. The Spaceport-SDK can be downloaded from http://spaceport-io. Just run the installer and stick the files (except the uninstaller) into /resources/spaceport-sdk
+
+To test the updating process, you just need to upload a manifest somewhere online and follow the directory structure below where "update-A" is versioned manifest.
+
+/update-A
+/updater.1.0.0.0.exe
+/updater.1.0.1.0.exe
+/1.0.2.0.patchnotes
+/1.0.3.0.patchnotes
+/1.0.2.0.zip
+/1.0.3.0.zip
+
+[update-A]
+product=1.0.3.0
+updater=1.0.1.0
+
+The idea here is that update-A contains the latest product version to download, and the latest updater to download. If there is a newer updater available, it will download and install that first before downloading and installing the update as to use the latest updater.
+
+The reason that update-A is suffixed with an A because it's versioned. Every time you change the updater API, and clients cannot understand the new API you need to point the old update manifest at the new updater, then start a new update manifest (update-B, and so on). This way, anyone reading update-A would download the new updater, then hypothetically Launchpad would know to point to the correct manifest the new updater supports (updater-B).
+
+It doesn't do this right now, which was one of the things that had not been done. It also should probably support incremental updates so it doesn't have to download the entire update package every time which contains all the files.
