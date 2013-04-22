@@ -7,6 +7,7 @@ The SLN contains all of the projects neccessary to build an installer, and updat
 
 To test the updating process, you just need to upload a manifest somewhere online and follow the directory structure below where "update-A" is versioned manifest.
 
+[Webserver directory structure]
 /update-A
 /updater.1.0.0.0.exe
 /updater.1.0.1.0.exe
@@ -15,7 +16,9 @@ To test the updating process, you just need to upload a manifest somewhere onlin
 /1.0.2.0.zip
 /1.0.3.0.zip
 
-[update-A]
+Note: .patchnote files are just plaintext files displayed to the user while downloading the update.
+
+[Contents of update-A]
 product=1.0.3.0
 updater=1.0.1.0
 
